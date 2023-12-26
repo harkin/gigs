@@ -69,4 +69,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem "faraday", "2.8.1"
 gem "nokogiri", "1.15.5"
