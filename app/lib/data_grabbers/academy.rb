@@ -4,6 +4,8 @@ module DataGrabbers
     EVENTS_URL = "https://www.theacademydublin.com/"
 
     def self.get_events
+      start_time = Time.now.to_i
+
       response = Faraday.get(EVENTS_URL)
       document = Nokogiri::HTML(response.body)
       gigs = document.css("div.month, div.gigbg")
@@ -22,11 +24,19 @@ module DataGrabbers
               date: Time.parse(date),
               price: details[2]&.strip,
               tickets_available: gig.css("div.soldout").blank?,
-              link_to_buy: gig.css("a").attribute("href")&.value,
+              link_to_buy_ticket: gig.css("a").attribute("href")&.value,
+              venue: :academy,
             }
           )
         end
       end
+
+      ActiveRecord::Base.transaction do
+        Event.where(venue: :academy).delete_all
+        Event.insert_all(events)
+      end
+
+      puts "Finished grabbing The Academy events in #{Time.now.to_i - start_time} seconds"
       events
     end
   end
