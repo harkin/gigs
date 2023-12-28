@@ -18,9 +18,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_003419) do
     t.string "title", null: false
     t.string "price"
     t.string "link_to_buy_ticket"
+    t.string "more_info"
+    t.integer "ticket_status", null: false
     t.integer "venue", null: false
-    t.boolean "tickets_available"
-    t.date "date", null: false
+    t.datetime "event_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["venue"], name: "index_events_on_venue"

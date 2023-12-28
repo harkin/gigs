@@ -21,9 +21,9 @@ module DataGrabbers
           events.push(
             {
               title: gig.css("div.bands").text,
-              date: Time.parse(date),
+              event_date: Time.parse(date),
               price: details[2]&.strip,
-              tickets_available: gig.css("div.soldout").blank?,
+              ticket_status: gig.css("div.soldout").blank? ? :available : :sold_out,
               link_to_buy_ticket: gig.css("a").attribute("href")&.value,
               venue: :academy,
             }

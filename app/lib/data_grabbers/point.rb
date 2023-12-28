@@ -8,22 +8,56 @@ module DataGrabbers
       start_time = Time.now.to_i
 
       response = Faraday.get(EVENTS_URL)
-      events = JSON.parse(response.body)
-      next_url = events["pagination"].first["pages"]["next"]
+      raw_events = JSON.parse(response.body)
+      next_url = raw_events["pagination"].first["pages"]["next"]
 
       loop do
         break if next_url.blank?
         response = Faraday.get(next_url)
         more_events = JSON.parse(response.body)
         next_url = more_events["pagination"].first["pages"]["next"]
-        events["results"] += more_events["results"]
+        raw_events["results"] += more_events["results"]
       end
 
+      events = []
+      raw_events["results"].each do |event|
+        event["showDates"].each do |date|
+          events.push(
+            {
+              title: event["heading"].strip,
+              event_date: Time.parse(date["showDate"]),
+              ticket_status: normalise_ticket_status(date["status"]),
+              link_to_buy_ticket: event["ticketUrl"],
+              venue: :point,
+              more_info: event["showUrl"]
+            }
+          )
+        end
+      end
 
+      ActiveRecord::Base.transaction do
+        Event.where(venue: :academy).delete_all
+        Event.insert_all(events)
+      end
 
-      puts "Finished grabbing The Point events in #{Time.now.to_i - start_time} seconds"
+      puts "Finished grabbing The Point raw_events in #{Time.now.to_i - start_time} seconds"
 
       events
     end
+
+    private_class_method def normalise_ticket_status(status)
+      puts "starting with status:#{status}"
+      case status
+      when "Normal"
+        :available
+      when "Limited Availability"
+        :limited_availability
+      when "Sold Out"
+        :sold_out
+      else
+        :unknown
+      end
+    end
+
   end
 end
