@@ -29,7 +29,7 @@ module DataGrabbers
               ticket_status: normalise_ticket_status(date["status"]),
               link_to_buy_ticket: event["ticketUrl"],
               venue: :point,
-              more_info: event["showUrl"]
+              more_info: event["showUrl"],
             }
           )
         end
@@ -46,7 +46,6 @@ module DataGrabbers
     end
 
     private_class_method def normalise_ticket_status(status)
-      puts "starting with status:#{status}"
       case status
       when "Normal"
         :available

@@ -7,18 +7,56 @@ module DataGrabbers
       start_time = Time.now.to_i
 
       response = Faraday.get(EVENTS_URL % 0)
-      events = JSON.parse(response.body)
-      number_of_events = events["numberOfHits"]
+      raw_events = JSON.parse(response.body)
+      number_of_events = raw_events["numberOfHits"]
       how_many_more_searches_to_do = (number_of_events / 24.0).ceil
       how_many_more_searches_to_do.times do |index|
         response = Faraday.get(EVENTS_URL % ((index + 1) * 24))
         more_events = JSON.parse(response.body)
-        events["results"] += more_events["results"]
+        raw_events["results"] += more_events["results"]
       end
 
-      puts "Finished grabbing The Olympia events in #{Time.now.to_i - start_time} seconds"
+      events = []
+      raw_events["results"].each do |event|
+        # TODO the olympia sometimes includes a sparse range of dates in the response
+        # A number of events aren't being listed right now, only the first night
 
-      events
+        ticket_url = event["url"]["tickets"].eql?("#!") ? nil : event["url"]["tickets"]
+        events.push(
+          {
+            title: event["title"].strip,
+            event_date: Time.parse("#{event["time"]} #{event["date"]["single"]}"),
+            ticket_status: normalise_ticket_status(event["status"]),
+            link_to_buy_ticket: ticket_url,
+            venue: :olympia,
+            more_info: event["url"]["event"],
+            price: event["originalPrice"],
+          }
+        )
+      end
+
+      ActiveRecord::Base.transaction do
+        Event.where(venue: :olympia).delete_all
+        Event.insert_all(events)
+      end
+
+      puts "Finished grabbing The Olympia raw_events in #{Time.now.to_i - start_time} seconds"
+
+      raw_events
     end
+
+    private_class_method def normalise_ticket_status(status)
+      case status
+      when "Tickets Available"
+        :available
+      when "Low Availability", "Last Seats"
+        :limited_availability
+      when "Sold Out"
+        :sold_out
+      else
+        :unknown
+      end
+    end
+
   end
 end
