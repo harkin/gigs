@@ -1,7 +1,35 @@
-<main class="container">
+<main>
   <div class="row text-center justify-content-center">
-    <div class="col">
-      <h1 class="display-4">Hello World!</h1>
-    </div>
+    <h1 class="display-4">Hello World!</h1>
+
+    <% @events.each do |year, events_by_month| %>
+      <% events_by_month.each do |month, events| %>
+        <h2 class="display-2"><%= "#{Date::MONTHNAMES[month]} #{year}" %></h2>
+
+        <table class="items-center justify-center border-separate border-spacing-2 border border-slate-500">
+          <thead>
+          <tr>
+            <th>Event</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>Ticket Status</th>
+            <th>More Info</th>
+          </tr>
+          </thead>
+          <tbody class="justify-center">
+          <% events.each do |event| %>
+            <tr class="">
+              <td class="text-red-500"><%== event.title %></td>
+              <td class="text-blue-500"><%= event.renderable_venue %></td>
+              <td class="text-green-500"><%= event.event_date %></td>
+              <td class="text-orange-500"><%= event.renderable_ticket_status %></td>
+              <td class="text-purple-500"><%= event.more_info %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      <% end %>
+
+    <% end %>
   </div>
 </main>

@@ -11,4 +11,28 @@ class Event < ApplicationRecord
     sold_out: 2,
     unknown: 3,
   }
+
+  def renderable_venue
+    case venue
+    when "academy"
+      "The Academy"
+    when "point"
+      "The 3Arena"
+    when "olympia"
+      "The Olympia"
+    end
+  end
+
+  def renderable_ticket_status
+    case ticket_status
+    when "available"
+      return  "Available"
+    when "limited_availability"
+      "Limited Availability"
+    when "sold_out"
+      "Sold Out"
+    when "unknown"
+      "Unknown"
+    end
+  end
 end

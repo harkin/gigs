@@ -26,7 +26,7 @@ module DataGrabbers
           {
             title: event["title"].strip,
             event_date: Time.parse("#{event["time"]} #{event["date"]["single"]}"),
-            ticket_status: normalise_ticket_status(event["status"]),
+            ticket_status: normalise_ticket_status(event["status"]["message"]),
             link_to_buy_ticket: ticket_url,
             venue: :olympia,
             more_info: event["url"]["event"],
@@ -45,7 +45,7 @@ module DataGrabbers
       raw_events
     end
 
-    private_class_method def normalise_ticket_status(status)
+    private_class_method def self.normalise_ticket_status(status)
       case status
       when "Tickets Available"
         :available
