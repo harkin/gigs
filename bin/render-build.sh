@@ -3,7 +3,7 @@
 set -o errexit
 
 bundle install
-puts "Pre-compiling assets"
+echo "Pre-compiling assets"
 ./bin/rails assets:precompile
-puts "Cleaning assets"
+echo "Cleaning assets"
 ./bin/rails assets:clean
