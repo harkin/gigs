@@ -4,6 +4,6 @@ set -o errexit
 
 bundle install
 echo "Pre-compiling assets"
-./bin/rails assets:precompile --trace
+./bin/rails assets:precompile
 echo "Cleaning assets"
 ./bin/rails assets:clean
