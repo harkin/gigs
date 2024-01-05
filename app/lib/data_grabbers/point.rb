@@ -45,7 +45,7 @@ module DataGrabbers
       events
     end
 
-    private_class_method def normalise_ticket_status(status)
+    private_class_method def self.normalise_ticket_status(status)
       case status
       when "Normal"
         :available
