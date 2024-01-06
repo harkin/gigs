@@ -3,6 +3,7 @@ class Event < ApplicationRecord
     academy: 0,
     point: 1,
     olympia: 2,
+    whelans: 3,
   }
 
   enum ticket_status: {
@@ -20,6 +21,8 @@ class Event < ApplicationRecord
       "The 3Arena"
     when "olympia"
       "The Olympia"
+    when "whelans"
+      "Whelans"
     end
   end
 

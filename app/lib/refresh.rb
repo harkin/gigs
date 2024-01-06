@@ -4,5 +4,6 @@ class Refresh
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::Academy.get_events
     ::DataGrabbers::Point.get_events
+    ::DataGrabbers::Whelans.get_events
   end
 end
