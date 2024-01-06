@@ -36,7 +36,7 @@ module DataGrabbers
       end
 
       ActiveRecord::Base.transaction do
-        Event.where(venue: :academy).delete_all
+        Event.where(venue: :point).delete_all
         Event.insert_all(events)
       end
 
