@@ -36,7 +36,7 @@ module DataGrabbers
         Event.insert_all(events)
       end
 
-      puts "Finished grabbing The Academy events in #{Time.now.to_i - start_time} seconds"
+      puts "Finished grabbing #{events.count} The Academy events in #{Time.now.to_i - start_time} seconds"
       events
     end
   end

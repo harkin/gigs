@@ -40,7 +40,7 @@ module DataGrabbers
         Event.insert_all(events)
       end
 
-      puts "Finished grabbing The Point raw_events in #{Time.now.to_i - start_time} seconds"
+      puts "Finished grabbing #{events.count} The Point events in #{Time.now.to_i - start_time} seconds"
 
       events
     end

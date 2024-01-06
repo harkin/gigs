@@ -40,7 +40,7 @@ module DataGrabbers
         Event.insert_all(events)
       end
 
-      puts "Finished grabbing The Olympia raw_events in #{Time.now.to_i - start_time} seconds"
+      puts "Finished grabbing #{events.count} The Olympia events in #{Time.now.to_i - start_time} seconds"
 
       raw_events
     end
