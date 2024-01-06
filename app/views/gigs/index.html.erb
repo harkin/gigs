@@ -1,6 +1,7 @@
 <main>
   <div class="row text-center justify-content-center">
     <h1 class="display-4">Hello World!</h1>
+    <p>Displaying information for <%= Event.count %> events across <%= Event.venues.count %> venues</p>
 
     <% @events.each do |year, events_by_month| %>
       <% events_by_month.each do |month, events| %>
