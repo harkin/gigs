@@ -12,15 +12,17 @@ module DataGrabbers
         date_to_search_for = Time.now + i.months
         # Whelans expects a date of the form "2024-3" to be sent in the request
         month_array = "#{date_to_search_for.year}-#{date_to_search_for.month}"
-        puts month_array
+
+        puts "Fetching events for #{month_array}"
+
         # this defaults to form encoding which Whelans expects
-        response = Faraday.post("https://www.whelanslive.com/wp-content/plugins/modus-whelans/inc/custom-ajax.php", {
+        response = Faraday.post(EVENTS_URL, {
           action: "whelansAjaxEventShortcode",
           ajax_flag: 1,
           page: 1,
           limit: 200, # This seems to work, unlikely to have more than 200 events in a month and can avoid paging this way
           class: "events-template",
-          month_array: "2024-1",
+          month_array: month_array,
         })
         document = Nokogiri::HTML(response.body)
         gigs = document.css("li")
