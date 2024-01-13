@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
     t.index ["venue"], name: "index_events_on_venue"
   end
 
-  create_table "refresh_tables", force: :cascade do |t|
+  create_table "refreshes", force: :cascade do |t|
     t.datetime "last_refresh_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -1,8 +1,7 @@
 class CreateRefreshTable < ActiveRecord::Migration[7.1]
   def change
-    create_table :refresh_tables do |t|
+    create_table :refreshes do |t|
       t.datetime :last_refresh_at, null: false
-      t.timestamps
     end
   end
 end
