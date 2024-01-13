@@ -1,4 +1,7 @@
 module.exports = {
+  // corePlugins: {
+  //   preflight: false,
+  // },
   content: [
     './app/views/**/*.html.erb',
     './app/helpers/**/*.rb',
