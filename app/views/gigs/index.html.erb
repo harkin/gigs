@@ -3,8 +3,11 @@
     <h1 class="display-4">Hello World!</h1>
     <p>Displaying information for <%= Event.count %> events across <%= Event.venues.count %> venues</p>
     <p>Events last updated at <%= Refresh.last&.last_refresh_at %></p>
-<br />
-<br />
+    <% if Refresh.last&.last_refresh_at < 1.day.ago %>
+      <p>Events outdated, <a href="/refresh">click here to refresh (it takes a few seconds!)</a></p>
+    <% end %>
+    <br/>
+
     <% @events.each do |year, events_by_month| %>
       <% events_by_month.each do |month, events| %>
         <h2 class="display-2"><%= "#{Date::MONTHNAMES[month]} #{year}" %></h2>
