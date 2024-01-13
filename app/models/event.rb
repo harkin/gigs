@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   enum venue: {
     academy: 0,
     # bord_gais:,
-    # button_factory:,
+    button_factory: 4,
     # grand_social:,
     # national_concert_hall:,
     # pavilion:,
@@ -25,6 +25,8 @@ class Event < ApplicationRecord
     case venue
     when "academy"
       "The Academy"
+    when "button_factory"
+      "Button Factory"
     when "point"
       "The 3Arena"
     when "olympia"
