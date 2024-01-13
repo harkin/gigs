@@ -24,7 +24,7 @@
               <td class="text-blue-500"><%= event.renderable_venue %></td>
               <td class="text-green-500"><%= event.event_date %></td>
               <td class="text-orange-500"><%= event.renderable_ticket_status %></td>
-              <td class="text-purple-500"><%= event.more_info %></td>
+              <td><a href="<%= event.more_info %>">Click for more info</a></td>
             </tr>
           <% end %>
           </tbody>
