@@ -10,6 +10,7 @@ class Event < ApplicationRecord
     point: 1,
     olympia: 2,
     # opium:,
+    # sugar_club:
     # vicar_street:,
     whelans: 3,
   }
