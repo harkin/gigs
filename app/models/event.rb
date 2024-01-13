@@ -1,8 +1,16 @@
 class Event < ApplicationRecord
   enum venue: {
     academy: 0,
+    # bord_gais:,
+    # button_factory:,
+    # grand_social:,
+    # national_concert_hall:,
+    # pavilion:,
+    # pepper_canister:,
     point: 1,
     olympia: 2,
+    # opium:,
+    # vicar_street:,
     whelans: 3,
   }
 
