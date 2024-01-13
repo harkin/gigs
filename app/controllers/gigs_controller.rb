@@ -8,6 +8,6 @@ class GigsController < ApplicationController
   def refresh
     puts "refreshing gig events"
     ::Refresh.refresh_events
-    head :ok
+    redirect_to action: :index
   end
 end
