@@ -11,10 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "events", force: :cascade do |t|
+  create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.string "price"
     t.string "link_to_buy_ticket"
@@ -27,7 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
     t.index ["venue"], name: "index_events_on_venue"
   end
 
-  create_table "refreshes", force: :cascade do |t|
+  create_table "refreshes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "last_refresh_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
