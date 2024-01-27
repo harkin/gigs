@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-LC_ALL="C" /usr/local/opt/postgresql@15/bin/postgres -D /usr/local/var/postgresql@15
+/usr/local/opt/mysql@8.0/bin/mysqld_safe --datadir\=/usr/local/var/mysql
