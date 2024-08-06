@@ -8,6 +8,7 @@ class RefreshGigData
     ::DataGrabbers::ButtonFactory.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::Point.get_events
+    ::DataGrabbers::VicarStreet.get_events
     ::DataGrabbers::Whelans.get_events
 
     Refresh.destroy_all
