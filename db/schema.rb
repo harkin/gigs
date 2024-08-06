@@ -26,8 +26,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
 
   create_table "refreshes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "last_refresh_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
 end
