@@ -2,42 +2,26 @@ module DataGrabbers
   class VicarStreet
 
     EVENTS_URL = "https://www.vicarstreet.com/all-shows-at-vicar-street.html"
+    ROOT_URL = "https://www.vicarstreet.com"
 
     def self.get_events
       start_time = Time.now.to_i
 
       events = []
 
-      (0..11).each do |i|
-        date_to_search_for = Time.now + i.months
-        # Whelans expects a date of the form "2024-3" to be sent in the request
-        month_array = "#{date_to_search_for.year}-#{date_to_search_for.month}"
+      # this defaults to form encoding which Whelans expects
+      response = Faraday.get(EVENTS_URL)
+      document = Nokogiri::HTML(response.body)
+      main_body = document.css("div.blog-featured")
+      next_page = main_body.css("li.pagination-next").css("a").attribute("href").value
+      extract_events_from_html(main_body, events)
 
-
-        # this defaults to form encoding which Whelans expects
-        response = Faraday.get(EVENTS_URL)
+      while next_page
+        response = Faraday.get("#{ROOT_URL}#{next_page}")
         document = Nokogiri::HTML(response.body)
-        gigs = document.css("div.upcomingShowWrap")
-
-        gigs.each do |gig|
-          date = gig.css("span.date_col").text.strip
-          title = gig.css("span.name_col")[0].css("span").text
-          time = gig.css("span.name_col")[0].css("meta").map(&:values).select { |h| h[0].eql?("startDate") }[0][1]
-          
-          more_info = gig.css("div.titles").css("a").attribute("href").value
-          ticket = gig.css("div.link-types").css("a").attribute("href").value
-
-          events.push(
-            {
-              title: title,
-              event_date: Time.parse("#{month_array}-#{day_of_month} #{time}"),
-              ticket_status: :unknown, # TODO can't tell if Whelans updates anything if a show sells out yet
-              link_to_buy_ticket: ticket,
-              more_info: more_info,
-              venue: :whelans,
-            }
-          )
-        end
+        main_body = document.css("div.blog-featured")
+        next_page = main_body.css("li.pagination-next").css("a")&.attribute("href")&.value
+        extract_events_from_html(main_body, events)
       end
 
       ActiveRecord::Base.transaction do
@@ -45,9 +29,28 @@ module DataGrabbers
         Event.insert_all(events)
       end
 
-      puts "Finished grabbing #{events.count} Whelans events in #{Time.now.to_i - start_time} seconds"
+      puts "Finished grabbing #{events.count} Vicar Street events in #{Time.now.to_i - start_time} seconds"
 
       events
+    end
+
+    def self.extract_events_from_html(html, events)
+      listings = html.css("div.upcomingShowWrap")
+      listings.each do |listing|
+        name_col = listing.css("span.name_col")
+        ticket_col = listing.css("span.ticket_col")
+        start_time = name_col.css("meta").find { |m| m.attribute("itemprop").value.eql?("startDate") }.attribute("content").value
+        events.push(
+          {
+            title: name_col.css("a").text.strip,
+            event_date: Time.parse(start_time),
+            ticket_status: ticket_col.text.strip.eql?("Tickets") ? :available : :sold_out,
+            link_to_buy_ticket: ticket_col.css("a").attribute("href").value,
+            more_info: "#{ROOT_URL}#{name_col.css("a").attribute("href").value}",
+            venue: :vicar_street,
+          }
+        )
+      end
     end
 
   end

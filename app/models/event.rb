@@ -11,7 +11,7 @@ class Event < ApplicationRecord
     olympia: 2,
     # opium:,
     # sugar_club:
-    # vicar_street:,
+    vicar_street: 5,
     whelans: 3,
   }
 
@@ -32,6 +32,8 @@ class Event < ApplicationRecord
       "The 3Arena"
     when "olympia"
       "The Olympia"
+    when "vicar_street"
+      "Vicar Street"
     when "whelans"
       "Whelans"
     end
