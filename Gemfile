@@ -64,4 +64,6 @@ end
 gem "faraday", "2.12.0"
 gem "mysql2", "0.5.6"
 gem "nokogiri", "1.16.7"
-gem "tailwindcss-rails", "~> 3.0"
+gem "tailwindcss-rails"
+
+gem "importmap-rails", "~> 2.0"
