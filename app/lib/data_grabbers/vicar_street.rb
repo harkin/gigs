@@ -45,7 +45,7 @@ module DataGrabbers
             title: name_col.css("a").text.strip,
             event_date: Time.parse(start_time),
             ticket_status: ticket_col.text.strip.eql?("Tickets") ? :available : :sold_out,
-            link_to_buy_ticket: ticket_col.css("a").attribute("href").value,
+            link_to_buy_ticket: ticket_col.css("a").attribute("href")&.value,
             more_info: "#{ROOT_URL}#{name_col.css("a").attribute("href").value}",
             venue: :vicar_street,
           }
