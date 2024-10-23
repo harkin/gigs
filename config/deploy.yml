@@ -7,7 +7,7 @@ image: kothacles/gigs
 # Deploy to these servers.
 servers:
   web:
-    - 130.61.94.43
+    - jigglypuff
   # job:
   #   hosts:
   #     - 192.168.0.1
