@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_15_233002) do
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.string "price"
-    t.string "link_to_buy_ticket"
+    t.string "link_to_buy_ticket", limit: 500
     t.string "more_info"
     t.integer "ticket_status", null: false
     t.integer "venue", null: false
@@ -27,5 +27,4 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_13_212024) do
   create_table "refreshes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "last_refresh_at", null: false
   end
-
 end
