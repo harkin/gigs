@@ -19,7 +19,11 @@ default: &default
 
 development:
   <<: *default
-  database: gigs_development
+  username: <%= Rails.application.credentials.planetscale&.fetch(:username) %>
+  password: <%= Rails.application.credentials.planetscale&.fetch(:password) %>
+  database: <%= Rails.application.credentials.planetscale&.fetch(:database) %>
+  host: <%= Rails.application.credentials.planetscale&.fetch(:host) %>
+  ssl_mode: verify_identity
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
