@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-/usr/local/opt/mysql@8.0/bin/mysqld_safe --datadir\=/usr/local/var/mysql
