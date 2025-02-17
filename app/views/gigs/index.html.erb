@@ -30,7 +30,13 @@
               <td class="text-red-500"><%== event.title %></td>
               <td class="text-blue-500"><%= event.renderable_venue %></td>
               <td class="text-green-500"><%= event.event_date %></td>
-              <td class="text-orange-500"><%= event.renderable_ticket_status %></td>
+              <td class="text-orange-500">
+                <% if event.link_to_buy_ticket.present? %>
+                  <a href="<%= event.link_to_buy_ticket %>"><%= event.renderable_ticket_status %></a>
+                <% else %>
+                  <%= event.renderable_ticket_status %>
+                <% end %>
+              </td>
               <% if event.more_info.present? %>
                 <td><a href="<%= event.more_info %>">Click for more info</a></td>
               <% end %>
