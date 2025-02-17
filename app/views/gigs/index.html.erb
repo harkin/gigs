@@ -31,7 +31,9 @@
               <td class="text-blue-500"><%= event.renderable_venue %></td>
               <td class="text-green-500"><%= event.event_date %></td>
               <td class="text-orange-500"><%= event.renderable_ticket_status %></td>
-              <td><a href="<%= event.more_info %>">Click for more info</a></td>
+              <% if event.more_info.present? %>
+                <td><a href="<%= event.more_info %>">Click for more info</a></td>
+              <% end %>
             </tr>
           <% end %>
           </tbody>
