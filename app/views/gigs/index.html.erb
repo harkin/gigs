@@ -5,47 +5,37 @@
     <p>Events last updated at <%= @last_refreshed_at&.to_formatted_s(:short) %></p>
 
     <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
-      <p>Events outdated, <a href="/refresh">click here to refresh (it takes a few seconds!)</a></p>
+      <p class="my-4">Events outdated, <a href="/refresh" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"><span class="material-symbols-outlined mr-2">refresh</span>click here to refresh (it takes a few seconds!)</a></p>
     <% end %>
 
     <br/>
 
     <% @events.each do |year, events_by_month| %>
       <% events_by_month.each do |month, events| %>
-        <h2 class="display-2"><%= "#{Date::MONTHNAMES[month]} #{year}" %></h2>
+        <h2 class="text-2xl font-bold my-8"><%= "#{Date::MONTHNAMES[month]} #{year}" %></h2>
 
-        <table class="items-center justify-center border-separate border-spacing-2 border border-slate-500">
-          <thead>
-          <tr>
-            <th>Event</th>
-            <th>Place</th>
-            <th>Date</th>
-            <th>Ticket Status</th>
-            <th>More Info</th>
-          </tr>
-          </thead>
-          <tbody class="justify-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <% events.each do |event| %>
-            <tr class="">
-              <td class="text-red-500"><%== event.title %></td>
-              <td class="text-blue-500"><%= event.renderable_venue %></td>
-              <td class="text-green-500"><%= event.event_date %></td>
-              <td class="text-orange-500">
-                <% if event.link_to_buy_ticket.present? %>
-                  <a href="<%= event.link_to_buy_ticket %>"><%= event.renderable_ticket_status %></a>
-                <% else %>
-                  <%= event.renderable_ticket_status %>
+            <div class="bg-white rounded-lg p-6 mb-6 flex flex-col md-card-hover">
+              <h3 class="text-xl font-semibold mb-2 flex items-center"><span class="material-symbols-outlined mr-2">event</span><%== event.title %></h3>
+              <p class="text-gray-600 mb-2 flex items-center"><span class="material-symbols-outlined mr-2">location_on</span><%= event.renderable_venue %></p>
+              <p class="text-gray-500 mb-4 flex items-center"><span class="material-symbols-outlined mr-2">calendar_today</span><%= event.event_date %></p>
+              <div class="mt-auto">
+                <p class="mb-4 flex items-center">
+                  <% if event.link_to_buy_ticket.present? %>
+                    <a href="<%= event.link_to_buy_ticket %>" class="text-blue-500 hover:text-blue-700 font-semibold py-2 px-4 rounded inline-flex items-center"><span class="material-symbols-outlined mr-2">confirmation_number</span><%= event.renderable_ticket_status %></a>
+                  <% else %>
+                    <span class="material-symbols-outlined mr-2">confirmation_number</span><%= event.renderable_ticket_status %>
+                  <% end %>
+                </p>
+                <% if event.more_info.present? %>
+                  <a href="<%= event.more_info %>" class="text-blue-500 hover:text-blue-700 font-semibold py-2 px-4 rounded inline-flex items-center"><span class="material-symbols-outlined mr-2">info</span>Click for more info</a>
                 <% end %>
-              </td>
-              <% if event.more_info.present? %>
-                <td><a href="<%= event.more_info %>">Click for more info</a></td>
-              <% end %>
-            </tr>
+              </div>
+            </div>
           <% end %>
-          </tbody>
-        </table>
+        </div>
       <% end %>
-
     <% end %>
   </div>
 </main>

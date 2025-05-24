@@ -7,3 +7,15 @@
         @apply text-blue-600 underline hover:text-blue-800 visited:text-purple-600;
     }
 }
+
+@layer components {
+  /* Custom class for a Material Design-like card hover effect */
+  .md-card-hover {
+    @apply shadow-md; /* Base shadow */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition for shadow */
+  }
+
+  .md-card-hover:hover {
+    @apply shadow-xl; /* Increased shadow on hover */
+  }
+}
