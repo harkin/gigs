@@ -4,6 +4,8 @@ module DataGrabbers
     EVENTS_URL = "https://www.whelanslive.com/wp-content/plugins/modus-whelans/inc/custom-ajax.php"
 
     def self.get_events
+      return
+
       start_time = Time.now.to_i
 
       events = []
