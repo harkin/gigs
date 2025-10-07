@@ -9,15 +9,17 @@ module DataGrabbers
       events = []
 
       next_page = EVENTS_URL
+      next_year = false
 
       12.times do
         response = Faraday.get("#{next_page}")
         document = Nokogiri::HTML(response.body)
         events_html = document.css("article.desk")
 
-        extract_events_from_html(events_html, events)
+        extract_events_from_html(events_html, events, next_year)
 
         next_page = document.css("header nav").last.css("a").last.attribute("href").to_s + "/"
+        next_year = true if next_page.include?("january")
       end
 
       ActiveRecord::Base.transaction do
@@ -30,7 +32,7 @@ module DataGrabbers
       events
     end
 
-    def self.extract_events_from_html(events_html, events)
+    def self.extract_events_from_html(events_html, events, next_year)
       events_html.each do |event_html|
         title_element = event_html.css("h3 a").first
         title = title_element.text.strip
@@ -46,6 +48,9 @@ module DataGrabbers
         ticket = ticket_element&.attribute("href")&.value
 
         event_date = Time.parse(date_text)
+        if next_year
+          event_date = event_date + 1.year
+        end
 
         events.push(
           {
