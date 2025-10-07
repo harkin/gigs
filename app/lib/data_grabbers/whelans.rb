@@ -1,50 +1,43 @@
 module DataGrabbers
   class Whelans
 
-    EVENTS_URL = "https://www.whelanslive.com/wp-content/plugins/modus-whelans/inc/custom-ajax.php"
+    EVENTS_URL = "https://www.whelanslive.com/events/"
 
     def self.get_events
-      return
-
       start_time = Time.now.to_i
 
       events = []
 
-      (0..11).each do |i|
-        date_to_search_for = Time.now + i.months
-        # Whelans expects a date of the form "2024-3" to be sent in the request
-        month_array = "#{date_to_search_for.year}-#{date_to_search_for.month}"
+      response = Faraday.get(EVENTS_URL)
+      document = Nokogiri::HTML(response.body)
+      articles = document.css("article.desk")
 
-        # this defaults to form encoding which Whelans expects
-        response = Faraday.post(EVENTS_URL, {
-          action: "whelansAjaxEventShortcode",
-          ajax_flag: 1,
-          page: 1,
-          limit: 200, # This seems to work, unlikely to have more than 200 events in a month and can avoid paging this way
-          class: "events-template",
-          month_array: month_array,
-        })
-        document = Nokogiri::HTML(response.body)
-        gigs = document.css("li")
+      articles.each do |article|
+        title_element = article.css("h3 a").first
+        title = title_element.text.strip
+        more_info = title_element.attribute("href")&.value
 
-        gigs.each do |gig|
-          day_of_month = gig.css("div.date")[0].children[1].text
-          time = gig.css("div.date")[0].children[2].text
-          title = gig.css("div.titles").css("a").text
-          more_info = gig.css("div.titles").css("a").attribute("href").value
-          ticket = gig.css("div.link-types").css("a").attribute("href").value
+        date_text = article.css("li").find { |li| li.text.include?("@") }&.text&.strip
 
-          events.push(
-            {
-              title: title,
-              event_date: Time.parse("#{month_array}-#{day_of_month} #{time}"),
-              ticket_status: :unknown, # TODO can't tell if Whelans updates anything if a show sells out yet
-              link_to_buy_ticket: ticket,
-              more_info: more_info,
-              venue: :whelans,
-            }
-          )
-        end
+        # dates look like "Tuesday, 7th of October @ 8:00 PM"
+        # the 'of' interferes with parsing
+        date_text.gsub!("of", "")
+
+        ticket_element = article.css("a.tickets").first
+        ticket = ticket_element&.attribute("href")&.value
+
+        event_date = Time.parse(date_text)
+
+        events.push(
+          {
+            title: title,
+            event_date: event_date,
+            ticket_status: :unknown,
+            link_to_buy_ticket: ticket,
+            more_info: more_info,
+            venue: :whelans,
+          }
+        )
       end
 
       ActiveRecord::Base.transaction do
