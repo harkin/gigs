@@ -44,3 +44,5 @@
 /.idea/*
 
 /config/credentials/development.key
+
+.claude
