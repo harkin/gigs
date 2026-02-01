@@ -21,11 +21,14 @@ module DataGrabbers
         more_info_uri = URI.parse(more_info_relative_link)
         more_info_uri.scheme = EVENTS_URI.scheme
         more_info_uri.host = EVENTS_URI.host
+        event_date = Time.parse("#{time} #{date}")
+
+        next if event_date < Time.now
 
         events.push(
           {
             title: title,
-            event_date: Time.parse("#{time} #{date}"),
+            event_date: event_date,
             ticket_status: :unknown, # TODO Button Factory doesn't have ticket details on the shows page
             link_to_buy_ticket: nil, # TODO Button Factory doesn't have ticket links on the shows page
             more_info: more_info_uri.to_s,
