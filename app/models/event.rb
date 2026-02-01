@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  enum venue: {
+  enum :venue, {
     academy: 0,
     # bord_gais:,
     button_factory: 4,
@@ -15,7 +15,7 @@ class Event < ApplicationRecord
     whelans: 3,
   }
 
-  enum ticket_status: {
+  enum :ticket_status, {
     available: 0,
     limited_availability: 1,
     sold_out: 2,
