@@ -1,19 +1,57 @@
-<div class="flex items-center gap-2 flex-wrap">
-  <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 500;">Theme:</span>
-  <%
-    swatches = [
-      ["dark",     "#818cf8", "Dark"],
-      ["bold",     "#ec4899", "Bold"],
-      ["neon",     "#00ffff", "Neon"],
-      ["cards",    "#6366f1", "Cards"],
-    ]
-  %>
-  <% swatches.each do |theme, color, label| %>
-    <button data-theme-target="swatch"
-            data-action="click->theme#select"
-            data-theme-value="<%= theme %>"
-            style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 50%; background: <%= color %>; border: 2px solid transparent; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: inline-block;"
-            title="<%= label %>">
-    </button>
-  <% end %>
+<div class="switcher-bar">
+  <div class="switcher-group">
+    <span class="switcher-label">Theme</span>
+    <%
+      swatches = [
+        ["light",  "Light",  "#ec4899", "#f472b6", "#db2777"],
+        ["dark",   "Dark",   "#818cf8", "#6366f1", "#4f46e5"],
+        ["neon",   "Neon",   "#00fff7", "#00e5e0", "#00ccc7"],
+      ]
+    %>
+    <div class="theme-swatches">
+      <% swatches.each do |theme, label, color_top, color_mid, color_bottom| %>
+        <button data-theme-target="swatch"
+                data-action="click->theme#select"
+                data-theme-value="<%= theme %>"
+                class="theme-swatch-btn"
+                title="<%= label %>">
+          <span class="swatch-dot" style="background: linear-gradient(135deg, <%= color_top %>, <%= color_mid %>, <%= color_bottom %>);"></span>
+          <span class="swatch-label"><%= label %></span>
+        </button>
+      <% end %>
+    </div>
+  </div>
+
+  <span class="switcher-divider"></span>
+
+  <div class="switcher-group">
+    <span class="switcher-label">View</span>
+    <div class="layout-toggle">
+      <button data-theme-target="layoutBtn"
+              data-action="click->theme#toggleLayout"
+              data-layout-value="list"
+              class="layout-toggle-btn"
+              title="List view">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="3" y1="4.5" x2="15" y2="4.5"/>
+          <line x1="3" y1="9" x2="15" y2="9"/>
+          <line x1="3" y1="13.5" x2="15" y2="13.5"/>
+        </svg>
+        <span>List</span>
+      </button>
+      <button data-theme-target="layoutBtn"
+              data-action="click->theme#toggleLayout"
+              data-layout-value="cards"
+              class="layout-toggle-btn"
+              title="Cards view">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="5.5" height="5.5" rx="1"/>
+          <rect x="10.5" y="2" width="5.5" height="5.5" rx="1"/>
+          <rect x="2" y="10.5" width="5.5" height="5.5" rx="1"/>
+          <rect x="10.5" y="10.5" width="5.5" height="5.5" rx="1"/>
+        </svg>
+        <span>Cards</span>
+      </button>
+    </div>
+  </div>
 </div>

@@ -1,11 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["swatch"]
+  static targets = ["swatch", "layoutBtn"]
 
   connect() {
-    const saved = localStorage.getItem("theme") || "bold"
-    this.applyTheme(saved)
+    const savedTheme = localStorage.getItem("theme") || "light"
+    const savedLayout = localStorage.getItem("layout") || "list"
+    this.applyTheme(savedTheme)
+    this.applyLayout(savedLayout)
   }
 
   select(event) {
@@ -14,14 +16,25 @@ export default class extends Controller {
     localStorage.setItem("theme", theme)
   }
 
+  toggleLayout(event) {
+    const layout = event.currentTarget.dataset.layoutValue
+    this.applyLayout(layout)
+    localStorage.setItem("layout", layout)
+  }
+
   applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme)
 
-    // Toggle table vs cards layout visibility
+    this.swatchTargets.forEach(swatch => {
+      swatch.classList.toggle("active", swatch.dataset.themeValue === theme)
+    })
+  }
+
+  applyLayout(layout) {
     const tableLayout = document.querySelector('[data-layout="table"]')
     const cardsLayout = document.querySelector('[data-layout="cards"]')
     if (tableLayout && cardsLayout) {
-      if (theme === "cards") {
+      if (layout === "cards") {
         tableLayout.classList.add("hidden")
         cardsLayout.classList.remove("hidden")
       } else {
@@ -30,11 +43,8 @@ export default class extends Controller {
       }
     }
 
-    // Update active swatch indicator
-    this.swatchTargets.forEach(swatch => {
-      const isActive = swatch.dataset.themeValue === theme
-      swatch.style.boxShadow = isActive ? "0 0 0 3px var(--bg), 0 0 0 5px var(--accent)" : "none"
-      swatch.style.transform = isActive ? "scale(1.15)" : ""
+    this.layoutBtnTargets.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.layoutValue === layout)
     })
   }
 }
