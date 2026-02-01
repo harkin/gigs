@@ -421,9 +421,29 @@
         box-shadow: var(--shadow);
     }
     [data-theme="light"] .switcher-bar {
-        background: rgba(255,255,255,0.22);
-        backdrop-filter: blur(16px);
-        border-color: rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.35);
+        backdrop-filter: blur(20px);
+        border-color: rgba(255,255,255,0.45);
+    }
+    [data-theme="light"] .switcher-label {
+        color: #4c1d95;
+    }
+    [data-theme="light"] .switcher-divider {
+        background: rgba(109,40,217,0.25);
+    }
+    [data-theme="light"] .swatch-label {
+        color: #5b21b6;
+    }
+    [data-theme="light"] .theme-swatch-btn.active .swatch-label {
+        color: #7c3aed;
+    }
+    [data-theme="light"] .layout-toggle-btn {
+        color: #6d28d9;
+    }
+    [data-theme="light"] .layout-toggle-btn.active {
+        color: #7c3aed;
+        border-color: #7c3aed;
+        background: rgba(124,58,237,0.12);
     }
     [data-theme="neon"] .switcher-bar {
         background: rgba(0,255,247,0.04);

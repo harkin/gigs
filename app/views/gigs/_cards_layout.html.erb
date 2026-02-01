@@ -2,7 +2,7 @@
   <div class="cards-grid">
     <% @events.each do |event| %>
       <div class="venue-card"
-           style="--venue-color: <%= venue_color_for(event.venue) %>;"
+           style="--venue-color: <%= status_color_for(event) %>;"
            data-filter-target="row"
            data-title="<%= event.title.downcase %>"
            data-venue="<%= event.venue %>"
