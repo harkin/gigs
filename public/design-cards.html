@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dublin Gigs — Bento Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; background: #f0f0f0; }
+    .card {
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .venue-olympia { border-left: 4px solid #6366f1; }
+    .venue-vicar { border-left: 4px solid #ec4899; }
+    .venue-whelans { border-left: 4px solid #f59e0b; }
+    .venue-academy { border-left: 4px solid #10b981; }
+    .venue-button { border-left: 4px solid #8b5cf6; }
+    .venue-point { border-left: 4px solid #ef4444; }
+    input, select {
+      background: #fff !important;
+      border: 1px solid #e5e5e5 !important;
+    }
+    input:focus, select:focus {
+      border-color: #000 !important;
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.1) !important;
+      outline: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Dublin Gigs</h1>
+      <p class="text-gray-400 mt-1.5 text-sm">
+        10 events &middot; Updated Jan 31, 2026
+      </p>
+    </header>
+
+    <!-- Filter Bar -->
+    <div class="sticky top-0 z-10 bg-[#f0f0f0]/90 backdrop-blur-xl -mx-4 px-4 py-4 mb-6">
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex-1 min-w-[200px]">
+          <input type="text" placeholder="Search events..." class="w-full rounded-xl text-sm px-4 py-2.5">
+        </div>
+        <select class="rounded-xl text-sm px-3 py-2.5">
+          <option value="">All Venues</option>
+          <option>3Olympia Theatre</option>
+          <option>Vicar Street</option>
+          <option>Whelan's</option>
+          <option>The Academy</option>
+          <option>Button Factory</option>
+          <option>The Point</option>
+        </select>
+        <div class="flex items-center gap-2">
+          <input type="date" class="rounded-xl text-sm px-3 py-2.5">
+          <span class="text-gray-400 text-sm">to</span>
+          <input type="date" class="rounded-xl text-sm px-3 py-2.5">
+        </div>
+        <button class="text-sm text-gray-400 hover:text-gray-700">Reset</button>
+      </div>
+    </div>
+
+    <!-- Card Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Card 1 -->
+      <div class="card rounded-2xl p-5 venue-olympia">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-500">3Olympia Theatre</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-red-100 text-red-600">Sold Out</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Fontaines D.C.</h3>
+        <p class="text-sm text-gray-400 mb-4">Friday, February 14, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium">More info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card rounded-2xl p-5 venue-vicar">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-pink-500">Vicar Street</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-600">Available</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Lankum</h3>
+        <p class="text-sm text-gray-400 mb-4">Saturday, February 22, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card rounded-2xl p-5 venue-whelans">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-500">Whelan's</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-amber-100 text-amber-600">Limited</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Pillow Queens</h3>
+        <p class="text-sm text-gray-400 mb-4">Thursday, March 5, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="card rounded-2xl p-5 venue-academy">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-500">The Academy</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-600">Available</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">The Murder Capital</h3>
+        <p class="text-sm text-gray-400 mb-4">Friday, March 13, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="card rounded-2xl p-5 venue-point">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-red-500">The Point</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-red-100 text-red-600">Sold Out</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Hozier</h3>
+        <p class="text-sm text-gray-400 mb-4">Saturday, March 21, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium">More info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 6 -->
+      <div class="card rounded-2xl p-5 venue-vicar">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-pink-500">Vicar Street</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-600">Available</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">CMAT</h3>
+        <p class="text-sm text-gray-400 mb-4">Friday, April 3, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 7 -->
+      <div class="card rounded-2xl p-5 venue-olympia">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-500">3Olympia Theatre</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-amber-100 text-amber-600">Limited</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Inhaler</h3>
+        <p class="text-sm text-gray-400 mb-4">Saturday, April 11, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 8 -->
+      <div class="card rounded-2xl p-5 venue-button">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-violet-500">Button Factory</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-600">Available</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Sorcha Richardson</h3>
+        <p class="text-sm text-gray-400 mb-4">Wednesday, April 22, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 9 -->
+      <div class="card rounded-2xl p-5 venue-vicar">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-pink-500">Vicar Street</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">Unknown</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Villagers</h3>
+        <p class="text-sm text-gray-400 mb-4">Saturday, May 2, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium">More info &rarr;</a>
+        </div>
+      </div>
+      <!-- Card 10 -->
+      <div class="card rounded-2xl p-5 venue-vicar">
+        <div class="flex justify-between items-start mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-pink-500">Vicar Street</span>
+          <span class="text-xs font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-600">Available</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Damien Dempsey</h3>
+        <p class="text-sm text-gray-400 mb-4">Friday, May 15, 2026</p>
+        <div class="flex gap-2">
+          <a href="#" class="text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">Buy Tickets</a>
+          <a href="#" class="text-xs text-gray-400 hover:text-gray-700 font-medium flex items-center">Info &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

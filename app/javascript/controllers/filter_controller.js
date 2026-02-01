@@ -13,6 +13,8 @@ export default class extends Controller {
     const dateFrom = this.dateFromTarget.value ? new Date(this.dateFromTarget.value) : null
     const dateTo = this.dateToTarget.value ? new Date(this.dateToTarget.value + "T23:59:59") : null
 
+    // Find the currently visible layout to count only its rows
+    const visibleLayout = document.querySelector('[data-layout]:not(.hidden)')
     let visibleCount = 0
 
     this.rowTargets.forEach(row => {
@@ -28,11 +30,13 @@ export default class extends Controller {
       const isVisible = matchesSearch && matchesVenue && matchesDateFrom && matchesDateTo
 
       row.classList.toggle("hidden", !isVisible)
-      if (isVisible) visibleCount++
+      if (isVisible && visibleLayout && visibleLayout.contains(row)) visibleCount++
     })
 
     this.countTarget.textContent = visibleCount
-    this.noResultsTarget.classList.toggle("hidden", visibleCount > 0)
+    this.noResultsTargets.forEach(el => {
+      el.classList.toggle("hidden", visibleCount > 0)
+    })
   }
 
   reset() {

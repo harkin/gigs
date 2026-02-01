@@ -1,0 +1,21 @@
+<div class="flex items-center gap-2 flex-wrap">
+  <span style="color: var(--text-muted); font-size: 0.75rem; font-weight: 500;">Theme:</span>
+  <%
+    swatches = [
+      ["polished", "#4f46e5", "Polished"],
+      ["dark",     "#818cf8", "Dark"],
+      ["bold",     "#ec4899", "Bold"],
+      ["retro",    "#b8542a", "Retro"],
+      ["neon",     "#00ffff", "Neon"],
+      ["cards",    "#6366f1", "Cards"],
+    ]
+  %>
+  <% swatches.each do |theme, color, label| %>
+    <button data-theme-target="swatch"
+            data-action="click->theme#select"
+            data-theme-value="<%= theme %>"
+            style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; border-radius: 50%; background: <%= color %>; border: 2px solid transparent; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: inline-block;"
+            title="<%= label %>">
+    </button>
+  <% end %>
+</div>

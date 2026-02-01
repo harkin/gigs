@@ -1,139 +1,29 @@
 <div class="max-w-6xl mx-auto" data-controller="filter">
   <!-- Header Section -->
-  <header class="mb-6">
-    <h1 class="text-3xl font-semibold text-gray-900 tracking-tight">Dublin Gigs</h1>
-    <p class="text-gray-500 mt-1">
-      <span data-filter-target="count"><%= @events.count %></span> events
-      <span class="text-gray-300 mx-2">|</span>
-      Updated <%= @last_refreshed_at&.to_formatted_s(:short) || "Never" %>
-      <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
-        <a href="/refresh" class="text-blue-600 hover:underline ml-2">Refresh</a>
-      <% end %>
-    </p>
+  <header class="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <span class="retro-subtitle">Live Music Listings</span>
+      <h1 class="text-3xl font-semibold tracking-tight page-heading">Dublin Gigs</h1>
+      <div class="retro-divider">
+        <p style="color: var(--text-muted); margin-top: 0.25rem; font-size: 0.875rem;">
+          <span data-filter-target="count"><%= @events.count %></span> events
+          <span style="margin: 0 0.5rem; opacity: 0.4;">|</span>
+          Updated <%= @last_refreshed_at&.to_formatted_s(:short) || "Never" %>
+          <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
+            <a href="/refresh" style="margin-left: 0.5rem;">Refresh</a>
+          <% end %>
+        </p>
+      </div>
+    </div>
+    <%= render "gigs/theme_switcher" %>
   </header>
 
-  <!-- Sticky Filter Bar -->
-  <div class="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-200 -mx-4 px-4 py-4 mb-6">
-    <div class="flex flex-wrap gap-3 items-center">
-      <!-- Search Input -->
-      <div class="flex-1 min-w-[200px]">
-        <input type="text"
-               placeholder="Search events..."
-               data-filter-target="search"
-               data-action="input->filter#filter"
-               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-      </div>
+  <!-- Filter Bar -->
+  <%= render "gigs/filter_bar" %>
 
-      <!-- Venue Dropdown -->
-      <select data-filter-target="venue"
-              data-action="change->filter#filter"
-              class="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm">
-        <option value="">All Venues</option>
-        <% @venues.each do |name, value| %>
-          <option value="<%= value %>"><%= name %></option>
-        <% end %>
-      </select>
+  <!-- Table Layout -->
+  <%= render "gigs/table_layout" %>
 
-      <!-- Date Range -->
-      <div class="flex items-center gap-2">
-        <input type="date"
-               data-filter-target="dateFrom"
-               data-action="change->filter#filter"
-               class="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-               title="From date">
-        <span class="text-gray-400 text-sm">to</span>
-        <input type="date"
-               data-filter-target="dateTo"
-               data-action="change->filter#filter"
-               class="rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-               title="To date">
-      </div>
-
-      <!-- Reset Button -->
-      <button type="button"
-              data-action="click->filter#reset"
-              class="text-sm text-gray-500 hover:text-gray-700 underline">
-        Reset
-      </button>
-    </div>
-  </div>
-
-  <!-- Table/List View -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <!-- Table Header (Desktop) -->
-    <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
-      <div class="col-span-5">Event</div>
-      <div class="col-span-2">Venue</div>
-      <div class="col-span-2">Date</div>
-      <div class="col-span-2">Status</div>
-      <div class="col-span-1"></div>
-    </div>
-
-    <!-- Event Rows -->
-    <div class="divide-y divide-gray-100">
-      <% @events.each do |event| %>
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50 transition-colors"
-             data-filter-target="row"
-             data-title="<%= event.title.downcase %>"
-             data-venue="<%= event.venue %>"
-             data-date="<%= event.event_date.to_date.iso8601 %>">
-
-          <!-- Event Title -->
-          <div class="md:col-span-5">
-            <span class="font-medium text-gray-900"><%== event.title %></span>
-          </div>
-
-          <!-- Venue -->
-          <div class="md:col-span-2">
-            <span class="text-sm text-gray-600 md:text-gray-600">
-              <span class="md:hidden font-medium text-gray-400">Venue: </span>
-              <%= event.renderable_venue %>
-            </span>
-          </div>
-
-          <!-- Date -->
-          <div class="md:col-span-2">
-            <span class="text-sm text-gray-600">
-              <span class="md:hidden font-medium text-gray-400">Date: </span>
-              <%= event.event_date.strftime("%a, %b %d %Y") %>
-            </span>
-          </div>
-
-          <!-- Status Badge -->
-          <div class="md:col-span-2">
-            <% status_class = case event.ticket_status
-                              when "available" then "status-available"
-                              when "limited_availability" then "status-limited"
-                              when "sold_out" then "status-sold-out"
-                              else "status-unknown"
-                              end %>
-            <% if event.link_to_buy_ticket.present? %>
-              <a href="<%= event.link_to_buy_ticket %>"
-                 class="status-badge <%= status_class %> hover:opacity-80">
-                <%= event.renderable_ticket_status %>
-              </a>
-            <% else %>
-              <span class="status-badge <%= status_class %>">
-                <%= event.renderable_ticket_status %>
-              </span>
-            <% end %>
-          </div>
-
-          <!-- More Info Link -->
-          <div class="md:col-span-1 md:text-right">
-            <% if event.more_info.present? %>
-              <a href="<%= event.more_info %>" class="text-sm text-gray-400 hover:text-gray-600">
-                Info
-              </a>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-    <!-- No Results Message -->
-    <div class="hidden px-6 py-12 text-center text-gray-500" data-filter-target="noResults">
-      No events match your filters.
-    </div>
-  </div>
+  <!-- Cards Layout -->
+  <%= render "gigs/cards_layout" %>
 </div>

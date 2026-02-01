@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dublin Gigs — Bold & Colorful</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    body { font-family: 'Space Grotesk', sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
+    .card-gradient { background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85)); backdrop-filter: blur(20px); }
+    .row-hover:hover { transform: translateX(4px); }
+    input, select { border-color: #d8b4fe !important; }
+    input:focus, select:focus { border-color: #a855f7 !important; box-shadow: 0 0 0 3px rgba(168,85,247,0.2) !important; }
+  </style>
+</head>
+<body class="min-h-screen gradient-bg">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8 text-white">
+      <h1 class="text-5xl font-bold tracking-tight">
+        DUBLIN<br><span class="text-yellow-300">GIGS</span>
+      </h1>
+      <p class="text-white/70 mt-3 text-lg">
+        10 events
+        <span class="text-white/30 mx-2">|</span>
+        Updated Jan 31, 2026
+      </p>
+    </header>
+
+    <!-- Sticky Filter Bar -->
+    <div class="sticky top-0 z-10 backdrop-blur-xl bg-white/20 rounded-2xl px-5 py-4 mb-6 border border-white/30">
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex-1 min-w-[200px]">
+          <input type="text" placeholder="Search events..." class="w-full rounded-xl bg-white/90 text-sm px-4 py-2.5 text-gray-800 placeholder-gray-400">
+        </div>
+        <select class="rounded-xl bg-white/90 text-sm px-3 py-2.5 text-gray-800">
+          <option value="">All Venues</option>
+          <option>3Olympia Theatre</option>
+          <option>Vicar Street</option>
+          <option>Whelan's</option>
+          <option>The Academy</option>
+          <option>Button Factory</option>
+          <option>The Point</option>
+        </select>
+        <div class="flex items-center gap-2">
+          <input type="date" class="rounded-xl bg-white/90 text-sm px-3 py-2.5 text-gray-800">
+          <span class="text-white/70 text-sm font-medium">to</span>
+          <input type="date" class="rounded-xl bg-white/90 text-sm px-3 py-2.5 text-gray-800">
+        </div>
+        <button class="text-sm text-white/80 hover:text-white underline font-medium">Reset</button>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="card-gradient rounded-2xl border border-white/40 overflow-hidden shadow-2xl">
+      <!-- Header -->
+      <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-purple-50/80 border-b border-purple-100 text-xs font-bold text-purple-500 uppercase tracking-wider">
+        <div class="col-span-5">Event</div>
+        <div class="col-span-2">Venue</div>
+        <div class="col-span-2">Date</div>
+        <div class="col-span-2">Status</div>
+        <div class="col-span-1"></div>
+      </div>
+
+      <div class="divide-y divide-purple-100/50">
+        <!-- Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Fontaines D.C.</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">3Olympia Theatre</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Fri, Feb 14 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white">Sold Out</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Lankum</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Vicar Street</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Sat, Feb 22 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white">Available</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 3 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Pillow Queens</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Whelan's</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Thu, Mar 05 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white">Limited</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 4 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">The Murder Capital</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">The Academy</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Fri, Mar 13 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white">Available</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 5 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Hozier</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">The Point</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Sat, Mar 21 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white">Sold Out</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 6 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">CMAT</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Vicar Street</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Fri, Apr 03 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white">Available</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 7 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Inhaler</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">3Olympia Theatre</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Sat, Apr 11 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white">Limited</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 8 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Sorcha Richardson</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Button Factory</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Wed, Apr 22 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white">Available</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 9 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Villagers</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Vicar Street</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Sat, May 02 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-400 text-white">Unknown</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+        <!-- Row 10 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-all duration-200">
+          <div class="md:col-span-5"><span class="font-bold text-gray-900 text-base">Damien Dempsey</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-purple-600 font-medium">Vicar Street</span></div>
+          <div class="md:col-span-2"><span class="text-sm text-gray-600">Fri, May 15 2026</span></div>
+          <div class="md:col-span-2"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white">Available</span></div>
+          <div class="md:col-span-1 md:text-right"><a href="#" class="text-sm text-purple-400 hover:text-purple-600 font-medium">Info</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

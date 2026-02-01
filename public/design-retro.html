@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dublin Gigs — Retro Concert Poster</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f0e8;
+      color: #2c1810;
+      background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+    h1, .serif { font-family: 'Playfair Display', serif; }
+    .serif-body { font-family: 'Source Serif 4', serif; }
+    .row-hover:hover { background: rgba(194, 120, 58, 0.08); }
+    .warm-border { border-color: #c2783a; }
+    input, select {
+      font-family: 'Inter', sans-serif;
+      background: #faf6f0 !important;
+      border: 1px solid #d4c4a8 !important;
+      border-radius: 4px !important;
+      color: #2c1810 !important;
+    }
+    input:focus, select:focus {
+      border-color: #c2783a !important;
+      box-shadow: 0 0 0 2px rgba(194,120,58,0.2) !important;
+      outline: none !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-10">
+    <!-- Header -->
+    <header class="mb-10 text-center border-b-2 border-[#2c1810] pb-8">
+      <p class="text-xs uppercase tracking-[0.4em] text-[#c2783a] mb-2 font-medium">Live Music Listings</p>
+      <h1 class="text-7xl font-black tracking-tight text-[#2c1810] leading-none">
+        DUBLIN GIGS
+      </h1>
+      <div class="flex items-center justify-center gap-4 mt-4">
+        <span class="h-px w-12 bg-[#c2783a]"></span>
+        <span class="text-sm serif-body text-[#8b6f4e]">10 events &bull; Updated 31 January 2026</span>
+        <span class="h-px w-12 bg-[#c2783a]"></span>
+      </div>
+    </header>
+
+    <!-- Filter Bar -->
+    <div class="sticky top-0 z-10 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[#d4c4a8] -mx-4 px-4 py-4 mb-8">
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex-1 min-w-[200px]">
+          <input type="text" placeholder="Search events..." class="w-full text-sm px-4 py-2">
+        </div>
+        <select class="text-sm px-3 py-2">
+          <option value="">All Venues</option>
+          <option>3Olympia Theatre</option>
+          <option>Vicar Street</option>
+          <option>Whelan's</option>
+          <option>The Academy</option>
+          <option>Button Factory</option>
+          <option>The Point</option>
+        </select>
+        <div class="flex items-center gap-2">
+          <input type="date" class="text-sm px-3 py-2">
+          <span class="text-[#8b6f4e] text-sm serif-body italic">to</span>
+          <input type="date" class="text-sm px-3 py-2">
+        </div>
+        <button class="text-sm text-[#8b6f4e] hover:text-[#2c1810] underline serif-body italic">Reset</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-[#faf6f0] rounded-lg border border-[#d4c4a8] overflow-hidden shadow-sm">
+      <!-- Header -->
+      <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-[#2c1810] text-[10px] font-medium text-[#d4c4a8] uppercase tracking-[0.2em]">
+        <div class="col-span-5">Event</div>
+        <div class="col-span-2">Venue</div>
+        <div class="col-span-2">Date</div>
+        <div class="col-span-2">Status</div>
+        <div class="col-span-1"></div>
+      </div>
+
+      <div class="divide-y divide-[#e8dcc8]">
+        <!-- Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Fontaines D.C.</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">3Olympia Theatre</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">14 February</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#a0332c] bg-[#a0332c]/10 px-2.5 py-1 rounded">Sold Out</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Lankum</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Vicar Street</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">22 February</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#4a7c59] bg-[#4a7c59]/10 px-2.5 py-1 rounded">Available</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 3 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Pillow Queens</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Whelan's</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">5 March</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#c2783a] bg-[#c2783a]/10 px-2.5 py-1 rounded">Limited</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 4 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">The Murder Capital</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">The Academy</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">13 March</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#4a7c59] bg-[#4a7c59]/10 px-2.5 py-1 rounded">Available</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 5 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Hozier</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">The Point</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">21 March</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#a0332c] bg-[#a0332c]/10 px-2.5 py-1 rounded">Sold Out</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 6 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">CMAT</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Vicar Street</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">3 April</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#4a7c59] bg-[#4a7c59]/10 px-2.5 py-1 rounded">Available</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 7 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Inhaler</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">3Olympia Theatre</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">11 April</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#c2783a] bg-[#c2783a]/10 px-2.5 py-1 rounded">Limited</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 8 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Sorcha Richardson</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Button Factory</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">22 April</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#4a7c59] bg-[#4a7c59]/10 px-2.5 py-1 rounded">Available</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 9 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Villagers</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Vicar Street</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">2 May</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#8b6f4e] bg-[#8b6f4e]/10 px-2.5 py-1 rounded">Unknown</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+        <!-- Row 10 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover transition-colors">
+          <div class="md:col-span-5"><span class="font-bold text-[#2c1810] text-base serif">Damien Dempsey</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#6b5740]">Vicar Street</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-sm serif-body text-[#8b6f4e]">15 May</span></div>
+          <div class="md:col-span-2 flex items-center"><span class="text-xs font-bold uppercase tracking-wider text-[#4a7c59] bg-[#4a7c59]/10 px-2.5 py-1 rounded">Available</span></div>
+          <div class="md:col-span-1 flex items-center md:justify-end"><a href="#" class="text-xs text-[#c2783a] hover:text-[#2c1810] serif-body italic">Info &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

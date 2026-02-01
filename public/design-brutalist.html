@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dublin Gigs — Brutalist</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap');
+    body { font-family: 'Space Mono', monospace; background: #fff; color: #000; }
+    .highlight { background: #BFFF00; }
+    .border-thick { border: 3px solid #000; }
+    .border-thicker { border: 4px solid #000; }
+    .row-hover:hover { background: #BFFF00; }
+    input, select { font-family: 'Space Mono', monospace; border: 2px solid #000 !important; border-radius: 0 !important; background: #fff !important; }
+    input:focus, select:focus { outline: 3px solid #BFFF00 !important; border-color: #000 !important; box-shadow: none !important; }
+    option { font-family: 'Space Mono', monospace; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <header class="mb-8 border-b-4 border-black pb-4">
+      <h1 class="text-6xl font-bold uppercase leading-none tracking-tighter" style="font-family:'Inter',sans-serif;">
+        DUBLIN<br><span class="highlight px-2">GIGS</span>
+      </h1>
+      <p class="mt-3 text-sm uppercase tracking-widest">
+        [10 EVENTS] — UPDATED 31.01.2026
+      </p>
+    </header>
+
+    <!-- Filter Bar -->
+    <div class="sticky top-0 z-10 bg-white border-b-4 border-black -mx-4 px-4 py-4 mb-6">
+      <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex-1 min-w-[200px]">
+          <input type="text" placeholder="SEARCH..." class="w-full text-sm px-3 py-2 uppercase">
+        </div>
+        <select class="text-sm px-3 py-2 uppercase">
+          <option value="">ALL VENUES</option>
+          <option>3OLYMPIA THEATRE</option>
+          <option>VICAR STREET</option>
+          <option>WHELAN'S</option>
+          <option>THE ACADEMY</option>
+          <option>BUTTON FACTORY</option>
+          <option>THE POINT</option>
+        </select>
+        <div class="flex items-center gap-2">
+          <input type="date" class="text-sm px-3 py-2">
+          <span class="text-sm font-bold">→</span>
+          <input type="date" class="text-sm px-3 py-2">
+        </div>
+        <button class="text-sm uppercase font-bold border-2 border-black px-3 py-1.5 hover:bg-black hover:text-white transition-colors">[RESET]</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="border-thicker overflow-hidden">
+      <!-- Header -->
+      <div class="hidden md:grid md:grid-cols-12 gap-0 bg-black text-white text-xs font-bold uppercase tracking-widest">
+        <div class="col-span-5 px-4 py-3 border-r-2 border-white/20">Event</div>
+        <div class="col-span-2 px-4 py-3 border-r-2 border-white/20">Venue</div>
+        <div class="col-span-2 px-4 py-3 border-r-2 border-white/20">Date</div>
+        <div class="col-span-2 px-4 py-3 border-r-2 border-white/20">Status</div>
+        <div class="col-span-1 px-4 py-3"></div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Fontaines D.C.</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">3Olympia</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">14.02.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase bg-black text-white px-2 py-1">SOLD OUT</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 2 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Lankum</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Vicar St</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">22.02.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase highlight px-2 py-1">AVAILABLE</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 3 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Pillow Queens</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Whelan's</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">05.03.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase border-2 border-black px-2 py-1">LIMITED</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 4 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">The Murder Capital</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Academy</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">13.03.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase highlight px-2 py-1">AVAILABLE</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 5 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Hozier</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">The Point</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">21.03.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase bg-black text-white px-2 py-1">SOLD OUT</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 6 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">CMAT</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Vicar St</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">03.04.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase highlight px-2 py-1">AVAILABLE</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 7 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Inhaler</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">3Olympia</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">11.04.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase border-2 border-black px-2 py-1">LIMITED</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 8 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Sorcha Richardson</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Button Fctry</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">22.04.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase highlight px-2 py-1">AVAILABLE</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 9 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 border-b-2 border-black row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Villagers</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Vicar St</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">02.05.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase text-gray-400 px-2 py-1">UNKNOWN</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+      <!-- Row 10 -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-0 row-hover transition-colors">
+        <div class="md:col-span-5 px-4 py-3 md:border-r-2 md:border-black"><span class="font-bold uppercase">Damien Dempsey</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">Vicar St</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-sm">15.05.26</span></div>
+        <div class="md:col-span-2 px-4 py-3 md:border-r-2 md:border-black"><span class="text-xs font-bold uppercase highlight px-2 py-1">AVAILABLE</span></div>
+        <div class="md:col-span-1 px-4 py-3"><a href="#" class="text-xs font-bold uppercase hover:highlight">[INFO]</a></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

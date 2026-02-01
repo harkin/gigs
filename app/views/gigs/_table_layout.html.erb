@@ -1,0 +1,65 @@
+<div data-layout="table">
+  <div class="theme-card overflow-hidden">
+    <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 table-header text-xs font-medium tracking-wider"
+         style="text-transform: uppercase;">
+      <div class="col-span-5">Event</div>
+      <div class="col-span-2">Venue</div>
+      <div class="col-span-2">Date</div>
+      <div class="col-span-2">Status</div>
+      <div class="col-span-1"></div>
+    </div>
+
+    <div>
+      <% @events.each do |event| %>
+        <div class="event-row grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4"
+             style="border-bottom: 1px solid var(--border-light);"
+             data-filter-target="row"
+             data-title="<%= event.title.downcase %>"
+             data-venue="<%= event.venue %>"
+             data-date="<%= event.event_date.to_date.iso8601 %>">
+
+          <div class="md:col-span-5">
+            <span style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;"><%== event.title %></span>
+          </div>
+
+          <div class="md:col-span-2 flex items-center">
+            <span style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+              <%= event.renderable_venue %>
+            </span>
+          </div>
+
+          <div class="md:col-span-2 flex items-center">
+            <span style="font-size: 0.875rem; color: var(--text-secondary);">
+              <%= event.event_date.strftime("%a, %b %d %Y") %>
+            </span>
+          </div>
+
+          <div class="md:col-span-2 flex items-center">
+            <% if event.link_to_buy_ticket.present? %>
+              <a href="<%= event.link_to_buy_ticket %>"
+                 class="status-badge <%= status_class_for(event) %> hover:opacity-80">
+                <%= event.renderable_ticket_status %>
+              </a>
+            <% else %>
+              <span class="status-badge <%= status_class_for(event) %>">
+                <%= event.renderable_ticket_status %>
+              </span>
+            <% end %>
+          </div>
+
+          <div class="md:col-span-1 flex items-center md:justify-end">
+            <% if event.more_info.present? %>
+              <a href="<%= event.more_info %>" class="info-link" style="font-size: 0.8rem; color: var(--accent);">
+                Info
+              </a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="hidden px-6 py-12 text-center" style="color: var(--text-muted);" data-filter-target="noResults">
+      No events match your filters.
+    </div>
+  </div>
+</div>

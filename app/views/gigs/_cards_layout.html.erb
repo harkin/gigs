@@ -1,0 +1,48 @@
+<div data-layout="cards" class="hidden">
+  <div class="cards-grid">
+    <% @events.each do |event| %>
+      <div class="venue-card"
+           style="--venue-color: <%= venue_color_for(event.venue) %>;"
+           data-filter-target="row"
+           data-title="<%= event.title.downcase %>"
+           data-venue="<%= event.venue %>"
+           data-date="<%= event.event_date.to_date.iso8601 %>">
+
+        <div style="margin-bottom: 0.75rem;">
+          <h3 style="font-weight: 600; color: var(--text-primary); font-size: 1rem; line-height: 1.4; font-family: var(--font-heading);">
+            <%== event.title %>
+          </h3>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.375rem; margin-bottom: 0.75rem;">
+          <span style="font-size: 0.875rem; color: var(--text-secondary);">
+            📍 <%= event.renderable_venue %>
+          </span>
+          <span style="font-size: 0.875rem; color: var(--text-secondary);">
+            📅 <%= event.event_date.strftime("%a, %b %d %Y") %>
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span class="status-badge <%= status_class_for(event) %>">
+            <%= event.renderable_ticket_status %>
+          </span>
+
+          <% if event.link_to_buy_ticket.present? && event.ticket_status == "available" %>
+            <a href="<%= event.link_to_buy_ticket %>" class="buy-button">
+              Buy Tickets
+            </a>
+          <% elsif event.more_info.present? %>
+            <a href="<%= event.more_info %>" style="font-size: 0.875rem; color: var(--accent);">
+              More Info →
+            </a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="hidden px-6 py-12 text-center" style="color: var(--text-muted);" data-filter-target="noResults">
+    No events match your filters.
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="sticky top-0 z-10 filter-bar -mx-4 px-4 py-4 mb-6">
+  <div class="flex flex-wrap gap-3 items-center">
+    <div class="flex-1 min-w-[200px]">
+      <input type="text"
+             placeholder="Search events..."
+             data-filter-target="search"
+             data-action="input->filter#filter"
+             class="filter-input w-full shadow-sm text-sm px-3 py-2">
+    </div>
+
+    <select data-filter-target="venue"
+            data-action="change->filter#filter"
+            class="filter-input shadow-sm text-sm px-3 py-2">
+      <option value="">All Venues</option>
+      <% @venues.each do |name, value| %>
+        <option value="<%= value %>"><%= name %></option>
+      <% end %>
+    </select>
+
+    <div class="flex items-center gap-2">
+      <input type="date"
+             data-filter-target="dateFrom"
+             data-action="change->filter#filter"
+             class="filter-input shadow-sm text-sm px-3 py-2"
+             title="From date">
+      <span style="color: var(--text-muted); font-size: 0.875rem;">to</span>
+      <input type="date"
+             data-filter-target="dateTo"
+             data-action="change->filter#filter"
+             class="filter-input shadow-sm text-sm px-3 py-2"
+             title="To date">
+    </div>
+
+    <button type="button"
+            data-action="click->filter#reset"
+            style="color: var(--text-muted); font-size: 0.875rem; text-decoration: underline;">
+      Reset
+    </button>
+  </div>
+</div>
