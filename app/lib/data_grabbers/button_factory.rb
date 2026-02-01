@@ -23,7 +23,7 @@ module DataGrabbers
         more_info_uri.host = EVENTS_URI.host
         event_date = Time.parse("#{time} #{date}")
 
-        next if event_date < Time.now
+        next if event_date <= Time.now
 
         events.push(
           {
