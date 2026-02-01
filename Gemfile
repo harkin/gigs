@@ -1,12 +1,9 @@
 source "https://rubygems.org"
 
-ruby "3.4.3"
+ruby "4.0.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.2"
-
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 6.0"
@@ -16,9 +13,6 @@ gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
-
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -41,7 +35,6 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
-  gem "planetscale_rails"
 end
 
 group :development do
@@ -55,15 +48,9 @@ group :development do
   # gem "spring"
 end
 
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-end
-
-gem "faraday", "2.12.0"
-gem "mysql2", "0.5.6"
-gem "nokogiri", "1.18.8"
+gem "faraday"
+gem "mysql2"
+gem "nokogiri"
 gem "tailwindcss-rails"
 
 gem "importmap-rails", "~> 2.0"
