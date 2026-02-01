@@ -6,8 +6,7 @@ class GigsController < ApplicationController
   end
 
   def refresh
-    puts "refreshing gig events"
-    ::RefreshGigData.refresh_events
+    Thread.new { ::RefreshGigData.refresh_events }
     redirect_to action: :index
   end
 end
