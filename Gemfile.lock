@@ -126,8 +126,6 @@ GEM
     minitest (6.0.1)
       prism (~> 1.5)
     msgpack (1.8.0)
-    mysql2 (0.5.7)
-      bigdecimal
     net-http (0.9.1)
       uri (>= 0.11.1)
     net-imap (0.6.2)
@@ -159,6 +157,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.4)
+    rack-mini-profiler (4.0.1)
+      rack (>= 1.2.0)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -215,6 +215,8 @@ GEM
     tailwindcss-ruby (4.1.18-x86_64-linux-gnu)
     thor (1.5.0)
     timeout (0.6.0)
+    trilogy (2.10.0)
+      bigdecimal
     tsort (0.2.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
@@ -243,13 +245,14 @@ DEPENDENCIES
   debug
   faraday
   importmap-rails (~> 2.0)
-  mysql2
   nokogiri
   propshaft
   puma (>= 6.0)
+  rack-mini-profiler
   rails (~> 8.1.2)
   stimulus-rails
   tailwindcss-rails (~> 4.0)
+  trilogy
   turbo-rails
   tzinfo-data
   web-console
