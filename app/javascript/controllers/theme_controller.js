@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["swatch"]
 
   connect() {
-    const saved = localStorage.getItem("theme") || "polished"
+    const saved = localStorage.getItem("theme") || "bold"
     this.applyTheme(saved)
   }
 
