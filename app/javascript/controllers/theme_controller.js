@@ -5,7 +5,8 @@ export default class extends Controller {
 
   connect() {
     const savedTheme = localStorage.getItem("theme") || "light"
-    const savedLayout = localStorage.getItem("layout") || "list"
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    const savedLayout = isMobile ? "cards" : (localStorage.getItem("layout") || "list")
     this.applyTheme(savedTheme)
     this.applyLayout(savedLayout)
   }

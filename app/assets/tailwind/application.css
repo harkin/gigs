@@ -381,6 +381,20 @@
         box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
     }
 
+    /* Date inputs — prevent iOS Safari collapse */
+    .filter-date {
+        min-width: 8.5rem;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    /* iOS Safari renders date inputs with no text when empty;
+       ensure they still take up space and look tappable */
+    @supports (-webkit-touch-callout: none) {
+        .filter-date {
+            min-height: 2.5rem;
+        }
+    }
+
     /* Bold: light purple-tinted inputs */
     [data-theme="light"] .filter-input {
         background: rgba(255,255,255,0.9);
