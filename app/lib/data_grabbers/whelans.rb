@@ -36,6 +36,9 @@ module DataGrabbers
       events_html.each do |event_html|
         title_element = event_html.css("h3 a").first
         title = title_element.text.strip
+
+        next if title.include?("CANCELLED")
+
         more_info = title_element.attribute("href")&.value
 
         date_text = event_html.css("li").find { |li| li.text.include?("@") }&.text&.strip
