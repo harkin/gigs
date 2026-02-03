@@ -47,6 +47,9 @@ module DataGrabbers
         ticket_element = event_html.css("a.tickets").first
         ticket = ticket_element&.attribute("href")&.value
 
+        price_element = event_html.css("li.price").first
+        price = price_element&.text&.strip
+
         event_date = Time.parse(date_text)
         if next_year
           event_date = event_date + 1.year
@@ -56,6 +59,7 @@ module DataGrabbers
           {
             title: title,
             event_date: event_date,
+            price: price,
             ticket_status: :unknown,
             link_to_buy_ticket: ticket,
             more_info: more_info,
