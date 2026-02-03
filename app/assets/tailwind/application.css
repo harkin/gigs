@@ -222,6 +222,45 @@
     }
 
     /* ───────────────────────────
+       Price Tags
+       ─────────────────────────── */
+    .price-tag {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.01em;
+    }
+    .price-tag--empty {
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    /* Light/Bold theme: subtle purple tint */
+    [data-theme="light"] .price-tag {
+        color: #7c3aed;
+        font-weight: 700;
+        font-size: 0.75rem;
+    }
+    [data-theme="light"] .price-tag--empty {
+        color: rgba(124, 58, 237, 0.4);
+    }
+
+    /* Neon theme: cyan glow, monospace feel */
+    [data-theme="neon"] .price-tag {
+        color: #00fff7;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-shadow: 0 0 8px rgba(0,255,247,0.4);
+    }
+    [data-theme="neon"] .price-tag--empty {
+        color: #333;
+        text-shadow: none;
+    }
+
+    /* ───────────────────────────
        Page Heading
        ─────────────────────────── */
     .page-heading {

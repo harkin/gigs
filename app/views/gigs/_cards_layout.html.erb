@@ -24,9 +24,14 @@
         </div>
 
         <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span class="status-badge <%= status_class_for(event) %>">
-            <%= event.renderable_ticket_status %>
-          </span>
+          <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+            <span class="status-badge <%= status_class_for(event) %>">
+              <%= event.renderable_ticket_status %>
+            </span>
+            <% if event.price.present? %>
+              <span class="price-tag"><%= event.price %></span>
+            <% end %>
+          </div>
 
           <% if event.link_to_buy_ticket.present? && event.ticket_status == "available" %>
             <a href="<%= event.link_to_buy_ticket %>" class="buy-button">

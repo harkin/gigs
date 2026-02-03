@@ -2,9 +2,10 @@
   <div class="theme-card overflow-hidden">
     <div class="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 table-header text-xs font-medium tracking-wider"
          style="text-transform: uppercase;">
-      <div class="col-span-5">Event</div>
+      <div class="col-span-4">Event</div>
       <div class="col-span-2">Venue</div>
       <div class="col-span-2">Date</div>
+      <div class="col-span-1">Price</div>
       <div class="col-span-2">Status</div>
       <div class="col-span-1"></div>
     </div>
@@ -18,7 +19,7 @@
              data-venue="<%= event.venue %>"
              data-date="<%= event.event_date.to_date.iso8601 %>">
 
-          <div class="md:col-span-5">
+          <div class="md:col-span-4">
             <span style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;"><%== event.title %></span>
           </div>
 
@@ -32,6 +33,14 @@
             <span style="font-size: 0.875rem; color: var(--text-secondary);">
               <%= event.event_date.strftime("%a, %b %d %Y") %>
             </span>
+          </div>
+
+          <div class="md:col-span-1 flex items-center">
+            <% if event.price.present? %>
+              <span class="price-tag"><%= event.price %></span>
+            <% else %>
+              <span class="price-tag price-tag--empty">—</span>
+            <% end %>
           </div>
 
           <div class="md:col-span-2 flex items-center">
