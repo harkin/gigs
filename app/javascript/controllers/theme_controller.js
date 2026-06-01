@@ -5,10 +5,20 @@ export default class extends Controller {
 
   connect() {
     const savedTheme = localStorage.getItem("theme") || "light"
-    const isMobile = window.matchMedia("(max-width: 767px)").matches
-    const savedLayout = isMobile ? "cards" : (localStorage.getItem("layout") || "list")
     this.applyTheme(savedTheme)
-    this.applyLayout(savedLayout)
+
+    // Check if we need to switch to saved layout preference
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    const savedLayout = isMobile ? "cards" : (localStorage.getItem("layout") || "table")
+    const currentLayout = document.querySelector("turbo-frame#events-display")?.dataset.currentLayout
+
+    if (currentLayout && savedLayout !== currentLayout) {
+      // Trigger Turbo Frame navigation to preferred layout
+      const layoutLink = document.querySelector(`a[data-turbo-frame="events-display"][data-layout-value="${savedLayout}"]`)
+      if (layoutLink) {
+        layoutLink.click()
+      }
+    }
   }
 
   select(event) {
@@ -17,10 +27,10 @@ export default class extends Controller {
     localStorage.setItem("theme", theme)
   }
 
-  toggleLayout(event) {
+  selectLayout(event) {
     const layout = event.currentTarget.dataset.layoutValue
-    this.applyLayout(layout)
     localStorage.setItem("layout", layout)
+    this.updateLayoutButtons(layout)
   }
 
   applyTheme(theme) {
@@ -31,19 +41,7 @@ export default class extends Controller {
     })
   }
 
-  applyLayout(layout) {
-    const tableLayout = document.querySelector('[data-layout="table"]')
-    const cardsLayout = document.querySelector('[data-layout="cards"]')
-    if (tableLayout && cardsLayout) {
-      if (layout === "cards") {
-        tableLayout.classList.add("hidden")
-        cardsLayout.classList.remove("hidden")
-      } else {
-        tableLayout.classList.remove("hidden")
-        cardsLayout.classList.add("hidden")
-      }
-    }
-
+  updateLayoutButtons(layout) {
     this.layoutBtnTargets.forEach(btn => {
       btn.classList.toggle("active", btn.dataset.layoutValue === layout)
     })

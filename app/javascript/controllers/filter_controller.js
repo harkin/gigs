@@ -5,6 +5,19 @@ export default class extends Controller {
 
   connect() {
     this.filter()
+
+    // Re-apply filters when Turbo Frame content changes (layout switch)
+    document.addEventListener("turbo:frame-load", this.handleFrameLoad)
+  }
+
+  disconnect() {
+    document.removeEventListener("turbo:frame-load", this.handleFrameLoad)
+  }
+
+  handleFrameLoad = (event) => {
+    if (event.target.id === "events-display") {
+      this.filter()
+    }
   }
 
   filter() {
@@ -13,8 +26,6 @@ export default class extends Controller {
     const dateFrom = this.dateFromTarget.value ? new Date(this.dateFromTarget.value) : null
     const dateTo = this.dateToTarget.value ? new Date(this.dateToTarget.value + "T23:59:59") : null
 
-    // Find the currently visible layout to count only its rows
-    const visibleLayout = document.querySelector('[data-layout]:not(.hidden)')
     let visibleCount = 0
 
     this.rowTargets.forEach(row => {
@@ -30,7 +41,7 @@ export default class extends Controller {
       const isVisible = matchesSearch && matchesVenue && matchesDateFrom && matchesDateTo
 
       row.classList.toggle("hidden", !isVisible)
-      if (isVisible && visibleLayout && visibleLayout.contains(row)) visibleCount++
+      if (isVisible) visibleCount++
     })
 
     this.countTarget.textContent = visibleCount

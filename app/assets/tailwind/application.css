@@ -660,6 +660,15 @@
     [data-theme="neon"] .info-link::after { content: "]"; }
 
     /* ───────────────────────────
+       Turbo Frame loading state
+       ─────────────────────────── */
+    turbo-frame[aria-busy="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+        transition: opacity 0.15s;
+    }
+
+    /* ───────────────────────────
        Layout toggle buttons
        ─────────────────────────── */
     .layout-toggle {
@@ -681,6 +690,7 @@
         border: 1.5px solid transparent;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         font-family: var(--font-body);
+        text-decoration: none;
     }
     .layout-toggle-btn svg {
         flex-shrink: 0;

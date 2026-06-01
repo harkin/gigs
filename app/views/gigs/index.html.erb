@@ -18,9 +18,8 @@
   <!-- Filter Bar -->
   <%= render "gigs/filter_bar" %>
 
-  <!-- Table Layout -->
-  <%= render "gigs/table_layout" %>
-
-  <!-- Cards Layout -->
-  <%= render "gigs/cards_layout" %>
+  <!-- Events Display (Turbo Frame for layout switching) -->
+  <turbo-frame id="events-display" data-current-layout="<%= @layout %>">
+    <%= render "gigs/#{@layout}_layout" %>
+  </turbo-frame>
 </div>

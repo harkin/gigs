@@ -27,23 +27,29 @@
   <div class="switcher-group hidden md:flex">
     <span class="switcher-label">View</span>
     <div class="layout-toggle">
-      <button data-theme-target="layoutBtn"
-              data-action="click->theme#toggleLayout"
-              data-layout-value="list"
-              class="layout-toggle-btn"
-              title="List view">
+      <a href="?layout=table"
+         data-turbo-frame="events-display"
+         data-turbo-action="replace"
+         data-theme-target="layoutBtn"
+         data-action="click->theme#selectLayout"
+         data-layout-value="table"
+         class="layout-toggle-btn <%= 'active' if @layout == 'table' %>"
+         title="List view">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <line x1="3" y1="4.5" x2="15" y2="4.5"/>
           <line x1="3" y1="9" x2="15" y2="9"/>
           <line x1="3" y1="13.5" x2="15" y2="13.5"/>
         </svg>
         <span>List</span>
-      </button>
-      <button data-theme-target="layoutBtn"
-              data-action="click->theme#toggleLayout"
-              data-layout-value="cards"
-              class="layout-toggle-btn"
-              title="Cards view">
+      </a>
+      <a href="?layout=cards"
+         data-turbo-frame="events-display"
+         data-turbo-action="replace"
+         data-theme-target="layoutBtn"
+         data-action="click->theme#selectLayout"
+         data-layout-value="cards"
+         class="layout-toggle-btn <%= 'active' if @layout == 'cards' %>"
+         title="Cards view">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="2" width="5.5" height="5.5" rx="1"/>
           <rect x="10.5" y="2" width="5.5" height="5.5" rx="1"/>
@@ -51,7 +57,7 @@
           <rect x="10.5" y="10.5" width="5.5" height="5.5" rx="1"/>
         </svg>
         <span>Cards</span>
-      </button>
+      </a>
     </div>
   </div>
 </div>
