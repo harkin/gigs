@@ -10,6 +10,7 @@ class Event < ApplicationRecord
     point: 1,
     olympia: 2,
     # opium:,
+    oreilly_theatre: 6,
     # sugar_club:
     vicar_street: 5,
     whelans: 3,
@@ -32,6 +33,8 @@ class Event < ApplicationRecord
       "The 3Arena"
     when "olympia"
       "The Olympia"
+    when "oreilly_theatre"
+      "O'Reilly Theatre"
     when "vicar_street"
       "Vicar Street"
     when "whelans"

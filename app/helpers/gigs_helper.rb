@@ -14,6 +14,7 @@ module GigsHelper
     when "button_factory" then "#ec4899"
     when "point" then "#f59e0b"
     when "olympia" then "#10b981"
+    when "oreilly_theatre" then "#0ea5e9"
     when "vicar_street" then "#8b5cf6"
     when "whelans" then "#ef4444"
     else "#6b7280"
