@@ -4,6 +4,12 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Skip deploys for commits that only touch non-app files. (Workflow changes
+    # are NOT excluded, so Dependabot action bumps still get deploy-tested.)
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.github/dependabot.yml'
   workflow_dispatch:
 
 # Collapse overlapping deploys to "just deploy the latest" so two runs never

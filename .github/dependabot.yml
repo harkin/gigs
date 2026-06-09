@@ -1,14 +1,31 @@
 version: 2
 updates:
-  # Keep the SHA-pinned GitHub Actions current: Dependabot opens a weekly PR that
-  # bumps the pinned commit SHA and updates the trailing "# version" comment.
+  # GitHub Actions: weekly, with a 14-day cooldown so a new release has time to
+  # prove out before we adopt it (compromised releases are historically caught
+  # within ~2 days). Bumps the SHA-pinned `uses:` refs and their version comments.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    # Wait 7 days after a release before proposing it, so any issues (including a
-    # compromised release, historically caught within ~2 days) have time to
-    # surface. Cooldown delays version updates only — security updates for a
-    # known advisory are still proposed immediately.
     cooldown:
-      default-days: 7
+      default-days: 14
+
+  # Ruby gems: weekly version-update PRs. Grouped to avoid PR spam, capped, and
+  # held for 21 days. Note: cooldown applies to version updates only — security
+  # updates for a known advisory are exempt and proposed immediately.
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 21
+    groups:
+      # Collapse all minor + patch gem bumps into one PR; majors stay individual
+      # so big upgrades (e.g. a puma 7->8) get their own scrutiny.
+      ruby-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
