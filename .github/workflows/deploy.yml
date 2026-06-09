@@ -48,16 +48,8 @@ jobs:
             StrictHostKeyChecking accept-new
           EOF
 
-      - name: Write credential files from secrets
+      - name: Deploy with kamal
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        run: |
-          mkdir -p config/credentials
-          # printf '%s' avoids adding a newline; .kamal/secrets reads these via
-          # $(cat ...), which also strips any trailing newline from the secret.
-          printf '%s' "$KAMAL_REGISTRY_PASSWORD" > config/credentials/dockerhub.key
-          printf '%s' "$RAILS_MASTER_KEY" > config/credentials/production.key
-
-      - name: Deploy with kamal
         run: kamal deploy
