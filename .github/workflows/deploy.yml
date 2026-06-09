@@ -1,8 +1,9 @@
 name: Deploy
 
-# Manual trigger only for now: run from the Actions tab via "Run workflow".
-# To auto-deploy later, add a `push:` block here (e.g. branches: [main]).
+# Auto-deploy on every push to main, plus a manual "Run workflow" button.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # Collapse overlapping deploys to "just deploy the latest" so two runs never
@@ -20,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Ruby (to run the kamal CLI)
         uses: ruby/setup-ruby@v1
@@ -31,10 +32,10 @@ jobs:
         run: gem install kamal -v 2.11.0
 
       - name: Set up Docker Buildx (kamal builds the image here)
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Load the SSH deploy key into the agent
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
