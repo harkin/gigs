@@ -1,0 +1,8 @@
+version: 2
+updates:
+  # Keep the SHA-pinned GitHub Actions current: Dependabot opens a weekly PR that
+  # bumps the pinned commit SHA and updates the trailing "# version" comment.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
