@@ -1,34 +1,31 @@
 module DataGrabbers
   class Academy
 
-    EVENTS_URL = "https://www.theacademydublin.com/"
+    # The Academy's site is a Next.js app that fetches its event list from the
+    # VenueCloud API (venueCloudId=21 is The Academy). We hit that JSON API
+    # directly rather than scraping the rendered HTML -- it's the same data the
+    # page hydrates from, and it doesn't break when they tweak their markup.
+    # Covers all the venue's rooms (The Academy, The Academy 2, The Green Room,
+    # ...), all tagged as :academy.
+    EVENTS_URL = "https://www.venuecloud.net/api/events?venueCloudId=21"
 
     def self.get_events
       start_time = Time.now.to_i
 
       response = Faraday.get(EVENTS_URL)
-      document = Nokogiri::HTML(response.body)
-      gigs = document.css("div.month, div.gigbg")
-      current_month = gigs.css("span.headingfour").first.text
-      events = []
-      gigs.each do |gig|
-        if gig.css("span.headingfour").present?
-          current_month = gig.css("span.headingfour").text
-        else
-          details = gig.css("div.details").text.split("/")
-          date = "#{details[0].strip} #{gig.css("div.date").text} #{current_month}"
+      raw_events = JSON.parse(response.body)["events"] || []
 
-          events.push(
-            {
-              title: gig.css("div.bands").text,
-              event_date: Time.parse(date),
-              price: details[2]&.strip,
-              ticket_status: gig.css("div.soldout").blank? ? :available : :sold_out,
-              link_to_buy_ticket: gig.css("a").attribute("href")&.value,
-              venue: :academy,
-            }
-          )
-        end
+      events = raw_events.map do |gig|
+        {
+          # subTitle (when present) is usually a support act, e.g. "+ Special
+          # Guests: ...", so a plain space reads better than a dash.
+          title: [gig["title"], gig["subTitle"]].compact_blank.join(" "),
+          event_date: Time.parse(gig.dig("startDate", "date")),
+          price: gig["pricing"],
+          ticket_status: gig["isSoldOut"] ? :sold_out : :available,
+          link_to_buy_ticket: gig["ticketsUrl"],
+          venue: :academy,
+        }
       end
 
       ActiveRecord::Base.transaction do
