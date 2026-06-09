@@ -6,3 +6,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait 7 days after a release before proposing it, so any issues (including a
+    # compromised release, historically caught within ~2 days) have time to
+    # surface. Cooldown delays version updates only — security updates for a
+    # known advisory are still proposed immediately.
+    cooldown:
+      default-days: 7
