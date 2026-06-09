@@ -36,9 +36,10 @@ tests we add will gate the deploy.
 
 ## Infra notes
 
-- Tests need MySQL/MariaDB on `localhost:3306` (db `gigs_test`, user `root`, empty
-  password). Locally: the `gigs-mariadb` podman container. In CI: a `mariadb:11`
-  service container (already wired in `.github/workflows/deploy.yml`).
+- Tests need MySQL on `localhost:3306` (db `gigs_test`, user `root`, empty
+  password). Use **MySQL 8.4** to match production (PlanetScale runs MySQL 8.4).
+  Locally: the `gigs-mysql` podman container. In CI: a `mysql:8.4` service
+  container (already wired in `.github/workflows/deploy.yml`).
 - The index view references the compiled Tailwind asset, so
   `bin/rails tailwindcss:build` must run before the suite (CI does this).
 - The test environment needs **no** secrets / `RAILS_MASTER_KEY`.
