@@ -8,19 +8,6 @@ module GigsHelper
     end
   end
 
-  def venue_color_for(venue)
-    case venue
-    when "academy" then "#6366f1"
-    when "button_factory" then "#ec4899"
-    when "point" then "#f59e0b"
-    when "olympia" then "#10b981"
-    when "oreilly_theatre" then "#0ea5e9"
-    when "vicar_street" then "#8b5cf6"
-    when "whelans" then "#ef4444"
-    else "#6b7280"
-    end
-  end
-
   def status_color_for(event)
     case event.ticket_status
     when "available" then "#22c55e"
