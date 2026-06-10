@@ -48,18 +48,10 @@ jobs:
           ruby-version: "4.0.5"
           bundler-cache: true
 
-      - name: Build Tailwind CSS (the index view references the compiled asset)
-        run: bin/rails tailwindcss:build
-
-      - name: Prepare the test database
-        env:
-          RAILS_ENV: test
-        run: bin/rails db:prepare
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-        run: bin/rails test
+      # Single source of truth for checks: db prepare, Tailwind build, importmap
+      # audit, and tests all live in config/ci.rb (also runnable locally).
+      - name: Run CI checks
+        run: bin/ci
 
   deploy:
     needs: test
