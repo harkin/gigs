@@ -1,0 +1,62 @@
+name: Refresh gig data
+
+# Replaces a fragile server crontab: scrape all venues once a day by running the
+# gigs:refresh task synchronously in the production container. The task is
+# fail-loud, so any venue breaking exits non-zero -> this run goes red ->
+# GitHub emails you. A green run (visible in the Actions tab) means success.
+on:
+  schedule:
+    # Daily at 06:00 UTC (~07:00 Dublin in summer). Scheduled runs are
+    # best-effort and only fire from the default branch.
+    - cron: "0 6 * * *"
+  # Manual "Run workflow" button for an on-demand refresh.
+  workflow_dispatch:
+
+# Don't let an overlapping manual + scheduled run stack; keep the latest.
+concurrency:
+  group: refresh-production
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Install Ruby (to run the kamal CLI)
+        uses: ruby/setup-ruby@12fd324f1d0b43274fdc8130f6980590a667c455 # v1.312.0
+        with:
+          ruby-version: "4.0.5"
+
+      - name: Install kamal (pinned to the version in Gemfile.lock)
+        run: gem install kamal -v 2.11.0
+
+      - name: Load the SSH deploy key into an agent
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          # Export the agent socket so the later kamal step (which SSHes itself) can use it.
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+          ssh-add - <<< "$SSH_PRIVATE_KEY"
+
+      - name: Teach the runner how to reach the server
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/config <<EOF
+          Host jigglypuff
+            HostName ${{ secrets.SSH_HOST }}
+            User ubuntu
+            StrictHostKeyChecking accept-new
+          EOF
+
+      - name: Refresh gig data in the running container
+        env:
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        run: kamal app exec --reuse "bin/rails gigs:refresh"
