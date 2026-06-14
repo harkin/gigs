@@ -2,6 +2,9 @@ module DataGrabbers
   class Whelans
 
     EVENTS_URL = "https://www.whelanslive.com/events/"
+    # The events page shows no availability; ticket sales run through Whelan's
+    # WooCommerce store, whose public Store API reports stock per product.
+    STORE_API_URL = "https://www.whelanslive.com/wp-json/wc/store/v1/products"
 
     def self.get_events
       start_time = Time.now.to_i
@@ -21,6 +24,8 @@ module DataGrabbers
         next_page = document.css("header nav").last.css("a").last.attribute("href").to_s + "/"
         next_year = true if next_page.include?("january")
       end
+
+      apply_ticket_statuses(events)
 
       EventValidator.validate!(events, venue: :whelans)
 
@@ -73,6 +78,37 @@ module DataGrabbers
         )
       end
 
+    end
+
+    # Map each event to its store stock via one batched Store API lookup keyed on
+    # the ticket slug. Events with no matching product stay :unknown.
+    def self.apply_ticket_statuses(events)
+      slugs = events.filter_map { |event| ticket_slug(event[:link_to_buy_ticket]) }.uniq
+      status_by_slug = fetch_store_statuses(slugs)
+
+      events.each do |event|
+        event[:ticket_status] = status_by_slug.fetch(ticket_slug(event[:link_to_buy_ticket]), :unknown)
+      end
+    end
+
+    def self.fetch_store_statuses(slugs)
+      slugs.each_slice(50).each_with_object({}) do |batch, statuses|
+        products = JSON.parse(Faraday.get(STORE_API_URL, slug: batch.join(","), per_page: 100).body)
+        raise "Whelans: unexpected Store API response" unless products.is_a?(Array)
+
+        products.each { |product| statuses[product["slug"]] = store_status(product) }
+      end
+    end
+
+    def self.store_status(product)
+      return :sold_out unless product["is_in_stock"]
+      return :limited_availability if product["low_stock_remaining"]
+
+      :available
+    end
+
+    def self.ticket_slug(url)
+      url.to_s[%r{/ticket/([^/]+)/?}, 1]
     end
 
   end

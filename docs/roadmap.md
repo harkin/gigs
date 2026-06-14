@@ -83,11 +83,11 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
 | 3Arena (Point) | ✓ | ✗ | ✓ | ✓ |
 | Vicar Street | ◑ available/sold-out only | ✗ | ✓ | ✓ |
-| Whelan's | ✗ always unknown | ✓ | ✓ | ✓ |
+| Whelan's | ✓ | ✓ | ✓ | ✓ |
 
 ### TODOs
-- [ ] **Whelan's ticket_status** — hard-coded `:unknown`. Find a status signal
-      (sold-out badge, presence/absence of the ticket link).
+- [x] **Whelan's ticket_status** — derived from the WooCommerce Store API (one
+      batched lookup by ticket slug → available / limited / sold-out).
 - [ ] **Button Factory price + status** — the shows page carries neither; likely
       need to follow each show's detail page or its ticketing provider.
 - [ ] **Vicar Street price** — not captured; check the listing markup / detail
