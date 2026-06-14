@@ -270,10 +270,11 @@
     .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 0.125rem 0.625rem;
-        border-radius: var(--radius);
-        font-size: 0.75rem;
-        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
     }
     .status-available {
         background: var(--status-available-bg);
@@ -292,30 +293,8 @@
         color: var(--status-unknown-text);
     }
 
-    /* Light: solid candy-colored round pills */
-    [data-theme="light"] .status-badge {
-        border-radius: 9999px;
-        padding: 0.25rem 0.75rem;
-        font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 0.02em;
-    }
-
-    /* Festival: solid candy pills */
-    [data-theme="festival"] .status-badge {
-        border-radius: 9999px;
-        padding: 0.25rem 0.75rem;
-        font-weight: 700;
-        font-size: 0.7rem;
-        letter-spacing: 0.02em;
-    }
-
-    /* Aurora: soft glowing glass pills */
+    /* Aurora: translucent pills get a faint ring for definition on glass */
     [data-theme="aurora"] .status-badge {
-        border-radius: 9999px;
-        padding: 0.2rem 0.7rem;
-        font-weight: 600;
-        font-size: 0.72rem;
         border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
     }
 
@@ -368,6 +347,10 @@
     .page-heading {
         font-family: var(--font-heading);
         color: var(--heading-color);
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
     }
 
     [data-theme="light"] .page-heading,
@@ -380,28 +363,14 @@
         -webkit-text-fill-color: transparent;
     }
 
-    /* Light: bigger, bolder gradient heading */
-    [data-theme="light"] .page-heading {
-        font-weight: 700;
-        font-size: 2.5rem;
-        letter-spacing: -0.02em;
-    }
-
-    /* Festival: big chunky sunset headline, slightly off-kilter */
+    /* Festival: headline tilts like a poster */
     [data-theme="festival"] .page-heading {
-        font-weight: 800;
-        font-size: 2.75rem;
-        letter-spacing: -0.03em;
-        line-height: 1.05;
         transform: rotate(-1.5deg);
         transform-origin: left bottom;
     }
 
     /* Aurora: gradient glow */
     [data-theme="aurora"] .page-heading {
-        font-weight: 700;
-        font-size: 2.75rem;
-        letter-spacing: -0.02em;
         filter: drop-shadow(0 0 24px rgba(139,92,246,0.35));
     }
 
@@ -479,7 +448,8 @@
     .filter-bar {
         background: var(--bg-filter);
         backdrop-filter: blur(8px);
-        border-bottom: 1px solid var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
     }
 
     /* Light: frosted glass filter bar */
@@ -707,21 +677,18 @@
         border-radius: var(--radius);
         border: 1px solid var(--border);
         box-shadow: var(--shadow);
-        border-left: 4px solid var(--venue-color, var(--accent));
+        border-left: 6px solid var(--venue-color, var(--accent));
         padding: 1.25rem;
         transition: box-shadow 0.2s, transform 0.2s;
     }
     .venue-card:hover {
         box-shadow: var(--shadow-hover);
-        transform: translateY(-1px);
+        transform: translateY(-3px);
     }
 
-    /* Festival: chunky rounded cards that bounce up on hover */
-    [data-theme="festival"] .venue-card {
-        border-left: 6px solid var(--venue-color, var(--accent));
-    }
+    /* Festival: cards tilt playfully on hover */
     [data-theme="festival"] .venue-card:hover {
-        transform: translateY(-4px) rotate(-0.5deg);
+        transform: translateY(-3px) rotate(-0.5deg);
     }
 
     /* Aurora: frosted glass panels */
@@ -736,7 +703,7 @@
         padding: 0.5rem 1rem;
         background: var(--accent);
         color: white;
-        border-radius: var(--radius);
+        border-radius: 9999px;
         font-size: 0.875rem;
         font-weight: 500;
         transition: background 0.15s, color 0.15s, transform 0.1s, box-shadow 0.1s;
@@ -749,7 +716,6 @@
     /* Festival: sunset gradient pill that lifts */
     [data-theme="festival"] .buy-button {
         background: linear-gradient(90deg, #ff6b35, #ff4d8d);
-        border-radius: 9999px;
         font-weight: 700;
         box-shadow: 0 4px 14px rgba(255,77,141,0.35);
     }
@@ -762,7 +728,6 @@
     /* Aurora: teal→violet gradient glow */
     [data-theme="aurora"] .buy-button {
         background: linear-gradient(90deg, #2dd4bf, #8b5cf6);
-        border-radius: 9999px;
         font-weight: 600;
         box-shadow: 0 4px 18px rgba(139,92,246,0.35);
     }
