@@ -77,7 +77,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 
 | Venue | ticket_status | price | buy link | info link |
 |---|---|---|---|---|
-| The Academy | ◑ no "limited" tier | ✓ | ✓ | ✗ |
+| The Academy | ◑ no "limited" tier | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
@@ -94,8 +94,9 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
       page for a price field.
 - [ ] **O'Reilly Theatre price** — only Fever/Eventbrite events return one; the
       Ticketsolve and GK paths return `nil`. See if Ticketsolve exposes pricing.
-- [ ] **The Academy info link** — no `more_info`; the VenueCloud API likely has an
-      event-URL field to map.
+- [x] **The Academy info link** — the venue has no per-event page, so `more_info`
+      points at the Ticketmaster listing (the only detail URL). Cards layout also
+      falls back to the ticket link for non-available events.
 - [ ] **3Arena price** — not captured (secondary; arena prices are often ranges).
 - [ ] **"Limited availability" tier** — Academy and Vicar Street only emit
       available/sold-out; map a middle tier where the source supports it.

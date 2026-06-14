@@ -41,6 +41,10 @@
             <a href="<%= event.more_info %>" style="font-size: 0.875rem; color: var(--accent);">
               More Info →
             </a>
+          <% elsif event.link_to_buy_ticket.present? %>
+            <a href="<%= event.link_to_buy_ticket %>" style="font-size: 0.875rem; color: var(--accent);">
+              View Tickets →
+            </a>
           <% end %>
         </div>
       </div>

@@ -24,6 +24,9 @@ module DataGrabbers
           price: gig["pricing"],
           ticket_status: gig["isSoldOut"] ? :sold_out : :available,
           link_to_buy_ticket: gig["ticketsUrl"],
+          # The Academy has no per-event page of its own; its Ticketmaster
+          # listing is the only detail page, so it doubles as more_info.
+          more_info: gig["ticketsUrl"],
           venue: :academy,
         }
       end
