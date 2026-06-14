@@ -60,9 +60,11 @@ module DataGrabbers
         end
       end
 
+      EventValidator.validate!(events, venue: :oreilly_theatre)
+
       ActiveRecord::Base.transaction do
         Event.where(venue: :oreilly_theatre).delete_all
-        Event.insert_all(events) if events.any?
+        Event.insert_all(events)
       end
 
       puts "Finished grabbing #{events.count} O'Reilly Theatre events in #{Time.now.to_i - start_time} seconds"

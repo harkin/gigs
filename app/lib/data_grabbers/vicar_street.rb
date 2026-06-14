@@ -24,6 +24,8 @@ module DataGrabbers
         extract_events_from_html(main_body, events)
       end
 
+      EventValidator.validate!(events, venue: :vicar_street)
+
       ActiveRecord::Base.transaction do
         Event.where(venue: :vicar_street).delete_all
         Event.insert_all(events)

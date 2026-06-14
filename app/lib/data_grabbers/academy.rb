@@ -28,6 +28,8 @@ module DataGrabbers
         }
       end
 
+      EventValidator.validate!(events, venue: :academy)
+
       ActiveRecord::Base.transaction do
         Event.where(venue: :academy).delete_all
         Event.insert_all(events)

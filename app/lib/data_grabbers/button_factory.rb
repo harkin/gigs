@@ -14,29 +14,33 @@ module DataGrabbers
       gigs = document.css("div.eventlist--upcoming").css("article.eventlist-event")
 
       gigs.each do |gig|
-        title = gig.css("h1.eventlist-title").text
-        date = gig.css("time.event-date").text
-        time = gig.css("time.event-time-12hr-start").text
+        title = gig.css("h1.eventlist-title").text.strip
+
+        # The <time> datetime attribute is the machine-readable ISO date; the
+        # page exposes no reliable start time, so events are date-only.
+        event_date = Date.parse(gig.css("time.event-date").attribute("datetime").value)
+
+        # The "upcoming" section still lists a few just-passed shows.
+        next if event_date < Date.current
+
         more_info_relative_link = gig.css("a.eventlist-button").attribute("href").value
         more_info_uri = URI.parse(more_info_relative_link)
         more_info_uri.scheme = EVENTS_URI.scheme
         more_info_uri.host = EVENTS_URI.host
-        event_date = Time.parse("#{time} #{date}")
-
-        # TODO this isn't working properly
-        next if event_date <= Time.now
 
         events.push(
           {
             title: title,
             event_date: event_date,
-            ticket_status: :unknown, # TODO Button Factory doesn't have ticket details on the shows page
-            link_to_buy_ticket: nil, # TODO Button Factory doesn't have ticket links on the shows page
+            ticket_status: :unknown, # shows page carries no ticket info
+            link_to_buy_ticket: nil,
             more_info: more_info_uri.to_s,
             venue: :button_factory,
           }
         )
       end
+
+      EventValidator.validate!(events, venue: :button_factory)
 
       ActiveRecord::Base.transaction do
         Event.where(venue: :button_factory).delete_all

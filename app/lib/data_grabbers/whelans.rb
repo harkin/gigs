@@ -22,6 +22,8 @@ module DataGrabbers
         next_year = true if next_page.include?("january")
       end
 
+      EventValidator.validate!(events, venue: :whelans)
+
       ActiveRecord::Base.transaction do
         Event.where(venue: :whelans).delete_all
         Event.insert_all(events)
