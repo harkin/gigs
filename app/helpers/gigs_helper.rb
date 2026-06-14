@@ -1,4 +1,6 @@
 module GigsHelper
+  THEMES = %w[light dark festival aurora].freeze
+
   def status_class_for(event)
     case event.ticket_status
     when "available" then "status-available"
