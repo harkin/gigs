@@ -14,7 +14,7 @@ module DataGrabbers
       events = fetch_upcoming_events(instance).map do |event|
         config = event.dig("scheduling", "config")
         {
-          title: event["title"].strip,
+          title: TitleCleaner.strip_promoter(event["title"].strip),
           event_date: Time.parse(config["startDate"]).in_time_zone(config["timeZoneId"]),
           price: nil,
           ticket_status: :unknown,

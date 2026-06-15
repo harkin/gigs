@@ -25,7 +25,7 @@ module DataGrabbers
         sold_out = price_text.to_s.match?(/sold\s*out/i)
 
         {
-          title: strip_promoter(entry.at_css(".thetitle").text.strip),
+          title: TitleCleaner.strip_promoter(entry.at_css(".thetitle").text.strip),
           event_date: event_date(Date.new(year, month, day), entry.at_css(".time")&.text),
           # The price slot also holds junk like "Buy"; keep only real amounts.
           price: price_text&.match?(/€|free/i) ? price_text : nil,
@@ -46,12 +46,6 @@ module DataGrabbers
       puts "Finished grabbing #{events.count} Workmans events in #{Time.now.to_i - start_time} seconds"
 
       events
-    end
-
-    # Titles are often "<Promoter> presents <Artist>"; drop the promoter so only
-    # the act remains. Titles without that lead-in are left as-is.
-    def self.strip_promoter(title)
-      title.sub(/\A.*?\bpres(?:ents?)?\b:?\s+/i, "")
     end
 
     # Times read like "10:30pm (First Floor)"; take the leading clock value and
