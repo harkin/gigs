@@ -1,7 +1,7 @@
 class Event < ApplicationRecord
   enum :venue, {
     academy: 0,
-    # bord_gais:,
+    bord_gais: 7,
     button_factory: 4,
     # grand_social:,
     # national_concert_hall:,
@@ -27,6 +27,8 @@ class Event < ApplicationRecord
     case venue
     when "academy"
       "The Academy"
+    when "bord_gais"
+      "Bord Gáis Energy Theatre"
     when "button_factory"
       "Button Factory"
     when "point"

@@ -31,7 +31,8 @@ Standing infra/quality items are at the bottom.
 ## 1. New venue scrapers
 
 ### Already stubbed in the enum (commented out)
-- [ ] Bord Gáis Energy Theatre
+- [x] Bord Gáis Energy Theatre — listing page (title, date range, price, per-show
+      Ticketmaster link); status `available` while a buy button is shown.
 - [ ] The Grand Social
 - [ ] National Concert Hall
 - [ ] Pavilion Theatre (Dún Laoghaire)
@@ -78,6 +79,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | Venue | ticket_status | price | buy link | info link |
 |---|---|---|---|---|
 | The Academy | ◑ no "limited" tier | ✓ | ✓ | ✓ |
+| Bord Gáis | ◑ available only | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |

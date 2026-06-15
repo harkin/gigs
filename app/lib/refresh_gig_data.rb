@@ -5,6 +5,7 @@ class RefreshGigData
     start_time = Time.now.to_i
 
     ::DataGrabbers::Academy.get_events
+    ::DataGrabbers::BordGais.get_events
     ::DataGrabbers::ButtonFactory.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::OreillyTheatre.get_events
