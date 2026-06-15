@@ -13,6 +13,7 @@ class RefreshGigData
     ::DataGrabbers::Point.get_events
     ::DataGrabbers::VicarStreet.get_events
     ::DataGrabbers::Whelans.get_events
+    ::DataGrabbers::Workmans.get_events
 
     Refresh.destroy_all
     Refresh.create!(last_refresh_at: Time.now)

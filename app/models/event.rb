@@ -14,6 +14,7 @@ class Event < ApplicationRecord
     # sugar_club:
     vicar_street: 5,
     whelans: 3,
+    workmans: 9,
   }
 
   enum :ticket_status, {
@@ -43,6 +44,8 @@ class Event < ApplicationRecord
       "Vicar Street"
     when "whelans"
       "Whelans"
+    when "workmans"
+      "The Workman's Club"
     end
   end
 

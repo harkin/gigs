@@ -44,7 +44,8 @@ Standing infra/quality items are at the bottom.
 ### Additional Dublin venues to add
 
 **Mid-size / club:**
-- [ ] The Workman's Club
+- [x] The Workman's Club — server-rendered listing (title, date+time, price,
+      Eventbrite/promoter buy link, detail page); status available/sold-out.
 - [ ] Lost Lane
 - [ ] The Sound House
 - [ ] Bello Bar
@@ -88,6 +89,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | 3Arena (Point) | ✓ | ✗ | ✓ | ✓ |
 | Vicar Street | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | Whelan's | ✓ | ✓ | ✓ | ✓ |
+| Workman's Club | ◑ available/sold-out only | ✓ | ◑ ticketed only | ✓ |
 
 ### TODOs
 - [x] **Whelan's ticket_status** — derived from the WooCommerce Store API (one
