@@ -8,6 +8,7 @@ class RefreshGigData
     ::DataGrabbers::BordGais.get_events
     ::DataGrabbers::ButtonFactory.get_events
     ::DataGrabbers::GrandSocial.get_events
+    ::DataGrabbers::NationalConcertHall.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::OreillyTheatre.get_events
     ::DataGrabbers::Point.get_events

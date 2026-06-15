@@ -35,7 +35,8 @@ Standing infra/quality items are at the bottom.
       Ticketmaster link); status `available` while a buy button is shown.
 - [x] The Grand Social — Wix Events query API (title, start datetime, slug →
       detail page); no ticket/price fields exposed, so status `unknown`.
-- [ ] National Concert Hall
+- [x] National Concert Hall — paginated listing (title, date+time, detail page,
+      tickets.nch.ie buy link); status available/sold-out. No price on the listing.
 - [ ] Pavilion Theatre (Dún Laoghaire)
 - [ ] Pepper Canister Church
 - [ ] Opium
@@ -84,6 +85,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | Bord Gáis | ◑ available only | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
+| National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
 | 3Arena (Point) | ✓ | ✗ | ✓ | ✓ |

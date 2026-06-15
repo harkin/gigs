@@ -4,7 +4,7 @@ class Event < ApplicationRecord
     bord_gais: 7,
     button_factory: 4,
     grand_social: 8,
-    # national_concert_hall:,
+    national_concert_hall: 10,
     # pavilion:,
     # pepper_canister:,
     point: 1,
@@ -34,6 +34,8 @@ class Event < ApplicationRecord
       "Button Factory"
     when "grand_social"
       "The Grand Social"
+    when "national_concert_hall"
+      "National Concert Hall"
     when "point"
       "The 3Arena"
     when "olympia"
