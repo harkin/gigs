@@ -33,7 +33,8 @@ Standing infra/quality items are at the bottom.
 ### Already stubbed in the enum (commented out)
 - [x] Bord Gáis Energy Theatre — listing page (title, date range, price, per-show
       Ticketmaster link); status `available` while a buy button is shown.
-- [ ] The Grand Social
+- [x] The Grand Social — Wix Events query API (title, start datetime, slug →
+      detail page); no ticket/price fields exposed, so status `unknown`.
 - [ ] National Concert Hall
 - [ ] Pavilion Theatre (Dún Laoghaire)
 - [ ] Pepper Canister Church
@@ -81,6 +82,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | The Academy | ◑ no "limited" tier | ✓ | ✓ | ✓ |
 | Bord Gáis | ◑ available only | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
+| The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
 | 3Arena (Point) | ✓ | ✗ | ✓ | ✓ |

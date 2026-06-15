@@ -3,7 +3,7 @@ class Event < ApplicationRecord
     academy: 0,
     bord_gais: 7,
     button_factory: 4,
-    # grand_social:,
+    grand_social: 8,
     # national_concert_hall:,
     # pavilion:,
     # pepper_canister:,
@@ -31,6 +31,8 @@ class Event < ApplicationRecord
       "Bord Gáis Energy Theatre"
     when "button_factory"
       "Button Factory"
+    when "grand_social"
+      "The Grand Social"
     when "point"
       "The 3Arena"
     when "olympia"
