@@ -5,6 +5,7 @@ class Event < ApplicationRecord
     button_factory: 4,
     gaiety: 11,
     grand_social: 8,
+    helix: 13,
     national_concert_hall: 10,
     pavilion: 12,
     # pepper_canister:,
@@ -37,6 +38,8 @@ class Event < ApplicationRecord
       "The Gaiety"
     when "grand_social"
       "The Grand Social"
+    when "helix"
+      "The Helix"
     when "national_concert_hall"
       "National Concert Hall"
     when "point"

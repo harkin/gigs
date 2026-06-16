@@ -70,7 +70,8 @@ Standing infra/quality items are at the bottom.
 - [x] The Gaiety Theatre — server-rendered programme (title, run start date,
       detail page, Ticketmaster buy link); status `available`. No price on listing.
 - [ ] Liberty Hall Theatre
-- [ ] The Helix (DCU)
+- [x] The Helix (DCU) — via the shared **WixEvents** adapter (same Wix Events
+      API as The Grand Social); title + datetime + detail page, status unknown.
 - [ ] The Round Room (Mansion House)
 - [ ] The National Stadium
 
@@ -97,6 +98,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Gaiety | ◑ available only | ✗ | ✓ | ✓ |
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
+| The Helix | ✗ always unknown | ✗ | ✗ | ✓ |
 | National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
