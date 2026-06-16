@@ -40,7 +40,15 @@ Standing infra/quality items are at the bottom.
 - [ ] Pavilion Theatre (Dún Laoghaire)
 - [ ] Pepper Canister Church
 - [ ] Opium
-- [ ] The Sugar Club
+
+### Parked
+- [~] The Sugar Club — **blocked without new infra.** Tickets run through Ticket
+      Tailor (Cloudflare-walled, 403 to scrapers). Their own `/tickets` page
+      server-renders only the soonest ~10 events; the rest load via an
+      `admin-ajax` `load_more_events` proxy that's nonce-gated and rejects
+      programmatic replay (`-1`), so the full list needs either a headless
+      browser or the venue's Ticket Tailor API key. Not worth wiring into the
+      fail-loud refresh until one of those exists.
 
 ### Additional Dublin venues to add
 
