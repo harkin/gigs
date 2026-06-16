@@ -7,6 +7,7 @@ class RefreshGigData
     ::DataGrabbers::Academy.get_events
     ::DataGrabbers::BordGais.get_events
     ::DataGrabbers::ButtonFactory.get_events
+    ::DataGrabbers::Gaiety.get_events
     ::DataGrabbers::GrandSocial.get_events
     ::DataGrabbers::NationalConcertHall.get_events
     ::DataGrabbers::Olympia.get_events

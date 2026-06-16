@@ -65,7 +65,8 @@ Standing infra/quality items are at the bottom.
 - [ ] Anseo
 
 **Theatres / concert halls:**
-- [ ] The Gaiety Theatre
+- [x] The Gaiety Theatre — server-rendered programme (title, run start date,
+      detail page, Ticketmaster buy link); status `available`. No price on listing.
 - [ ] Liberty Hall Theatre
 - [ ] The Helix (DCU)
 - [ ] The Round Room (Mansion House)
@@ -92,6 +93,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | The Academy | ◑ no "limited" tier | ✓ | ✓ | ✓ |
 | Bord Gáis | ◑ available only | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
+| The Gaiety | ◑ available only | ✗ | ✓ | ✓ |
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
 | National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
