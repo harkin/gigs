@@ -12,6 +12,7 @@ class RefreshGigData
     ::DataGrabbers::NationalConcertHall.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::OreillyTheatre.get_events
+    ::DataGrabbers::Pavilion.get_events
     ::DataGrabbers::Point.get_events
     ::DataGrabbers::VicarStreet.get_events
     ::DataGrabbers::Whelans.get_events

@@ -37,7 +37,9 @@ Standing infra/quality items are at the bottom.
       detail page); no ticket/price fields exposed, so status `unknown`.
 - [x] National Concert Hall — paginated listing (title, date+time, detail page,
       tickets.nch.ie buy link); status available/sold-out. No price on the listing.
-- [ ] Pavilion Theatre (Dún Laoghaire)
+- [x] Pavilion Theatre (Dún Laoghaire) — via the shared **Ticketsolve** adapter
+      (`shows.xml` feed): one Event per show at its next upcoming performance,
+      status available/sold-out. Reusable for any Ticketsolve box office.
 - [ ] Pepper Canister Church
 - [ ] Opium
 
@@ -98,6 +100,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
+| Pavilion Theatre | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | 3Arena (Point) | ✓ | ✗ | ✓ | ✓ |
 | Vicar Street | ◑ available/sold-out only | ✗ | ✓ | ✓ |
 | Whelan's | ✓ | ✓ | ✓ | ✓ |

@@ -6,7 +6,7 @@ class Event < ApplicationRecord
     gaiety: 11,
     grand_social: 8,
     national_concert_hall: 10,
-    # pavilion:,
+    pavilion: 12,
     # pepper_canister:,
     point: 1,
     olympia: 2,
@@ -43,6 +43,8 @@ class Event < ApplicationRecord
       "The 3Arena"
     when "olympia"
       "The Olympia"
+    when "pavilion"
+      "Pavilion Theatre"
     when "oreilly_theatre"
       "O'Reilly Theatre"
     when "vicar_street"
