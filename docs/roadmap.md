@@ -79,8 +79,8 @@ raise and abort the whole fail-loud refresh.
       Eventbrite/promoter buy link, detail page); status available/sold-out.
 - [~] Lost Lane / The Sound House / Wigwam / Fibber Magees / The Cobblestone /
       Arthur's — parked (see below)
-- [ ] Bello Bar — domain not resolving; find current site
-- [ ] Anseo — site has no obvious ticketing/listing platform; needs a closer look
+- [~] Bello Bar — domain not resolving; no current site found.
+- [~] Anseo — no venue website (anseo.ie is unrelated software); Instagram-only.
 
 **Theatres / concert halls:**
 - [x] The Gaiety Theatre — server-rendered programme (title, run start date,
