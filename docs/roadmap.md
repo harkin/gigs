@@ -40,43 +40,61 @@ Standing infra/quality items are at the bottom.
 - [x] Pavilion Theatre (Dún Laoghaire) — via the shared **Ticketsolve** adapter
       (`shows.xml` feed): one Event per show at its next upcoming performance,
       status available/sold-out. Reusable for any Ticketsolve box office.
-- [ ] Pepper Canister Church
-- [ ] Opium
+- [~] Pepper Canister Church — parked (see below)
+- [~] Opium — parked (see below)
 
-### Parked
-- [~] The Sugar Club — **blocked without new infra.** Tickets run through Ticket
-      Tailor (Cloudflare-walled, 403 to scrapers). Their own `/tickets` page
-      server-renders only the soonest ~10 events; the rest load via an
-      `admin-ajax` `load_more_events` proxy that's nonce-gated and rejects
-      programmatic replay (`-1`), so the full list needs either a headless
-      browser or the venue's Ticket Tailor API key. Not worth wiring into the
-      fail-loud refresh until one of those exists.
+### Parked (scouted, not currently viable)
+Each was investigated; none can be added cleanly today. A venue with **no
+upcoming events** can't be wired in — `EventValidator` (min_count ≥ 1) would
+raise and abort the whole fail-loud refresh.
+
+- [~] The Sugar Club — **bot-blocked.** Tickets run through Ticket Tailor
+      (Cloudflare-walled, 403). Their `/tickets` page server-renders only the
+      soonest ~10 events; the rest load via an `admin-ajax` `load_more_events`
+      proxy that's nonce-gated and rejects programmatic replay (`-1`). Needs a
+      headless browser or the venue's Ticket Tailor API key.
+- [~] Opium — Cloudflare 403 to scrapers.
+- [~] Liberty Hall Theatre — **dormant.** WordPress + Events Manager (clean iCal
+      feed at `/events/?ical=1`), but the latest event is May 2025 — no upcoming
+      events. Revisit if it reprograms; the iCal makes it a quick add when active.
+- [~] Arthur's — uses Wix Events (would drop into the WixEvents adapter) but has
+      **0 upcoming events** scheduled; promotes via Eventbrite/Instagram instead.
+- [~] Lost Lane / The Sound House — stale Tickera (`tc_events`) WordPress; the
+      listing is JS-rendered with no structured event dates (same dead end as
+      Whelan's `tc_events`), and Lost Lane punts to Eventbrite.
+- [~] Fibber Magees — Joomla listing mixes recurring bar notices ("Open Till
+      Late!", "LIVE MUSIC") with gigs, no ticket links, no year on dates. Too
+      noisy for the integrity bar.
+- [~] Wigwam — Squarespace, but "what's on" is recurring club nights (bingo,
+      karaoke, trivia), not a ticketed gig calendar.
+- [~] The Cobblestone — Squarespace with no events collection (trad sessions,
+      largely unticketed).
+- [~] Pepper Canister Church (domain 410 gone) / The National Stadium (no site)
+      / Round Room at the Mansion House (civic venue, no public gig listing).
 
 ### Additional Dublin venues to add
 
 **Mid-size / club:**
 - [x] The Workman's Club — server-rendered listing (title, date+time, price,
       Eventbrite/promoter buy link, detail page); status available/sold-out.
-- [ ] Lost Lane
-- [ ] The Sound House
-- [ ] Bello Bar
-- [ ] Wigwam
-- [ ] Fibber Magees
-- [ ] The Cobblestone (trad)
-- [ ] Arthur's
-- [ ] Anseo
+- [~] Lost Lane / The Sound House / Wigwam / Fibber Magees / The Cobblestone /
+      Arthur's — parked (see below)
+- [ ] Bello Bar — domain not resolving; find current site
+- [ ] Anseo — site has no obvious ticketing/listing platform; needs a closer look
 
 **Theatres / concert halls:**
 - [x] The Gaiety Theatre — server-rendered programme (title, run start date,
       detail page, Ticketmaster buy link); status `available`. No price on listing.
-- [ ] Liberty Hall Theatre
+- [~] Liberty Hall Theatre — parked, dormant (see above)
 - [x] The Helix (DCU) — via the shared **WixEvents** adapter (same Wix Events
       API as The Grand Social); title + datetime + detail page, status unknown.
-- [ ] The Round Room (Mansion House)
-- [ ] The National Stadium
+- [~] The Round Room / The National Stadium — parked (see above)
 
-**Stadiums / outdoor** — promoter-driven; may be better sourced via the promoter
-(MCD / Live Nation / Ticketmaster) than per-venue sites:
+**Stadiums / outdoor** — promoter-driven; no usable per-venue listing sites.
+Best path is a single **Ticketmaster Discovery API** adapter keyed by venue
+(covers all of the below at once). Needs a free API key from
+developer.ticketmaster.com — the API returns 401 without one. This is the
+highest-value remaining venue work, but it's blocked on that key.
 - [ ] Croke Park
 - [ ] Aviva Stadium
 - [ ] Marlay Park
