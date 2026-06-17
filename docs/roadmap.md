@@ -69,8 +69,8 @@ raise and abort the whole fail-loud refresh.
       karaoke, trivia), not a ticketed gig calendar.
 - [~] The Cobblestone — Squarespace with no events collection (trad sessions,
       largely unticketed).
-- [~] Pepper Canister Church (domain 410 gone) / The National Stadium (no site)
-      / Round Room at the Mansion House (civic venue, no public gig listing).
+- [~] Pepper Canister Church (domain 410 gone) / Round Room at the Mansion House
+      (civic venue, no public gig listing).
 
 ### Additional Dublin venues to add
 
@@ -88,7 +88,11 @@ raise and abort the whole fail-loud refresh.
 - [~] Liberty Hall Theatre — parked, dormant (see above)
 - [x] The Helix (DCU) — via the shared **WixEvents** adapter (same Wix Events
       API as The Grand Social); title + datetime + detail page, status unknown.
-- [~] The Round Room / The National Stadium — parked (see above)
+- [x] The National Stadium — Wix site listing gigs as Ticketmaster links; title
+      and date parsed from the TM slug (`.../loyle-carner-29-08-2026/...`), with
+      the TM link as the buy link. Status `available`. (Eventbrite cultural-day
+      events on the page are skipped — no date in their slug.)
+- [~] The Round Room — parked (see above)
 
 **Stadiums / outdoor** — promoter-driven; no usable per-venue listing sites.
 Best path is a single **Ticketmaster Discovery API** adapter keyed by venue
@@ -118,6 +122,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Helix | ✗ always unknown | ✗ | ✗ | ✓ |
 | National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
+| The National Stadium | ◑ available only | ✗ | ✓ | ✗ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
 | Pavilion Theatre | ◑ available/sold-out only | ✗ | ✓ | ✓ |

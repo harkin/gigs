@@ -7,6 +7,7 @@ class Event < ApplicationRecord
     grand_social: 8,
     helix: 13,
     national_concert_hall: 10,
+    national_stadium: 14,
     pavilion: 12,
     # pepper_canister:,
     point: 1,
@@ -42,6 +43,8 @@ class Event < ApplicationRecord
       "The Helix"
     when "national_concert_hall"
       "National Concert Hall"
+    when "national_stadium"
+      "The National Stadium"
     when "point"
       "The 3Arena"
     when "olympia"

@@ -11,6 +11,7 @@ class RefreshGigData
     ::DataGrabbers::GrandSocial.get_events
     ::DataGrabbers::Helix.get_events
     ::DataGrabbers::NationalConcertHall.get_events
+    ::DataGrabbers::NationalStadium.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::OreillyTheatre.get_events
     ::DataGrabbers::Pavilion.get_events
