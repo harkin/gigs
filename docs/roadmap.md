@@ -98,7 +98,8 @@ raise and abort the whole fail-loud refresh.
 Best path is a single **Ticketmaster Discovery API** adapter keyed by venue
 (covers all of the below at once). Needs a free API key from
 developer.ticketmaster.com — the API returns 401 without one. This is the
-highest-value remaining venue work, but it's blocked on that key.
+highest-value remaining venue work, but it's blocked on that key. Setup steps:
+**`docs/ticketmaster-plan.md`**.
 - [ ] Croke Park
 - [ ] Aviva Stadium
 - [ ] Marlay Park
