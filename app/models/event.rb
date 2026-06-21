@@ -5,6 +5,7 @@ class Event < ApplicationRecord
     bord_gais: 7,
     button_factory: 4,
     croke_park: 15,
+    fidelity: 22,
     gaiety: 11,
     grand_social: 8,
     helix: 13,
@@ -46,6 +47,8 @@ class Event < ApplicationRecord
       "Button Factory"
     when "croke_park"
       "Croke Park"
+    when "fidelity"
+      "Fidelity"
     when "gaiety"
       "The Gaiety"
     when "grand_social"

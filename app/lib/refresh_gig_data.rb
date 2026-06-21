@@ -9,6 +9,7 @@ class RefreshGigData
     ::DataGrabbers::BordGais.get_events
     ::DataGrabbers::ButtonFactory.get_events
     ::DataGrabbers::CrokePark.get_events
+    ::DataGrabbers::Fidelity.get_events
     ::DataGrabbers::Gaiety.get_events
     ::DataGrabbers::GrandSocial.get_events
     ::DataGrabbers::Helix.get_events
