@@ -13,7 +13,8 @@ module DataGrabbers
       response = Faraday.get(EVENTS_URL)
       document = Nokogiri::HTML(response.body)
       main_body = document.css("div.blog-featured")
-      next_page = main_body.css("li.pagination-next").css("a").attribute("href").value
+      # No "next" link when the shows fit on one page.
+      next_page = main_body.css("li.pagination-next").css("a").attribute("href")&.value
       extract_events_from_html(main_body, events)
 
       while next_page
