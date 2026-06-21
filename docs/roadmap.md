@@ -77,6 +77,9 @@ raise and abort the whole fail-loud refresh.
 **Mid-size / club:**
 - [x] The Workman's Club — server-rendered listing (title, date+time, price,
       Eventbrite/promoter buy link, detail page); status available/sold-out.
+- [x] Fidelity — Squarespace what's-on page; dated headings + titled paragraphs
+      with Eventbrite ticket links. Skips the undated "This Week" free bar nights.
+      Status `available`.
 - [~] Lost Lane / The Sound House / Wigwam / Fibber Magees / The Cobblestone /
       Arthur's — parked (see below)
 - [~] Bello Bar — domain not resolving; no current site found.
@@ -118,6 +121,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | The Academy | ◑ no "limited" tier | ✓ | ✓ | ✓ |
 | Bord Gáis | ◑ available only | ✓ | ✓ | ✓ |
 | Button Factory | ✗ always unknown | ✗ | ✗ | ✓ |
+| Fidelity | ◑ available only | ✗ | ✓ | ✓ |
 | The Gaiety | ◑ available only | ✗ | ✓ | ✓ |
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Helix | ✗ always unknown | ✗ | ✗ | ✓ |
