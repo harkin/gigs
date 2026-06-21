@@ -1,11 +1,16 @@
 class Event < ApplicationRecord
   enum :venue, {
     academy: 0,
+    aviva_stadium: 16,
     bord_gais: 7,
     button_factory: 4,
+    croke_park: 15,
     gaiety: 11,
     grand_social: 8,
     helix: 13,
+    iveagh_gardens: 20,
+    malahide_castle: 21,
+    marlay_park: 17,
     national_concert_hall: 10,
     national_stadium: 14,
     pavilion: 12,
@@ -14,6 +19,8 @@ class Event < ApplicationRecord
     olympia: 2,
     # opium:,
     oreilly_theatre: 6,
+    royal_hospital_kilmainham: 19,
+    st_annes_park: 18,
     # sugar_club:
     vicar_street: 5,
     whelans: 3,
@@ -31,16 +38,26 @@ class Event < ApplicationRecord
     case venue
     when "academy"
       "The Academy"
+    when "aviva_stadium"
+      "Aviva Stadium"
     when "bord_gais"
       "Bord Gáis Energy Theatre"
     when "button_factory"
       "Button Factory"
+    when "croke_park"
+      "Croke Park"
     when "gaiety"
       "The Gaiety"
     when "grand_social"
       "The Grand Social"
     when "helix"
       "The Helix"
+    when "iveagh_gardens"
+      "Iveagh Gardens"
+    when "malahide_castle"
+      "Malahide Castle"
+    when "marlay_park"
+      "Marlay Park"
     when "national_concert_hall"
       "National Concert Hall"
     when "national_stadium"
@@ -53,6 +70,10 @@ class Event < ApplicationRecord
       "Pavilion Theatre"
     when "oreilly_theatre"
       "O'Reilly Theatre"
+    when "royal_hospital_kilmainham"
+      "Royal Hospital Kilmainham"
+    when "st_annes_park"
+      "St Anne's Park"
     when "vicar_street"
       "Vicar Street"
     when "whelans"

@@ -88,25 +88,24 @@ raise and abort the whole fail-loud refresh.
 - [~] Liberty Hall Theatre — parked, dormant (see above)
 - [x] The Helix (DCU) — via the shared **WixEvents** adapter (same Wix Events
       API as The Grand Social); title + datetime + detail page, status unknown.
-- [x] The National Stadium — Wix site listing gigs as Ticketmaster links; title
-      and date parsed from the TM slug (`.../loyle-carner-29-08-2026/...`), with
-      the TM link as the buy link. Status `available`. (Eventbrite cultural-day
-      events on the page are skipped — no date in their slug.)
+- [x] The National Stadium — via the `TicketmasterDiscovery` adapter (venueId
+      KovZ9177TZf). Migrated off the original TM-slug parsing of the venue's Wix
+      site to the API — richer and more complete (real times, status, more events).
 - [~] The Round Room — parked (see above)
 
 **Stadiums / outdoor** — promoter-driven; no usable per-venue listing sites.
-Best path is a single **Ticketmaster Discovery API** adapter keyed by venue
-(covers all of the below at once). Needs a free API key from
-developer.ticketmaster.com — the API returns 401 without one. This is the
-highest-value remaining venue work, but it's blocked on that key. Setup steps:
-**`docs/ticketmaster-plan.md`**.
-- [ ] Croke Park
-- [ ] Aviva Stadium
-- [ ] Marlay Park
-- [ ] St Anne's Park
-- [ ] Royal Hospital Kilmainham (RHK)
-- [ ] Iveagh Gardens
-- [ ] Malahide Castle
+All sourced via the shared **`TicketmasterDiscovery`** adapter (one Discovery
+API call per `venueId`, filtered to Music + Arts & Theatre so sports fixtures
+are dropped). Seasonal venues legitimately have 0 events off-season, so the
+adapter uses `min_count: 0` guarded by a response-shape check. Setup +
+venue IDs: **`docs/ticketmaster-plan.md`**.
+- [x] Croke Park
+- [x] Aviva Stadium
+- [x] Marlay Park
+- [x] St Anne's Park (currently 0 upcoming — seasonal)
+- [x] Royal Hospital Kilmainham (RHK) (currently 0 upcoming — seasonal)
+- [x] Iveagh Gardens
+- [x] Malahide Castle
 
 ---
 
@@ -123,7 +122,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 | The Grand Social | ✗ always unknown | ✗ | ✗ | ✓ |
 | The Helix | ✗ always unknown | ✗ | ✗ | ✓ |
 | National Concert Hall | ◑ available/sold-out only | ✗ | ✓ | ✓ |
-| The National Stadium | ◑ available only | ✗ | ✓ | ✗ |
+| Stadiums/outdoor (Ticketmaster) | ◑ onsale/other | ◑ when TM exposes it | ✓ | ✓ |
 | The Olympia | ✓ | ✓ | ✓ | ✓ |
 | O'Reilly Theatre | ◑ provider-dependent | ◑ Fever/Eventbrite only | ✓ | ✓ |
 | Pavilion Theatre | ◑ available/sold-out only | ✗ | ✓ | ✓ |

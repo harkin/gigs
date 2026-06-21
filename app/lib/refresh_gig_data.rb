@@ -5,17 +5,24 @@ class RefreshGigData
     start_time = Time.now.to_i
 
     ::DataGrabbers::Academy.get_events
+    ::DataGrabbers::AvivaStadium.get_events
     ::DataGrabbers::BordGais.get_events
     ::DataGrabbers::ButtonFactory.get_events
+    ::DataGrabbers::CrokePark.get_events
     ::DataGrabbers::Gaiety.get_events
     ::DataGrabbers::GrandSocial.get_events
     ::DataGrabbers::Helix.get_events
+    ::DataGrabbers::IveaghGardens.get_events
+    ::DataGrabbers::MalahideCastle.get_events
+    ::DataGrabbers::MarlayPark.get_events
     ::DataGrabbers::NationalConcertHall.get_events
     ::DataGrabbers::NationalStadium.get_events
     ::DataGrabbers::Olympia.get_events
     ::DataGrabbers::OreillyTheatre.get_events
     ::DataGrabbers::Pavilion.get_events
     ::DataGrabbers::Point.get_events
+    ::DataGrabbers::RoyalHospitalKilmainham.get_events
+    ::DataGrabbers::StAnnesPark.get_events
     ::DataGrabbers::VicarStreet.get_events
     ::DataGrabbers::Whelans.get_events
     ::DataGrabbers::Workmans.get_events
