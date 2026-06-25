@@ -35,6 +35,21 @@ class Event < ApplicationRecord
     unknown: 3,
   }
 
+  # Multi-day runs store the run's start in event_date and its last day in
+  # end_date; single events leave end_date nil. An event counts as upcoming
+  # until its last day passes, so an in-progress run stays visible.
+  scope :upcoming, -> { where("COALESCE(end_date, event_date) >= ?", Date.current.beginning_of_day) }
+
+  # "Wed, Jun 17 2026" for a single date, "17 Jun – 6 Sep 2026" for a run.
+  def renderable_date
+    return event_date.strftime("%a, %b %d %Y") if end_date.blank? || end_date.to_date == event_date.to_date
+
+    start_date = event_date.to_date
+    finish_date = end_date.to_date
+    start_format = start_date.year == finish_date.year ? "%-d %b" : "%-d %b %Y"
+    "#{start_date.strftime(start_format)} – #{finish_date.strftime("%-d %b %Y")}"
+  end
+
   def renderable_venue
     case venue
     when "academy"

@@ -1,6 +1,6 @@
 class GigsController < ApplicationController
   def index
-    @events = Event.order(:event_date)
+    @events = Event.upcoming.order(:event_date)
     @venues = Event.venues.keys.map { |v| [Event.new(venue: v).renderable_venue, v] }
     @last_refreshed_at = Refresh.last&.last_refresh_at
     @layout = params[:layout].presence_in(%w[table cards]) || "table"

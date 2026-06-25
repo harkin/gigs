@@ -15,15 +15,25 @@ module DataGrabbers
       previous_month = Date.current.month
 
       events = document.css("div.event-container").map do |card|
-        month, day = start_month_day(card.at_css("p.event-date").text)
+        start_md, end_md = month_day_range(card.at_css("p.event-date").text)
+        month, day = start_md
         year += 1 if month < previous_month
         previous_month = month
+
+        # A run's end can roll into the next year (e.g. Dec - Jan).
+        end_date = nil
+        if end_md
+          end_month, end_day = end_md
+          end_year = end_month < month ? year + 1 : year
+          end_date = Date.new(end_year, end_month, end_day)
+        end
 
         buy_button = card.at_css("a.btn-primary")
 
         {
           title: card.at_css("h3.event-title").text.strip,
           event_date: Date.new(year, month, day),
+          end_date: end_date,
           price: nil,
           ticket_status: buy_button ? :available : :unknown,
           link_to_buy_ticket: buy_button&.attribute("href")&.value,
@@ -44,12 +54,17 @@ module DataGrabbers
       events
     end
 
-    # Dates read like "17th Jun. - 6th Sep."; take the start and return its
-    # [month, day]. Year is resolved by the caller from listing order.
-    def self.start_month_day(text)
-      start = text.split(/\s[-–]\s/).first.strip
-      day = start[/\d{1,2}/].to_i
-      month = Date::ABBR_MONTHNAMES.index(start[/[A-Za-z]{3,}/]&.capitalize)
+    # Dates read like "17th Jun. - 6th Sep." (a run) or "17th Jun." (one night).
+    # Return [[start_month, start_day], [end_month, end_day] or nil]. Years are
+    # resolved by the caller from listing order.
+    def self.month_day_range(text)
+      start_part, end_part = text.split(/\s[-–]\s/, 2).map(&:strip)
+      [month_day(start_part), end_part && month_day(end_part)]
+    end
+
+    def self.month_day(text)
+      day = text[/\d{1,2}/].to_i
+      month = Date::ABBR_MONTHNAMES.index(text[/[A-Za-z]{3,}/]&.capitalize)
       [month, day]
     end
 
