@@ -8,14 +8,38 @@
              class="filter-input w-full shadow-sm text-sm px-3 py-2">
     </div>
 
-    <select data-filter-target="venue"
-            data-action="change->filter#filter"
-            class="filter-input shadow-sm text-sm px-3 py-2">
-      <option value="">All Venues</option>
-      <% @venues.each do |name, value| %>
-        <option value="<%= value %>"><%= name %></option>
-      <% end %>
-    </select>
+    <div class="relative">
+      <button type="button"
+              data-filter-target="venueButton"
+              data-action="click->filter#toggleVenueMenu"
+              aria-haspopup="true"
+              aria-expanded="false"
+              class="venue-button filter-input shadow-sm text-sm px-3 py-2 flex items-center gap-2">
+        <span data-filter-target="venueLabel" class="venue-button-label">All Venues</span>
+        <span aria-hidden="true" style="opacity: 0.6; font-size: 0.7em;">▼</span>
+      </button>
+
+      <div data-filter-target="venueMenu"
+           role="group"
+           aria-label="Filter by venue"
+           class="venue-menu hidden">
+        <div class="venue-menu-header">
+          <span>Venues</span>
+          <button type="button"
+                  data-action="click->filter#clearVenues"
+                  style="text-decoration: underline;">Clear</button>
+        </div>
+        <% @venues.each do |name, value| %>
+          <label class="venue-option">
+            <input type="checkbox"
+                   value="<%= value %>"
+                   data-filter-target="venueCheckbox"
+                   data-action="change->filter#filter">
+            <span><%= name %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
 
     <div class="flex items-center gap-2">
       <input type="date"
