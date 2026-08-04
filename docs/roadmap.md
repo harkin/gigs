@@ -231,19 +231,57 @@ and a fast route to rate-limiting / being blocked. Guardrails:
       time-like tokens from filename titles and merging near-identical fallbacks.
 
 ### Performance
-- [ ] **Responses are served completely uncompressed.** Production returns the
-      2.0 MB index at full size with no `Content-Encoding`, even when the client
-      offers gzip and brotli — there's no `thruster` gem, no `Rack::Deflater`,
-      and the Dockerfile runs `bin/rails server` directly, so nothing in the
-      stack compresses. Plain gzip takes the page from 2,096,619 → 108,540 bytes
-      (**19×**). Adding `thruster` (the Rails 8 default wrapper) is the smallest
-      fix and also gets asset caching.
+
+**Where the time actually goes.** Measured against production:
+
+| | Server time |
+|---|---|
+| `/up` — same host, same Rails, no DB | 2.5 ms |
+| `/` — same host, DB round-trips | 575–819 ms |
+| rendering 1,296 rows of ERB (measured directly) | 12–36 ms |
+
+The host is fast and rendering is cheap. Essentially all of the page's server
+time is **database round-trip latency**: the app runs on Oracle Cloud while the
+database is PlanetScale on AWS (`aws.connect.psdb.cloud`, `ssl_mode:
+verify_identity`), so every query is a cross-cloud TLS round-trip at roughly
+200ms. Both are free tiers, so this is a deliberate trade, not an oversight —
+but it means *query count*, not query complexity, is what to optimise.
+
+- [x] **Responses served completely uncompressed** — fixed by adding `thruster`,
+      which gzips in Go in front of Puma. 2,096,619 → ~115,000 bytes (**18×**).
+      Note `app_port` had to move to 80: Thruster listens there and forwards to
+      Puma on 3000, so leaving the proxy pointed at 3000 would bypass it silently.
+- [x] **Redundant `COUNT` on the index** — the header rendered `@events.count`
+      before the rows loaded, so the page issued a `COUNT` and then a `SELECT`
+      for the same scope. Loading in the controller and taking `.size` off the
+      loaded rows cut three app queries to two.
+- [ ] **Cache the rendered listing.** The remaining cost is `Event Load` (1,296
+      rows) plus the render, repeated identically on every request — for data
+      that only changes **once a day**. Design notes, since the obvious answer is
+      wrong here:
+      - **Don't use Solid Cache**, despite it being the Rails 8 default. It
+        stores entries in a database table, and this app's database is the remote
+        one — every cache read would be the exact round-trip we're avoiding.
+      - **Use `:memory_store`.** `config/puma.rb` runs a single process with 3
+        threads in one container, so there's one shared in-process cache, no
+        cross-worker coherence problem, and nothing new to operate. No memcached
+        or Redis needed.
+      - **Keyed on `last_refresh_at` vs a TTL:** keying on the refresh timestamp
+        is always fresh but still costs a `Refresh` round-trip per request
+        (~600ms → ~200ms). A few-minute TTL costs zero queries on a hit (~5ms)
+        at the price of that much staleness after a refresh. Given the data
+        turns over daily, the TTL is the better trade.
+      - `expires_in 1.hour, private` already means repeat visitors inside an hour
+        never reach the server, so this targets first-time visitors and returns
+        after the hour.
 - [ ] All 1,296 upcoming events render into the DOM so the client-side filter can
       work. That's what makes filtering feel instant, so don't trade it away
       lightly — but if it needs addressing, virtualize or lazily render past the
-      first ~100 rows. Compression above is the cheaper win by far.
-- [ ] `index.html.erb` calls `@events.count`, firing a separate `COUNT` query
-      before the rows load; `.size` reuses the loaded relation.
+      first ~100 rows.
+- [ ] **Colocating the app and database** is the structural fix — it's the only
+      one that also helps the scraper's write path, and it would make Solid Cache
+      viable. Rails 8 makes a local SQLite genuinely production-worthy. Parked:
+      both current tiers are free and the workload is comfortably within them.
 
 ### Other
 - [ ] Scraper parser tests against recorded fixtures — see `docs/testing-plan.md`.
