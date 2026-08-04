@@ -28,22 +28,25 @@ module DataGrabbers
 
       events = []
 
-      scrape_homepage.each do |listing|
+      # A run gets one poster per date, all pointing at the same ticket link, so
+      # resolve each link once — the provider returns every date it covers.
+      scrape_homepage.group_by { |listing| listing[:link] }.each do |link, posters|
         resolved =
           begin
-            resolve(listing)
+            resolve(posters.first)
           rescue => e
-            puts "  O'Reilly: couldn't resolve #{listing[:link]} (#{e.class}: #{e.message})"
+            puts "  O'Reilly: couldn't resolve #{link} (#{e.class}: #{e.message})"
             nil
           end
 
-        # nil means the provider lookup failed -> fall back to month/filename.
+        # nil means the provider lookup failed -> fall back to month/filename,
+        # per poster, since each carries its own month heading.
         # An empty array means it succeeded but had nothing upcoming -> skip.
-        resolved = [fallback_event(listing)] if resolved.nil?
+        resolved ||= posters.map { |poster| fallback_event(poster) }
 
         # When a provider can't tell us availability, fall back to the venue's
         # own signal: a poster filename like "...-sold-out".
-        poster_sold_out = listing[:filename].downcase.include?("sold-out")
+        poster_sold_out = posters.any? { |poster| poster[:filename].downcase.include?("sold-out") }
 
         resolved.each do |event|
           status = event[:ticket_status]
@@ -52,8 +55,8 @@ module DataGrabbers
           events.push(
             event.merge(
               ticket_status: status,
-              link_to_buy_ticket: listing[:link],
-              more_info: listing[:link],
+              link_to_buy_ticket: link,
+              more_info: link,
               venue: :oreilly_theatre,
             )
           )
@@ -105,7 +108,8 @@ module DataGrabbers
     def self.resolve(listing)
       case URI.parse(listing[:link]).host.to_s
       when /ticketsolve\.com/             then resolve_ticketsolve(listing[:link])
-      when /feverup\.com/, /eventbrite\./ then resolve_schema_event(listing[:link])
+      when /feverup\.com/                 then resolve_fever(listing[:link])
+      when /eventbrite\./                 then resolve_schema_event(listing[:link])
       when /gkentertainment/              then resolve_gk(listing[:link])
       end
     end
@@ -184,10 +188,50 @@ module DataGrabbers
       Time.parse([day, clock].compact.join(" "))
     end
 
-    # --- Fever / Eventbrite (schema.org Event JSON-LD) -------------------------
+    # --- Fever ----------------------------------------------------------------
+
+    # A Fever plan page covers every date a show runs, but its JSON-LD exposes
+    # only the earliest as startDate. The homepage posts one poster per date and
+    # they all link to the same plan, so reading startDate stamps every one of
+    # those dates with the first show's date. The ticket selector payload has
+    # the real per-session times, so take the dates from there.
+    def self.resolve_fever(url)
+      body = fetch(url).body
+      event = json_ld_event(body)
+      return unless event
+
+      starts = fever_session_starts(body)
+      starts = [Time.parse(event["startDate"])] if starts.empty? && event["startDate"].present?
+      return if starts.empty?
+
+      title = humanize_if_shouty(event["name"].to_s.strip)
+      # Offers are plan-wide, so status and price can't vary per date here.
+      status = offers_status(event["offers"])
+      price = lowest_offer_price(event["offers"])
+
+      starts.filter_map do |start|
+        next if start.to_date < Date.today
+
+        { title: title, event_date: start, ticket_status: status, price: price }
+      end
+    end
+
+    # The sessions live in a Next.js flight payload rather than a clean JSON
+    # island, so scan for the timestamps instead of parsing the whole blob.
+    # One event per date at its earliest session: a date with a matinee and an
+    # evening show is still a single night out in the listing.
+    def self.fever_session_starts(body)
+      body.scan(/"starts_at_iso":"([^"]+)"/).flatten
+          .filter_map { |iso| Time.parse(iso) rescue nil }
+          .group_by(&:to_date)
+          .map { |_date, times| times.min }
+          .sort
+    end
+
+    # --- Eventbrite (schema.org Event JSON-LD) --------------------------------
 
     def self.resolve_schema_event(url)
-      event = json_ld_event(url)
+      event = json_ld_event(fetch(url).body)
       return unless event && event["startDate"].present?
 
       [{
@@ -198,8 +242,8 @@ module DataGrabbers
       }]
     end
 
-    def self.json_ld_event(url)
-      document = Nokogiri::HTML(fetch(url).body)
+    def self.json_ld_event(body)
+      document = Nokogiri::HTML(body)
       objects = document.css('script[type="application/ld+json"]').flat_map do |script|
         parsed = JSON.parse(script.text) rescue nil
         parsed.is_a?(Array) ? parsed : [parsed]

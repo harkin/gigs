@@ -154,8 +154,19 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 ---
 
 ## 3. Features
+- [ ] **Filter state in the URL** — filters are client-side only, so "Whelan's
+      gigs in October" isn't a link you can send anyone. Reflect search, venues
+      and dates into the query string and restore on load; also gives back/
+      forward navigation for free.
+- [ ] **Date presets** — "Tonight", "This weekend", "Next 7 days" beside the date
+      range. Answering "what's on Friday?" shouldn't need two typed dates. Pure
+      client-side on the existing rows.
+- [ ] **Add to calendar** — an `.ics` link per event. Title, datetime, venue and
+      URL are all already stored, which is everything an ICS file needs.
 - [ ] Filter by event type (music / comedy / theatre / …) — needs a category
       field on `Event`, scraper support, and a filter UI control.
+- [ ] Search should match venue names, not just titles — `filter_controller.js`
+      only tests `data-title`, so typing "whelans" finds nothing.
 - [x] Mobile design — responsive layouts + themes shipped.
 - [x] Show ticket prices — `price-tag` rendering shipped (per-venue gaps above).
 
@@ -193,6 +204,48 @@ and a fast route to rate-limiting / being blocked. Guardrails:
 ---
 
 ## 5. Standing infra / quality
+
+### Known bugs
+- [ ] **`/refresh` is an unauthenticated GET that spawns an unbounded thread**
+      (`routes.rb`, `GigsController#refresh`). Anyone hitting the URL triggers a
+      full 23-venue scrape from the server's IP, nothing stops concurrent runs
+      interleaving their `delete_all`/`insert_all`, and being a GET it's
+      reachable by crawlers and link prefetchers. Make it a POST behind a token,
+      or drop it and rely on the daily Actions workflow. Directly at odds with
+      the rate-limiting guardrails in §4.
+- [ ] **`Event#renderable_venue` silently returns `nil` for an unmapped venue** —
+      the `case` has no `else`. Adding a venue to the enum (step 2 of the guide
+      above) without adding the mapping (step 3) yields a blank venue column and
+      a blank entry in the venue filter, with no error. Wants an `else` that
+      raises or humanizes the enum key.
+- [ ] **Vicar Street "Larry Dean" is misdated at source** — the listing's
+      `startDate` meta says 2026-10-15 while its ticket link points at
+      `...dublin-06-02-2027`. The scraper correctly trusts the meta; the venue's
+      own markup is wrong. Nothing to fix in code, but a reminder that per-event
+      sanity checks (does the buy link's date agree with the meta?) could catch a
+      class of upstream errors `EventValidator` can't see.
+- [ ] **O'Reilly fallback events are month-only and can double up** — posters
+      that fail provider resolution fall back to `first_of_month` + a title
+      derived from the filename, which currently yields e.g. "Victor Patrascan"
+      and "Victor Patrascan 7pm" both dated 1 Dec 00:00. Consider stripping
+      time-like tokens from filename titles and merging near-identical fallbacks.
+
+### Performance
+- [ ] **Responses are served completely uncompressed.** Production returns the
+      2.0 MB index at full size with no `Content-Encoding`, even when the client
+      offers gzip and brotli — there's no `thruster` gem, no `Rack::Deflater`,
+      and the Dockerfile runs `bin/rails server` directly, so nothing in the
+      stack compresses. Plain gzip takes the page from 2,096,619 → 108,540 bytes
+      (**19×**). Adding `thruster` (the Rails 8 default wrapper) is the smallest
+      fix and also gets asset caching.
+- [ ] All 1,296 upcoming events render into the DOM so the client-side filter can
+      work. That's what makes filtering feel instant, so don't trade it away
+      lightly — but if it needs addressing, virtualize or lazily render past the
+      first ~100 rows. Compression above is the cheaper win by far.
+- [ ] `index.html.erb` calls `@events.count`, firing a separate `COUNT` query
+      before the rows load; `.size` reuses the loaded relation.
+
+### Other
 - [ ] Scraper parser tests against recorded fixtures — see `docs/testing-plan.md`.
 - [ ] CI secrets hardening — GHCR+OIDC or a kamal secrets adapter.
 - [ ] Refresh heartbeat / dead-man's-switch — catch "the workflow silently
