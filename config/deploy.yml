@@ -19,8 +19,10 @@ servers:
 proxy: 
   ssl: false
 #  host: app.example.com
-  # kamal-proxy connects to your container over port 80, use `app_port` to specify a different port.
-  app_port: 3000
+  # kamal-proxy connects to your container over port 80, which is where Thruster
+  # listens; it proxies on to Puma at 3000. Pointing this back at 3000 would skip
+  # Thruster and lose compression.
+  app_port: 80
 
 # Credentials for your image host.
 registry:

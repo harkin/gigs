@@ -8,6 +8,9 @@ gem "rails", "~> 8.1.2"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 8.0"
 
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster]
+gem "thruster", require: false
+
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 
