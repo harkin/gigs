@@ -241,11 +241,10 @@ and a fast route to rate-limiting / being blocked. Guardrails:
 | rendering 1,296 rows of ERB (measured directly) | 12–36 ms |
 
 The host is fast and rendering is cheap. Essentially all of the page's server
-time is **database round-trip latency**: the app runs on Oracle Cloud while the
-database is PlanetScale on AWS (`aws.connect.psdb.cloud`, `ssl_mode:
-verify_identity`), so every query is a cross-cloud TLS round-trip at roughly
-200ms. Both are free tiers, so this is a deliberate trade, not an oversight —
-but it means *query count*, not query complexity, is what to optimise.
+time is **database round-trip latency**: the database is remote and reached over
+TLS, so every query costs roughly 200ms no matter how trivial it is. That split
+is a deliberate trade, not an oversight — but it means *query count*, not query
+complexity, is what to optimise.
 
 - [x] **Responses served completely uncompressed** — fixed by adding `thruster`,
       which gzips in Go in front of Puma. 2,096,619 → ~115,000 bytes (**18×**).
@@ -281,7 +280,7 @@ but it means *query count*, not query complexity, is what to optimise.
 - [ ] **Colocating the app and database** is the structural fix — it's the only
       one that also helps the scraper's write path, and it would make Solid Cache
       viable. Rails 8 makes a local SQLite genuinely production-worthy. Parked:
-      both current tiers are free and the workload is comfortably within them.
+      the current setup costs nothing and the workload sits well inside it.
 
 ### Other
 - [ ] Scraper parser tests against recorded fixtures — see `docs/testing-plan.md`.

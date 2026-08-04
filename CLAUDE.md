@@ -2,6 +2,19 @@
 
 Rails app scraping Dublin music venues into a gig listing site.
 
+## This repo is public
+Commit messages, PR titles/bodies and anything under `docs/` are world-readable
+and effectively permanent — edits don't erase forks, clones or notification mail.
+
+Don't put infrastructure specifics in them: hosting or database **providers**,
+**pricing tiers**, hostnames, public IPs, or region/endpoint identifiers. Keep
+the reasoning, drop the vendor — "the database is remote, so every query costs a
+round-trip" carries the same engineering weight as naming the two clouds and
+what they cost. Measurements, timings and payload sizes are fine.
+
+Config that already names a provider stays as is; this is about not adding new
+detail in prose.
+
 ## Deploy
 - Push to `main` → CI tests + kamal-deploys (`.github/workflows/deploy.yml`). No PR needed
 - After deploying scraper changes, hit `GET /refresh` once (refreshes in a background thread, ~30s) or data stays stale.
