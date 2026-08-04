@@ -4,7 +4,7 @@
     <div>
       <h1 class="page-heading">Dublin Gigs</h1>
       <p style="color: var(--text-muted); margin-top: 0.25rem;">
-        <span data-filter-target="count"><%= @events.count %></span> events
+        <span data-filter-target="count"><%= @events.size %></span> events
         <span style="margin: 0 0.5rem; opacity: 0.4;">|</span>
         Updated <%= @last_refreshed_at&.to_formatted_s(:short) || "Never" %>
         <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
