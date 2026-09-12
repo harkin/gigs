@@ -7,36 +7,27 @@ module DataGrabbers
     STORE_API_URL = "https://www.whelanslive.com/wp-json/wc/store/v1/products"
 
     def self.get_events
-      start_time = Time.now.to_i
+      Store.replace(:whelans) do
+        events = []
 
-      events = []
+        next_page = EVENTS_URL
+        next_year = false
 
-      next_page = EVENTS_URL
-      next_year = false
+        12.times do
+          response = Faraday.get("#{next_page}")
+          document = Nokogiri::HTML(response.body)
+          events_html = document.css("article.desk")
 
-      12.times do
-        response = Faraday.get("#{next_page}")
-        document = Nokogiri::HTML(response.body)
-        events_html = document.css("article.desk")
+          extract_events_from_html(events_html, events, next_year)
 
-        extract_events_from_html(events_html, events, next_year)
+          next_page = document.css("header nav").last.css("a").last.attribute("href").to_s + "/"
+          next_year = true if next_page.include?("january")
+        end
 
-        next_page = document.css("header nav").last.css("a").last.attribute("href").to_s + "/"
-        next_year = true if next_page.include?("january")
+        apply_ticket_statuses(events)
+
+        events
       end
-
-      apply_ticket_statuses(events)
-
-      EventValidator.validate!(events, venue: :whelans)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :whelans).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} Whelans events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     def self.extract_events_from_html(events_html, events, next_year)

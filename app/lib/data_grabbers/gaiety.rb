@@ -4,54 +4,43 @@ module DataGrabbers
     EVENTS_URL = "https://www.gaietytheatre.ie/events/"
 
     def self.get_events
-      start_time = Time.now.to_i
+      Store.replace(:gaiety) do
+        response = Faraday.get(EVENTS_URL)
+        document = Nokogiri::HTML(response.body)
 
-      response = Faraday.get(EVENTS_URL)
-      document = Nokogiri::HTML(response.body)
+        # Cards list a run's start; no year is shown, so carry a running year and
+        # roll it forward when the month steps back (a run starting after New Year).
+        year = Date.current.year
+        previous_month = Date.current.month
 
-      # Cards list a run's start; no year is shown, so carry a running year and
-      # roll it forward when the month steps back (a run starting after New Year).
-      year = Date.current.year
-      previous_month = Date.current.month
+        document.css("div.event-container").map do |card|
+          start_md, end_md = month_day_range(card.at_css("p.event-date").text)
+          month, day = start_md
+          year += 1 if month < previous_month
+          previous_month = month
 
-      events = document.css("div.event-container").map do |card|
-        start_md, end_md = month_day_range(card.at_css("p.event-date").text)
-        month, day = start_md
-        year += 1 if month < previous_month
-        previous_month = month
+          # A run's end can roll into the next year (e.g. Dec - Jan).
+          end_date = nil
+          if end_md
+            end_month, end_day = end_md
+            end_year = end_month < month ? year + 1 : year
+            end_date = Date.new(end_year, end_month, end_day)
+          end
 
-        # A run's end can roll into the next year (e.g. Dec - Jan).
-        end_date = nil
-        if end_md
-          end_month, end_day = end_md
-          end_year = end_month < month ? year + 1 : year
-          end_date = Date.new(end_year, end_month, end_day)
+          buy_button = card.at_css("a.btn-primary")
+
+          {
+            title: card.at_css("h3.event-title").text.strip,
+            event_date: Date.new(year, month, day),
+            end_date: end_date,
+            price: nil,
+            ticket_status: buy_button ? :available : :unknown,
+            link_to_buy_ticket: buy_button&.attribute("href")&.value,
+            more_info: card.at_css(".event-poster a")&.attribute("href")&.value,
+            venue: :gaiety,
+          }
         end
-
-        buy_button = card.at_css("a.btn-primary")
-
-        {
-          title: card.at_css("h3.event-title").text.strip,
-          event_date: Date.new(year, month, day),
-          end_date: end_date,
-          price: nil,
-          ticket_status: buy_button ? :available : :unknown,
-          link_to_buy_ticket: buy_button&.attribute("href")&.value,
-          more_info: card.at_css(".event-poster a")&.attribute("href")&.value,
-          venue: :gaiety,
-        }
       end
-
-      EventValidator.validate!(events, venue: :gaiety)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :gaiety).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} Gaiety events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     # Dates read like "17th Jun. - 6th Sep." (a run) or "17th Jun." (one night).

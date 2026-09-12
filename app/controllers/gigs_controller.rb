@@ -3,10 +3,10 @@ class GigsController < ApplicationController
     # Loaded up front so the view's count comes off the loaded rows. The
     # database is remote, so a second query costs a whole round-trip.
     @events = Event.upcoming.order(:event_date).load
-    @venues = Event.venues.keys.map { |v| [Event.new(venue: v).renderable_venue, v] }
+    @venues = Event.venues.keys.map { |venue| [Event::VENUE_NAMES[venue], venue] }
     @last_refreshed_at = Refresh.last&.last_refresh_at
     @layout = params[:layout].presence_in(%w[table cards]) || "table"
-    @theme = params[:theme].presence_in(GigsHelper::THEMES)
+    @theme = params[:theme].presence_in(GigsHelper::THEMES.keys)
 
     expires_in 1.hour, public: false
   end

@@ -1,17 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
-const THEMES = ["light", "dark", "festival", "aurora"]
-
 export default class extends Controller {
   static targets = ["swatch", "layoutBtn"]
 
   connect() {
     const urlParams = new URLSearchParams(window.location.search)
+    // Rendered from GigsHelper::THEMES so the list lives in one place
+    const themes = document.documentElement.dataset.themes.split(" ")
 
     // A ?theme= param previews a theme without persisting it
     let savedTheme = urlParams.get("theme")
-    if (!THEMES.includes(savedTheme)) savedTheme = localStorage.getItem("theme")
-    if (!THEMES.includes(savedTheme)) savedTheme = "light"
+    if (!themes.includes(savedTheme)) savedTheme = localStorage.getItem("theme")
+    if (!themes.includes(savedTheme)) savedTheme = themes[0]
     this.applyTheme(savedTheme)
 
     // Check if we need to switch to saved layout preference;

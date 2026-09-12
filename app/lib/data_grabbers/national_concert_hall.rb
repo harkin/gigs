@@ -8,30 +8,21 @@ module DataGrabbers
     MAX_PAGES = 40
 
     def self.get_events
-      start_time = Time.now.to_i
+      Store.replace(:national_concert_hall) do
+        events = []
+        seen = Set.new
 
-      events = []
-      seen = Set.new
+        (1..MAX_PAGES).each do |page|
+          cards = Nokogiri::HTML(Faraday.get(EVENTS_URL, page: page).body).css("div.feature-card")
+          new_events = cards.filter_map { |card| parse_card(card) }.reject { |event| seen.include?(event[:more_info]) }
+          break if new_events.empty?
 
-      (1..MAX_PAGES).each do |page|
-        cards = Nokogiri::HTML(Faraday.get(EVENTS_URL, page: page).body).css("div.feature-card")
-        new_events = cards.filter_map { |card| parse_card(card) }.reject { |event| seen.include?(event[:more_info]) }
-        break if new_events.empty?
+          new_events.each { |event| seen.add(event[:more_info]) }
+          events.concat(new_events)
+        end
 
-        new_events.each { |event| seen.add(event[:more_info]) }
-        events.concat(new_events)
+        events
       end
-
-      EventValidator.validate!(events, venue: :national_concert_hall)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :national_concert_hall).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} National Concert Hall events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     # Each card carries two <p class="meta"> lines (category then date); the date

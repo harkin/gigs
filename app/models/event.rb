@@ -28,6 +28,32 @@ class Event < ApplicationRecord
     workmans: 9,
   }
 
+  VENUE_NAMES = {
+    "academy" => "The Academy",
+    "aviva_stadium" => "Aviva Stadium",
+    "bord_gais" => "Bord Gáis Energy Theatre",
+    "button_factory" => "Button Factory",
+    "croke_park" => "Croke Park",
+    "fidelity" => "Fidelity",
+    "gaiety" => "The Gaiety",
+    "grand_social" => "The Grand Social",
+    "helix" => "The Helix",
+    "iveagh_gardens" => "Iveagh Gardens",
+    "malahide_castle" => "Malahide Castle",
+    "marlay_park" => "Marlay Park",
+    "national_concert_hall" => "National Concert Hall",
+    "national_stadium" => "The National Stadium",
+    "olympia" => "The Olympia",
+    "oreilly_theatre" => "O'Reilly Theatre",
+    "pavilion" => "Pavilion Theatre",
+    "point" => "The 3Arena",
+    "royal_hospital_kilmainham" => "Royal Hospital Kilmainham",
+    "st_annes_park" => "St Anne's Park",
+    "vicar_street" => "Vicar Street",
+    "whelans" => "Whelans",
+    "workmans" => "The Workman's Club",
+  }.freeze
+
   enum :ticket_status, {
     available: 0,
     limited_availability: 1,
@@ -51,66 +77,10 @@ class Event < ApplicationRecord
   end
 
   def renderable_venue
-    case venue
-    when "academy"
-      "The Academy"
-    when "aviva_stadium"
-      "Aviva Stadium"
-    when "bord_gais"
-      "Bord Gáis Energy Theatre"
-    when "button_factory"
-      "Button Factory"
-    when "croke_park"
-      "Croke Park"
-    when "fidelity"
-      "Fidelity"
-    when "gaiety"
-      "The Gaiety"
-    when "grand_social"
-      "The Grand Social"
-    when "helix"
-      "The Helix"
-    when "iveagh_gardens"
-      "Iveagh Gardens"
-    when "malahide_castle"
-      "Malahide Castle"
-    when "marlay_park"
-      "Marlay Park"
-    when "national_concert_hall"
-      "National Concert Hall"
-    when "national_stadium"
-      "The National Stadium"
-    when "point"
-      "The 3Arena"
-    when "olympia"
-      "The Olympia"
-    when "pavilion"
-      "Pavilion Theatre"
-    when "oreilly_theatre"
-      "O'Reilly Theatre"
-    when "royal_hospital_kilmainham"
-      "Royal Hospital Kilmainham"
-    when "st_annes_park"
-      "St Anne's Park"
-    when "vicar_street"
-      "Vicar Street"
-    when "whelans"
-      "Whelans"
-    when "workmans"
-      "The Workman's Club"
-    end
+    VENUE_NAMES[venue]
   end
 
   def renderable_ticket_status
-    case ticket_status
-    when "available"
-      return  "Available"
-    when "limited_availability"
-      "Limited Availability"
-    when "sold_out"
-      "Sold Out"
-    when "unknown"
-      "Unknown"
-    end
+    ticket_status&.titleize
   end
 end

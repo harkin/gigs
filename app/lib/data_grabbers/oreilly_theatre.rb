@@ -22,57 +22,49 @@ module DataGrabbers
     FILENAME_NOISE = (MONTHS.map(&:downcase) + %w[orig full final new copy sold out pm am]).freeze
 
     def self.get_events
-      start_time = Time.now.to_i
-      @ticketsolve_jar = Hash.new { |hash, host| hash[host] = {} }
-      @ticketsolve_ready = false
+      Store.replace(:oreilly_theatre) do
+        @ticketsolve_jar = Hash.new { |hash, host| hash[host] = {} }
+        @ticketsolve_ready = false
 
-      events = []
+        events = []
 
-      # A run gets one poster per date, all pointing at the same ticket link, so
-      # resolve each link once — the provider returns every date it covers.
-      scrape_homepage.group_by { |listing| listing[:link] }.each do |link, posters|
-        resolved =
-          begin
-            resolve(posters.first)
-          rescue => e
-            puts "  O'Reilly: couldn't resolve #{link} (#{e.class}: #{e.message})"
-            nil
-          end
+        # A run gets one poster per date, all pointing at the same ticket link, so
+        # resolve each link once — the provider returns every date it covers.
+        scrape_homepage.group_by { |listing| listing[:link] }.each do |link, posters|
+          resolved =
+            begin
+              resolve(posters.first)
+            rescue => e
+              puts "  O'Reilly: couldn't resolve #{link} (#{e.class}: #{e.message})"
+              nil
+            end
 
-        # nil means the provider lookup failed -> fall back to month/filename,
-        # per poster, since each carries its own month heading.
-        # An empty array means it succeeded but had nothing upcoming -> skip.
-        resolved ||= posters.map { |poster| fallback_event(poster) }
+          # nil means the provider lookup failed -> fall back to month/filename,
+          # per poster, since each carries its own month heading.
+          # An empty array means it succeeded but had nothing upcoming -> skip.
+          resolved ||= posters.map { |poster| fallback_event(poster) }
 
-        # When a provider can't tell us availability, fall back to the venue's
-        # own signal: a poster filename like "...-sold-out".
-        poster_sold_out = posters.any? { |poster| poster[:filename].downcase.include?("sold-out") }
+          # When a provider can't tell us availability, fall back to the venue's
+          # own signal: a poster filename like "...-sold-out".
+          poster_sold_out = posters.any? { |poster| poster[:filename].downcase.include?("sold-out") }
 
-        resolved.each do |event|
-          status = event[:ticket_status]
-          status = :sold_out if status == :unknown && poster_sold_out
+          resolved.each do |event|
+            status = event[:ticket_status]
+            status = :sold_out if status == :unknown && poster_sold_out
 
-          events.push(
-            event.merge(
-              ticket_status: status,
-              link_to_buy_ticket: link,
-              more_info: link,
-              venue: :oreilly_theatre,
+            events.push(
+              event.merge(
+                ticket_status: status,
+                link_to_buy_ticket: link,
+                more_info: link,
+                venue: :oreilly_theatre,
+              )
             )
-          )
+          end
         end
+
+        events
       end
-
-      EventValidator.validate!(events, venue: :oreilly_theatre)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :oreilly_theatre).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} O'Reilly Theatre events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     # --- Homepage --------------------------------------------------------------
