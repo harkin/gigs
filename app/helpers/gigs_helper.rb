@@ -1,6 +1,19 @@
 module GigsHelper
   THEMES = %w[light dark festival aurora].freeze
 
+  # Some venue feeds ship entity-encoded titles ("Bluey&#8217;s Big Play"),
+  # others plain text. Parsing normalises both to text so ERB escapes exactly
+  # once on output; stray markup in a scraped title is dropped along the way.
+  def event_title(event)
+    Nokogiri::HTML.fragment(event.title.to_s).text
+  end
+
+  # Links come from scraped pages, so only hand the browser a scheme it is
+  # safe to follow; anything else (javascript:, data:) is dropped.
+  def external_url(url)
+    url if url.to_s.match?(%r{\Ahttps?://}i)
+  end
+
   def status_class_for(event)
     case event.ticket_status
     when "available" then "status-available"
