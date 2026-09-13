@@ -4,13 +4,13 @@
       <div class="venue-card"
            style="--venue-color: <%= status_color_for(event) %>;"
            data-filter-target="row"
-           data-title="<%= event.title.downcase %>"
+           data-title="<%= event_title(event).downcase %>"
            data-venue="<%= event.venue %>"
            data-date="<%= event.event_date.to_date.iso8601 %>">
 
         <div style="margin-bottom: 0.75rem;">
           <h3 style="font-weight: 600; color: var(--text-primary); font-size: 1rem; line-height: 1.4; font-family: var(--font-heading);">
-            <%== event.title %>
+            <%= event_title(event) %>
           </h3>
         </div>
 
@@ -33,16 +33,18 @@
             <% end %>
           </div>
 
-          <% if event.link_to_buy_ticket.present? && event.ticket_status == "available" %>
-            <a href="<%= event.link_to_buy_ticket %>" class="buy-button">
+          <% ticket_url = external_url(event.link_to_buy_ticket) %>
+          <% info_url = external_url(event.more_info) %>
+          <% if ticket_url && event.ticket_status == "available" %>
+            <a href="<%= ticket_url %>" class="buy-button">
               Buy Tickets
             </a>
-          <% elsif event.more_info.present? %>
-            <a href="<%= event.more_info %>" style="font-size: 0.875rem; color: var(--accent);">
+          <% elsif info_url %>
+            <a href="<%= info_url %>" style="font-size: 0.875rem; color: var(--accent);">
               More Info →
             </a>
-          <% elsif event.link_to_buy_ticket.present? %>
-            <a href="<%= event.link_to_buy_ticket %>" style="font-size: 0.875rem; color: var(--accent);">
+          <% elsif ticket_url %>
+            <a href="<%= ticket_url %>" style="font-size: 0.875rem; color: var(--accent);">
               View Tickets →
             </a>
           <% end %>
