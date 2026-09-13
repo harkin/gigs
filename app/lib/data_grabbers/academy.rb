@@ -13,38 +13,28 @@ module DataGrabbers
     TRACKING_PARAM = /\A(?:utm_|dice_)/
 
     def self.get_events
-      start_time = Time.now.to_i
+      Store.replace(:academy) do
+        response = Faraday.get(EVENTS_URL)
+        raw_events = JSON.parse(response.body)["events"] || []
 
-      response = Faraday.get(EVENTS_URL)
-      raw_events = JSON.parse(response.body)["events"] || []
+        raw_events.map do |gig|
+          ticket_url = clean_ticket_url(gig["ticketsUrl"])
 
-      events = raw_events.map do |gig|
-        ticket_url = clean_ticket_url(gig["ticketsUrl"])
-
-        {
-          # subTitle (when present) is usually a support act, e.g. "+ Special
-          # Guests: ...", so a plain space reads better than a dash.
-          title: [gig["title"], gig["subTitle"]].compact_blank.join(" "),
-          event_date: Time.parse(gig.dig("startDate", "date")),
-          price: gig["pricing"],
-          ticket_status: gig["isSoldOut"] ? :sold_out : :available,
-          link_to_buy_ticket: ticket_url,
-          # The Academy has no per-event page of its own; its Ticketmaster
-          # listing is the only detail page, so it doubles as more_info.
-          more_info: ticket_url,
-          venue: :academy,
-        }
+          {
+            # subTitle (when present) is usually a support act, e.g. "+ Special
+            # Guests: ...", so a plain space reads better than a dash.
+            title: [gig["title"], gig["subTitle"]].compact_blank.join(" "),
+            event_date: Time.parse(gig.dig("startDate", "date")),
+            price: gig["pricing"],
+            ticket_status: gig["isSoldOut"] ? :sold_out : :available,
+            link_to_buy_ticket: ticket_url,
+            # The Academy has no per-event page of its own; its Ticketmaster
+            # listing is the only detail page, so it doubles as more_info.
+            more_info: ticket_url,
+            venue: :academy,
+          }
+        end
       end
-
-      EventValidator.validate!(events, venue: :academy)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :academy).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} The Academy events in #{Time.now.to_i - start_time} seconds"
-      events
     end
 
     # Strips tracking params so we store the bare event link. Also drops

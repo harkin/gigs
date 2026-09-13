@@ -5,36 +5,27 @@ module DataGrabbers
     ROOT_URL = "https://www.vicarstreet.com"
 
     def self.get_events
-      start_time = Time.now.to_i
+      Store.replace(:vicar_street) do
+        events = []
 
-      events = []
-
-      # this defaults to form encoding which Whelans expects
-      response = Faraday.get(EVENTS_URL)
-      document = Nokogiri::HTML(response.body)
-      main_body = document.css("div.blog-featured")
-      # No "next" link when the shows fit on one page.
-      next_page = main_body.css("li.pagination-next").css("a").attribute("href")&.value
-      extract_events_from_html(main_body, events)
-
-      while next_page
-        response = Faraday.get("#{ROOT_URL}#{next_page}")
+        # this defaults to form encoding which Whelans expects
+        response = Faraday.get(EVENTS_URL)
         document = Nokogiri::HTML(response.body)
         main_body = document.css("div.blog-featured")
-        next_page = main_body.css("li.pagination-next").css("a")&.attribute("href")&.value
+        # No "next" link when the shows fit on one page.
+        next_page = main_body.css("li.pagination-next").css("a").attribute("href")&.value
         extract_events_from_html(main_body, events)
+
+        while next_page
+          response = Faraday.get("#{ROOT_URL}#{next_page}")
+          document = Nokogiri::HTML(response.body)
+          main_body = document.css("div.blog-featured")
+          next_page = main_body.css("li.pagination-next").css("a")&.attribute("href")&.value
+          extract_events_from_html(main_body, events)
+        end
+
+        events
       end
-
-      EventValidator.validate!(events, venue: :vicar_street)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: :vicar_street).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} Vicar Street events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     def self.extract_events_from_html(html, events)

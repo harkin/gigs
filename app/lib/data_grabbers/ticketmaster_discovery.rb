@@ -10,24 +10,13 @@ module DataGrabbers
     # This is a music/comedy listing, so drop sports fixtures and the like.
     GIG_SEGMENTS = ["Music", "Arts & Theatre"].freeze
 
+    # The Discovery API is authoritative and versioned, so a well-formed empty
+    # result is a real off-season state for these seasonal venues, not scraper
+    # drift — allow zero. fetch_events still raises on a malformed response.
     def get_events(venue_id:, venue:)
-      start_time = Time.now.to_i
-
-      events = fetch_events(venue_id).filter_map { |event| build_event(event, venue) }
-
-      # The Discovery API is authoritative and versioned, so a well-formed empty
-      # result is a real off-season state for these seasonal venues, not scraper
-      # drift — allow zero. fetch_events still raises on a malformed response.
-      EventValidator.validate!(events, venue: venue, min_count: 0)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: venue).delete_all
-        Event.insert_all(events) if events.any?
+      Store.replace(venue, min_count: 0) do
+        fetch_events(venue_id).filter_map { |event| build_event(event, venue) }
       end
-
-      puts "Finished grabbing #{events.count} #{venue} events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     def fetch_events(venue_id)

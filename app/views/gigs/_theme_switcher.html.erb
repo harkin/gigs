@@ -1,23 +1,15 @@
 <div class="switcher-bar">
   <div class="switcher-group">
     <span class="switcher-label">Theme</span>
-    <%
-      swatches = [
-        ["light",    "Light",    "#667eea", "#a855f7", "#f093fb"],
-        ["dark",     "Dark",     "#818cf8", "#6366f1", "#1e293b"],
-        ["festival", "Festival", "#ff6b35", "#ff4d8d", "#a64dff"],
-        ["aurora",   "Aurora",   "#5eead4", "#8b5cf6", "#ec4899"],
-      ]
-    %>
     <div class="theme-swatches">
-      <% swatches.each do |theme, label, color_top, color_mid, color_bottom| %>
+      <% GigsHelper::THEMES.each do |theme, settings| %>
         <button data-theme-target="swatch"
                 data-action="click->theme#select"
                 data-theme-value="<%= theme %>"
                 class="theme-swatch-btn"
-                title="<%= label %>">
-          <span class="swatch-dot" style="background: linear-gradient(135deg, <%= color_top %>, <%= color_mid %>, <%= color_bottom %>);"></span>
-          <span class="swatch-label"><%= label %></span>
+                title="<%= settings[:label] %>">
+          <span class="swatch-dot" style="background: linear-gradient(135deg, <%= settings[:swatch].join(", ") %>);"></span>
+          <span class="swatch-label"><%= settings[:label] %></span>
         </button>
       <% end %>
     </div>

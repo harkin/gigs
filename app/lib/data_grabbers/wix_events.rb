@@ -8,33 +8,22 @@ module DataGrabbers
     APP_ID = "140603ad-af8d-84a5-2c80-a0f60cb47351"
 
     def get_events(host:, venue:, events_path: "/events/")
-      start_time = Time.now.to_i
+      Store.replace(venue) do
+        instance = fetch_instance(host)
 
-      instance = fetch_instance(host)
-
-      events = fetch_upcoming(host, instance).map do |event|
-        config = event.dig("scheduling", "config")
-        {
-          title: TitleCleaner.strip_promoter(event["title"].strip),
-          event_date: Time.parse(config["startDate"]).in_time_zone(config["timeZoneId"]),
-          price: nil,
-          ticket_status: :unknown,
-          link_to_buy_ticket: nil,
-          more_info: "https://#{host}#{events_path}#{event["slug"]}",
-          venue: venue,
-        }
-      end.sort_by { |event| event[:event_date] }
-
-      EventValidator.validate!(events, venue: venue)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: venue).delete_all
-        Event.insert_all(events)
+        fetch_upcoming(host, instance).map do |event|
+          config = event.dig("scheduling", "config")
+          {
+            title: TitleCleaner.strip_promoter(event["title"].strip),
+            event_date: Time.parse(config["startDate"]).in_time_zone(config["timeZoneId"]),
+            price: nil,
+            ticket_status: :unknown,
+            link_to_buy_ticket: nil,
+            more_info: "https://#{host}#{events_path}#{event["slug"]}",
+            venue: venue,
+          }
+        end.sort_by { |event| event[:event_date] }
       end
-
-      puts "Finished grabbing #{events.count} #{venue} events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     def fetch_instance(host)

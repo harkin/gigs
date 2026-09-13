@@ -8,36 +8,25 @@ module DataGrabbers
     FEED_URL = "https://%s.ticketsolve.com/shows.xml"
 
     def get_events(subdomain:, venue:)
-      start_time = Time.now.to_i
+      Store.replace(venue) do
+        feed = Nokogiri::XML(Faraday.get(format(FEED_URL, subdomain)).body)
 
-      feed = Nokogiri::XML(Faraday.get(format(FEED_URL, subdomain)).body)
+        feed.xpath("//show").filter_map do |show|
+          performances = upcoming_performances(show)
+          next if performances.empty?
 
-      events = feed.xpath("//show").filter_map do |show|
-        performances = upcoming_performances(show)
-        next if performances.empty?
-
-        next_up = performances.min_by { |performance| performance[:time] }
-        {
-          title: show.at_xpath("./name").text.strip,
-          event_date: next_up[:time],
-          price: nil,
-          ticket_status: show_status(performances),
-          link_to_buy_ticket: next_up[:url],
-          more_info: next_up[:url][%r{\Ahttps?://[^/]+/shows/\d+}] || next_up[:url],
-          venue: venue,
-        }
+          next_up = performances.min_by { |performance| performance[:time] }
+          {
+            title: show.at_xpath("./name").text.strip,
+            event_date: next_up[:time],
+            price: nil,
+            ticket_status: show_status(performances),
+            link_to_buy_ticket: next_up[:url],
+            more_info: next_up[:url][%r{\Ahttps?://[^/]+/shows/\d+}] || next_up[:url],
+            venue: venue,
+          }
+        end
       end
-
-      EventValidator.validate!(events, venue: venue)
-
-      ActiveRecord::Base.transaction do
-        Event.where(venue: venue).delete_all
-        Event.insert_all(events)
-      end
-
-      puts "Finished grabbing #{events.count} #{venue} events in #{Time.now.to_i - start_time} seconds"
-
-      events
     end
 
     def upcoming_performances(show)

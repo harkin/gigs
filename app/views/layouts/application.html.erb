@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="<%= @theme || "light" %>">
+<html data-theme="<%= @theme || "light" %>" data-themes="<%= GigsHelper::THEMES.keys.join(" ") %>">
   <head>
     <title>Gigs</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,7 +18,7 @@
         // A ?theme= param (rendered server-side) wins; otherwise restore the saved choice
         if (new URLSearchParams(location.search).has("theme")) return;
         var t = localStorage.getItem("theme");
-        var known = ["light", "dark", "festival", "aurora"];
+        var known = document.documentElement.dataset.themes.split(" ");
         if (known.indexOf(t) !== -1) document.documentElement.setAttribute("data-theme", t);
       })();
     </script>
