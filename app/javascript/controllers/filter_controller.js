@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "search", "venueButton", "venueLabel", "venueMenu", "venueCheckbox",
-    "dateFrom", "dateTo", "row", "count", "noResults"
+    "dateFrom", "dateTo", "newOnly", "row", "count", "noResults"
   ]
 
   connect() {
@@ -91,6 +91,7 @@ export default class extends Controller {
     this.updateVenueLabel(selectedVenues)
     const dateFrom = this.dateFromTarget.value ? new Date(this.dateFromTarget.value) : null
     const dateTo = this.dateToTarget.value ? new Date(this.dateToTarget.value + "T23:59:59") : null
+    const newOnly = this.hasNewOnlyTarget && this.newOnlyTarget.checked
 
     let visibleCount = 0
 
@@ -104,7 +105,9 @@ export default class extends Controller {
       const matchesDateFrom = !dateFrom || eventDate >= dateFrom
       const matchesDateTo = !dateTo || eventDate <= dateTo
 
-      const isVisible = matchesSearch && matchesVenue && matchesDateFrom && matchesDateTo
+      const matchesNew = !newOnly || row.dataset.new === "true"
+
+      const isVisible = matchesSearch && matchesVenue && matchesDateFrom && matchesDateTo && matchesNew
 
       row.classList.toggle("hidden", !isVisible)
       if (isVisible) visibleCount++
@@ -121,6 +124,7 @@ export default class extends Controller {
     this.uncheckVenues()
     this.dateFromTarget.value = ""
     this.dateToTarget.value = ""
+    if (this.hasNewOnlyTarget) this.newOnlyTarget.checked = false
     this.filter()
   }
 }

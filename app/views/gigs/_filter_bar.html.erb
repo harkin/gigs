@@ -55,6 +55,13 @@
              title="To date">
     </div>
 
+    <label class="flex items-center gap-2" style="font-size: 0.875rem; color: var(--text-secondary); white-space: nowrap;">
+      <input type="checkbox"
+             data-filter-target="newOnly"
+             data-action="change->filter#filter">
+      Just announced
+    </label>
+
     <button type="button"
             data-action="click->filter#reset"
             style="color: var(--text-muted); font-size: 0.875rem; text-decoration: underline;">

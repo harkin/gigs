@@ -63,5 +63,17 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_includes response.body, "https://dice.fm/event/abc"
     end
+
+    test "#{layout} layout badges only recently announced events" do
+      create_event(title: "Brand New Gig", first_seen_at: 2.days.ago)
+      create_event(title: "Long Standing Gig", first_seen_at: 8.days.ago)
+
+      get root_url(layout: layout)
+
+      assert_response :success
+      assert_select "[data-new='true']", 1
+      assert_select "[data-new='false']", 1
+      assert_select ".new-badge", 1
+    end
   end
 end
