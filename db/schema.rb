@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_31_215118) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_21_000352) do
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "end_date"
     t.datetime "event_date", null: false
+    t.datetime "first_seen_at"
     t.string "link_to_buy_ticket", limit: 500
     t.string "more_info", limit: 500
     t.string "price"

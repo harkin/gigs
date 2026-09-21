@@ -17,10 +17,14 @@
              data-filter-target="row"
              data-title="<%= event_title(event).downcase %>"
              data-venue="<%= event.venue %>"
-             data-date="<%= event.event_date.to_date.iso8601 %>">
+             data-date="<%= event.event_date.to_date.iso8601 %>"
+             data-new="<%= event.newly_announced? %>">
 
           <div class="md:col-span-4">
             <span style="font-weight: 600; color: var(--text-primary); font-size: 0.95rem;"><%= event_title(event) %></span>
+            <% if event.newly_announced? %>
+              <span class="new-badge" style="margin-left: 0.4rem;">New</span>
+            <% end %>
           </div>
 
           <div class="md:col-span-2 flex items-center">

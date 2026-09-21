@@ -167,6 +167,17 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
       field on `Event`, scraper support, and a filter UI control.
 - [ ] Search should match venue names, not just titles — `filter_controller.js`
       only tests `data-title`, so typing "whelans" finds nothing.
+- [ ] **"New since your last visit"** — a personal window beats the fixed one:
+      visit daily and you see today's, come back after a month and you see the
+      month. Decide it client-side from `localStorage`, not a cookie — the index
+      is cached for an hour, so a server-rendered per-visitor badge would be
+      served stale and personalising it would mean `Vary: Cookie`. Render
+      `data-first-seen` per row; keep *two* stored timestamps and only roll them
+      forward after a session gap, or writing `now` on each load clears the
+      badges on first reload. Clamp the lookback to ~30 days, and fall back to
+      the fixed window when nothing is stored (first visit, second device).
+- [x] **"Just announced" badge + filter** — `first_seen_at` survives a refresh,
+      badged for 7 days with a filter-bar checkbox.
 - [x] Mobile design — responsive layouts + themes shipped.
 - [x] Show ticket prices — `price-tag` rendering shipped (per-venue gaps above).
 
@@ -185,8 +196,18 @@ event_date)`), then prune only the rows no longer seen this run. Benefits:
 - Stable primary keys / `created_at`; far less write churn.
 - Lets us tell *new* events from ones we've already enriched — the enabler below.
 
-Needs: a unique index on the chosen key (migration) + `upsert_all`, and a "seen
-this run" set per venue to drive deletions.
+**The enabler half already shipped, without the schema change.** `Store.replace`
+still wipes and re-inserts, but first matches each scraped gig to the row it
+replaces — keyed on `(venue, listing URL, start time)`, computed and compared in
+Ruby — so `first_seen_at` carries across. A stored key with a unique index was
+tried and rejected: the table's `utf8mb4_0900_ai_ci` collation folds case,
+accents and non-breaking spaces, so the index would merge rows Ruby considers
+distinct, and the column would need backfilling across every stored row before
+it could be added.
+
+Still outstanding, and the reason to revisit: stable primary keys and less write
+churn. Enrichment that persists per-row data needs those, and that would want a
+real `upsert_all` plus a "seen this run" set per venue to drive deletions.
 
 ### Careful, rate-limited enrichment
 Some enrichment (e.g. prices) may mean visiting a provider — Ticketmaster,
