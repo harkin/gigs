@@ -4,7 +4,9 @@ updates:
   # prove out before we adopt it (compromised releases are historically caught
   # within ~2 days). Bumps the SHA-pinned `uses:` refs and their version comments.
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories:
+      - "/"
+      - "/.github/actions/*"
     schedule:
       interval: "weekly"
     cooldown:

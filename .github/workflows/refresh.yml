@@ -27,33 +27,11 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Install Ruby (to run the kamal CLI)
-        uses: ruby/setup-ruby@bec3f19a76460dbe12f60def7d1a77585f07516c # v1.322.0
+      - name: Set up kamal
+        uses: ./.github/actions/kamal-setup
         with:
-          ruby-version: "4.0.7"
-
-      - name: Install kamal (pinned to the version in Gemfile.lock)
-        run: gem install kamal -v 2.11.0
-
-      - name: Load the SSH deploy key into an agent
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          eval "$(ssh-agent -s)"
-          # Export the agent socket so the later kamal step (which SSHes itself) can use it.
-          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
-          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
-          ssh-add - <<< "$SSH_PRIVATE_KEY"
-
-      - name: Teach the runner how to reach the server
-        run: |
-          mkdir -p ~/.ssh
-          cat >> ~/.ssh/config <<EOF
-          Host jigglypuff
-            HostName ${{ secrets.SSH_HOST }}
-            User ubuntu
-            StrictHostKeyChecking accept-new
-          EOF
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-host: ${{ secrets.SSH_HOST }}
 
       - name: Refresh gig data in the running container
         env:
