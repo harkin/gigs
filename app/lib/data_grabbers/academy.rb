@@ -1,6 +1,5 @@
 module DataGrabbers
   class Academy
-
     # The Academy's site is a Next.js app that fetches its event list from the
     # VenueCloud API (venueCloudId=21 is The Academy). We hit that JSON API
     # directly rather than scraping the rendered HTML -- it's the same data the
@@ -23,7 +22,7 @@ module DataGrabbers
           {
             # subTitle (when present) is usually a support act, e.g. "+ Special
             # Guests: ...", so a plain space reads better than a dash.
-            title: [gig["title"], gig["subTitle"]].compact_blank.join(" "),
+            title: [ gig["title"], gig["subTitle"] ].compact_blank.join(" "),
             event_date: Time.parse(gig.dig("startDate", "date")),
             price: gig["pricing"],
             ticket_status: gig["isSoldOut"] ? :sold_out : :available,
@@ -31,7 +30,7 @@ module DataGrabbers
             # The Academy has no per-event page of its own; its Ticketmaster
             # listing is the only detail page, so it doubles as more_info.
             more_info: ticket_url,
-            venue: :academy,
+            venue: :academy
           }
         end
       end

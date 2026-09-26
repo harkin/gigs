@@ -9,7 +9,6 @@ module DataGrabbers
   # parsed we fall back to the month heading + a title derived from the image
   # filename so the event is never lost.
   class OreillyTheatre
-
     EVENTS_URL = "https://www.oreillytheatre.com/"
     TICKETSOLVE_HOST = "https://takeyourseats.ticketsolve.com".freeze
 
@@ -126,7 +125,7 @@ module DataGrabbers
           title: name,
           event_date: combine_day_and_time(day, attributes["time-of-day"]),
           ticket_status: attributes["soldout"] ? :sold_out : :available,
-          price: nil,
+          price: nil
         }
       end
     end
@@ -177,7 +176,7 @@ module DataGrabbers
     # so we keep only its clock time and attach it to the real day.
     def self.combine_day_and_time(day, time_of_day)
       clock = (Time.parse(time_of_day).strftime("%H:%M") if time_of_day.present?) rescue nil
-      Time.parse([day, clock].compact.join(" "))
+      Time.parse([ day, clock ].compact.join(" "))
     end
 
     # --- Fever ----------------------------------------------------------------
@@ -193,7 +192,7 @@ module DataGrabbers
       return unless event
 
       starts = fever_session_starts(body)
-      starts = [Time.parse(event["startDate"])] if starts.empty? && event["startDate"].present?
+      starts = [ Time.parse(event["startDate"]) ] if starts.empty? && event["startDate"].present?
       return if starts.empty?
 
       title = humanize_if_shouty(event["name"].to_s.strip)
@@ -226,26 +225,26 @@ module DataGrabbers
       event = json_ld_event(fetch(url).body)
       return unless event && event["startDate"].present?
 
-      [{
+      [ {
         title: humanize_if_shouty(event["name"].to_s.strip),
         event_date: Time.parse(event["startDate"]),
         ticket_status: offers_status(event["offers"]),
-        price: lowest_offer_price(event["offers"]),
-      }]
+        price: lowest_offer_price(event["offers"])
+      } ]
     end
 
     def self.json_ld_event(body)
       document = Nokogiri::HTML(body)
       objects = document.css('script[type="application/ld+json"]').flat_map do |script|
         parsed = JSON.parse(script.text) rescue nil
-        parsed.is_a?(Array) ? parsed : [parsed]
+        parsed.is_a?(Array) ? parsed : [ parsed ]
       end
       objects.compact.find { |object| object["@type"] == "Event" }
     end
 
     def self.lowest_offer_price(offers)
-      offers = [offers] unless offers.is_a?(Array)
-      prices = offers.compact.flat_map { |offer| [offer["price"], offer["lowPrice"]] }.compact
+      offers = [ offers ] unless offers.is_a?(Array)
+      prices = offers.compact.flat_map { |offer| [ offer["price"], offer["lowPrice"] ] }.compact
       prices = prices.map { |p| p.to_s.to_f }.reject(&:zero?)
       return if prices.empty?
 
@@ -255,7 +254,7 @@ module DataGrabbers
     # Maps schema.org offer availability to our ticket_status. Sold out only
     # when every offer says so; limited/in-stock if any offer does.
     def self.offers_status(offers)
-      offers = [offers] unless offers.is_a?(Array)
+      offers = [ offers ] unless offers.is_a?(Array)
       availabilities = offers.compact.map { |offer| offer["availability"].to_s }
 
       return :unknown if availabilities.empty?
@@ -285,12 +284,12 @@ module DataGrabbers
         .sub(/\s*\d{1,2}(st|nd|rd|th)?\s+[A-Za-z]+\s+Dublin\s*\z/i, "")
         .squeeze(" ").strip
 
-      [{
+      [ {
         title: humanize_if_shouty(clean_title.presence || title),
-        event_date: Time.parse([date_text, time_text].compact.join(" ")),
+        event_date: Time.parse([ date_text, time_text ].compact.join(" ")),
         ticket_status: :unknown,
-        price: nil,
-      }]
+        price: nil
+      } ]
     end
 
     # --- Fallback & shared helpers ---------------------------------------------
@@ -300,7 +299,7 @@ module DataGrabbers
         title: title_from_filename(listing[:filename]),
         event_date: first_of_month(listing[:month]),
         ticket_status: listing[:filename].downcase.include?("sold-out") ? :sold_out : :unknown,
-        price: nil,
+        price: nil
       }
     end
 
@@ -341,6 +340,5 @@ module DataGrabbers
 
       response
     end
-
   end
 end

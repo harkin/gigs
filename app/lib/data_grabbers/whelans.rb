@@ -1,6 +1,5 @@
 module DataGrabbers
   class Whelans
-
     EVENTS_URL = "https://www.whelanslive.com/events/"
     # The events page shows no availability; ticket sales run through Whelan's
     # WooCommerce store, whose public Store API reports stock per product.
@@ -64,11 +63,10 @@ module DataGrabbers
             ticket_status: :unknown,
             link_to_buy_ticket: ticket,
             more_info: more_info,
-            venue: :whelans,
+            venue: :whelans
           }
         )
       end
-
     end
 
     # Map each event to its store stock via one batched Store API lookup keyed on
@@ -101,6 +99,5 @@ module DataGrabbers
     def self.ticket_slug(url)
       url.to_s[%r{/ticket/([^/]+)/?}, 1]
     end
-
   end
 end

@@ -25,7 +25,7 @@ class Event < ApplicationRecord
     # sugar_club:
     vicar_street: 5,
     whelans: 3,
-    workmans: 9,
+    workmans: 9
   }
 
   VENUE_NAMES = {
@@ -51,14 +51,14 @@ class Event < ApplicationRecord
     "st_annes_park" => "St Anne's Park",
     "vicar_street" => "Vicar Street",
     "whelans" => "Whelans",
-    "workmans" => "The Workman's Club",
+    "workmans" => "The Workman's Club"
   }.freeze
 
   enum :ticket_status, {
     available: 0,
     limited_availability: 1,
     sold_out: 2,
-    unknown: 3,
+    unknown: 3
   }
 
   # Production scrapes once a day, so this is the seven most recent refreshes.

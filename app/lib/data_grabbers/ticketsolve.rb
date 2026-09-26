@@ -23,7 +23,7 @@ module DataGrabbers
             ticket_status: show_status(performances),
             link_to_buy_ticket: next_up[:url],
             more_info: next_up[:url][%r{\Ahttps?://[^/]+/shows/\d+}] || next_up[:url],
-            venue: venue,
+            venue: venue
           }
         end
       end

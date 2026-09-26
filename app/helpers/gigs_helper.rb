@@ -6,7 +6,7 @@ module GigsHelper
     "light" => { label: "Light", swatch: %w[#667eea #a855f7 #f093fb] },
     "dark" => { label: "Dark", swatch: %w[#818cf8 #6366f1 #1e293b] },
     "festival" => { label: "Festival", swatch: %w[#ff6b35 #ff4d8d #a64dff] },
-    "aurora" => { label: "Aurora", swatch: %w[#5eead4 #8b5cf6 #ec4899] },
+    "aurora" => { label: "Aurora", swatch: %w[#5eead4 #8b5cf6 #ec4899] }
   }.freeze
 
   # Some venue feeds ship entity-encoded titles ("Bluey&#8217;s Big Play"),

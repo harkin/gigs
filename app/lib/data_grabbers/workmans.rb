@@ -1,6 +1,5 @@
 module DataGrabbers
   class Workmans
-
     EVENTS_URL = "https://theworkmansclub.com/events/"
     TIME_ZONE = ActiveSupport::TimeZone["Europe/Dublin"]
 
@@ -31,7 +30,7 @@ module DataGrabbers
             ticket_status: sold_out ? :sold_out : :available,
             link_to_buy_ticket: entry.at_css(".ticket_link a")&.attribute("href")&.value,
             more_info: entry.css("a").find { |link| link["href"]&.include?("/events/") }&.attribute("href")&.value,
-            venue: :workmans,
+            venue: :workmans
           }
         end
       end
@@ -43,6 +42,5 @@ module DataGrabbers
       clock = time_text.to_s[/\d{1,2}(:\d{2})?\s*[ap]m/i]
       clock ? TIME_ZONE.parse("#{date.iso8601} #{clock}") : date
     end
-
   end
 end

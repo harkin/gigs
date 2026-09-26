@@ -40,7 +40,6 @@ jobs:
       - name: Install Ruby and gems
         uses: ruby/setup-ruby@bec3f19a76460dbe12f60def7d1a77585f07516c # v1.322.0
         with:
-          ruby-version: "4.0.7"
           bundler-cache: true
 
       # Single source of truth for checks: db prepare, Tailwind build, importmap

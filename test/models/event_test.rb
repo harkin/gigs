@@ -14,7 +14,7 @@ class EventTest < ActiveSupport::TestCase
     fresh = create_event(title: "Fresh", first_seen_at: 2.days.ago)
     stale = create_event(title: "Stale", first_seen_at: 8.days.ago, more_info: "https://example.com/2")
 
-    assert_equal ["Fresh"], Event.newly_announced.pluck(:title)
+    assert_equal [ "Fresh" ], Event.newly_announced.pluck(:title)
     assert_predicate fresh, :newly_announced?
     assert_not_predicate stale, :newly_announced?
   end
@@ -33,7 +33,7 @@ class EventTest < ActiveSupport::TestCase
       "available" => "Available",
       "limited_availability" => "Limited Availability",
       "sold_out" => "Sold Out",
-      "unknown" => "Unknown",
+      "unknown" => "Unknown"
     }
     expected.each do |status, rendered|
       assert_equal rendered, Event.new(ticket_status: status).renderable_ticket_status

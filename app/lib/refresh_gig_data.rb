@@ -1,5 +1,4 @@
 class RefreshGigData
-
   def self.refresh_events
     puts "Starting to refresh all gig data"
     start_time = Time.now.to_i
