@@ -73,12 +73,16 @@ class Event < ApplicationRecord
 
   # "Wed, Jun 17 2026" for a single date, "17 Jun – 6 Sep 2026" for a run.
   def renderable_date
-    return event_date.strftime("%a, %b %d %Y") if end_date.blank? || end_date.to_date == event_date.to_date
+    return event_date.strftime("%a, %b %d %Y") unless multi_day?
 
     start_date = event_date.to_date
     finish_date = end_date.to_date
     start_format = start_date.year == finish_date.year ? "%-d %b" : "%-d %b %Y"
     "#{start_date.strftime(start_format)} – #{finish_date.strftime("%-d %b %Y")}"
+  end
+
+  def multi_day?
+    end_date.present? && end_date.to_date != event_date.to_date
   end
 
   def renderable_venue

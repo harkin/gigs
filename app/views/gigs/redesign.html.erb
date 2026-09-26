@@ -1,0 +1,98 @@
+<div data-controller="listing" data-listing-today-value="<%= Date.current.iso8601 %>">
+  <div class="wrap">
+    <header class="site">
+      <div>
+        <h1 class="wordmark">Dublin Gigs</h1>
+        <p class="meta">
+          <span data-listing-target="count"><%= number_with_delimiter(@event_count) %></span> upcoming
+          · <%= pluralize(@venues.size, "venue") %>
+          · <% if @last_refreshed_at %>updated <%= time_ago_in_words(@last_refreshed_at) %> ago<% else %>never updated<% end %>
+          <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
+            · <a href="/refresh" class="meta-link">Refresh</a>
+          <% end %>
+        </p>
+      </div>
+      <button type="button" class="icon-btn" data-controller="theme-toggle" data-action="theme-toggle#toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </header>
+  </div>
+
+  <div class="bar" data-listing-target="bar">
+    <div class="wrap">
+      <div class="bar-top">
+        <label class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="search" placeholder="Search artists or venues" autocomplete="off" aria-label="Search artists or venues"
+                 data-listing-target="search" data-action="input->listing#filter">
+        </label>
+        <div class="venue-wrap">
+          <button type="button" class="venue-btn" aria-haspopup="true" aria-expanded="false"
+                  data-listing-target="venueButton" data-action="listing#toggleVenueMenu">
+            <span data-listing-target="venueLabel">All venues</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="venue-menu" role="group" aria-label="Filter by venue" hidden data-listing-target="venueMenu">
+            <div class="vm-head">
+              <span>Venues</span>
+              <button type="button" data-action="listing#clearVenues">Clear</button>
+            </div>
+            <% @venues.each do |name, value| %>
+              <label>
+                <input type="checkbox" value="<%= value %>" data-listing-target="venueCheckbox" data-action="listing#filter">
+                <span><%= name %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="chips" role="group" aria-label="When">
+        <% [["all", "Any day"], ["today", "Tonight"], ["tomorrow", "Tomorrow"], ["weekend", "This weekend"], ["week", "Next 7 days"]].each do |value, label| %>
+          <button type="button" class="chip" aria-pressed="<%= value == "all" %>"
+                  data-listing-target="when" data-when="<%= value %>" data-action="listing#selectWhen"><%= label %></button>
+        <% end %>
+        <span class="chip-sep" aria-hidden="true"></span>
+        <button type="button" class="chip" aria-pressed="false" data-listing-target="newOnly" data-action="listing#toggle">Just announced</button>
+        <button type="button" class="chip" aria-pressed="false" data-listing-target="hideSold" data-action="listing#toggle">Hide sold out</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <% if @on_now.any? %>
+      <details class="on-now" data-listing-target="onNow">
+        <summary>
+          <span>On now <small>· <span data-listing-target="onNowCount"><%= @on_now.size %></span> shows running over several days</small></span>
+          <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+        </summary>
+        <div class="rows">
+          <%= render partial: "gigs/redesign_row", collection: @on_now, as: :event %>
+        </div>
+      </details>
+    <% end %>
+
+    <% @days.each do |date, events| %>
+      <% timed, untimed = events.partition { |event| display_time(event) } %>
+      <section class="day" data-listing-target="day">
+        <div class="day-head">
+          <h2>
+            <% if (relative = day_relative_label(date)) %><span class="rel"><%= relative %></span><% end %>
+            <span class="d-long"><%= date.strftime("%A %-d %B") %></span>
+            <span class="d-short"><%= date.strftime("%a %-d %b") %></span>
+          </h2>
+          <span><span data-count><%= events.size %></span> <span data-noun><%= events.size == 1 ? "gig" : "gigs" %></span></span>
+        </div>
+        <%= render partial: "gigs/redesign_row", collection: timed + untimed, as: :event %>
+      </section>
+    <% end %>
+
+    <div class="empty" data-listing-target="empty" <%= "hidden" if @event_count.positive? %>>
+      <% if @event_count.positive? %>
+        No gigs match these filters.
+        <button type="button" data-action="listing#reset">Clear filters</button>
+      <% else %>
+        No upcoming gigs yet.
+      <% end %>
+    </div>
+  </main>
+</div>

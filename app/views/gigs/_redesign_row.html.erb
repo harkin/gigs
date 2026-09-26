@@ -1,0 +1,32 @@
+<%
+  url = event_link(event)
+  status = display_status(event)
+  time = display_time(event)
+  price = display_price(event.price)
+  venue_text = event.renderable_venue
+  venue_text += " · until #{event.end_date.strftime("%-d %b")}" if event.multi_day?
+  title = display_title(event)
+%>
+<%= content_tag(url ? :a : :div,
+      href: url,
+      class: token_list("row", "is-sold": status == "sold_out"),
+      data: {
+        listing_target: "row",
+        start: event.event_date.to_date.iso8601,
+        end: (event.end_date || event.event_date).to_date.iso8601,
+        search: "#{title} #{event.renderable_venue}".downcase,
+        venue: event.venue,
+        new: event.newly_announced?,
+        sold: status == "sold_out",
+      }) do %>
+  <span class="time<%= " tbc" unless time || event.multi_day? %>"><%= time || ("—" unless event.multi_day?) %></span>
+  <span class="title"><%= title %><% if event.newly_announced? %><span class="new">New</span><% end %></span>
+  <span class="venue-d"><%= venue_text %></span>
+  <span class="status-d"><% if (label = status_label(status)) %><span class="status <%= status %>"><%= label %></span><% end %></span>
+  <span class="price"><%= price %></span>
+  <span class="go" aria-hidden="true"><% if url %><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg><% end %></span>
+  <span class="sub">
+    <span><%= venue_text %></span>
+    <% if (label = status_label(status)) %><span class="status <%= status %>"><%= label %></span><% end %>
+  </span>
+<% end %>
