@@ -1,6 +1,5 @@
 module DataGrabbers
   class ButtonFactory
-
     EVENTS_URL = "https://buttonfactory.ie/shows"
     EVENTS_URI = URI.parse(EVENTS_URL)
 
@@ -34,7 +33,7 @@ module DataGrabbers
               ticket_status: :unknown, # shows page carries no ticket info
               link_to_buy_ticket: nil,
               more_info: more_info_uri.to_s,
-              venue: :button_factory,
+              venue: :button_factory
             }
           )
         end
@@ -42,6 +41,5 @@ module DataGrabbers
         events
       end
     end
-
   end
 end

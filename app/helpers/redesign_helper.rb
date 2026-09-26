@@ -7,7 +7,7 @@ module RedesignHelper
 
   STATUS_LABELS = {
     "sold_out" => "Sold out",
-    "limited_availability" => "Few left",
+    "limited_availability" => "Few left"
   }.freeze
 
   def display_title(event)

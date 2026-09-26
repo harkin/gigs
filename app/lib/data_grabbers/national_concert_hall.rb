@@ -1,6 +1,5 @@
 module DataGrabbers
   class NationalConcertHall
-
     BASE_URL = "https://www.nch.ie"
     EVENTS_URL = "#{BASE_URL}/all-events-listing/"
     TIME_ZONE = ActiveSupport::TimeZone["Europe/Dublin"]
@@ -40,9 +39,8 @@ module DataGrabbers
         ticket_status: card.at_css("p.msg-main") ? :sold_out : :available,
         link_to_buy_ticket: card.at_css("a.btn-main")&.attribute("href")&.value,
         more_info: "#{BASE_URL}#{detail_path}",
-        venue: :national_concert_hall,
+        venue: :national_concert_hall
       }
     end
-
   end
 end

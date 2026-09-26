@@ -1,6 +1,5 @@
 module DataGrabbers
   class Fidelity
-
     EVENTS_URL = "https://www.fidelitybar.ie/whats-on"
 
     def self.get_events
@@ -38,11 +37,10 @@ module DataGrabbers
             ticket_status: :available,
             link_to_buy_ticket: link,
             more_info: link,
-            venue: :fidelity,
+            venue: :fidelity
           }
         end
       end
     end
-
   end
 end

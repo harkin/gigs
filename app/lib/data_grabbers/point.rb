@@ -1,7 +1,6 @@
 module DataGrabbers
   # This is for the 3 Arena, used to be called the Point ages ago and class names can't start with a number so...
   class Point
-
     EVENTS_URL = "https://3arena.ie/search/events/P0/?sort=upcoming&type=all"
 
     def self.get_events
@@ -28,7 +27,7 @@ module DataGrabbers
                 ticket_status: normalise_ticket_status(date["status"]),
                 link_to_buy_ticket: event["ticketUrl"],
                 venue: :point,
-                more_info: event["showUrl"],
+                more_info: event["showUrl"]
               }
             )
           end
@@ -50,6 +49,5 @@ module DataGrabbers
         :unknown
       end
     end
-
   end
 end

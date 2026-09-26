@@ -1,6 +1,5 @@
 module DataGrabbers
   class BordGais
-
     EVENTS_URL = "https://www.bordgaisenergytheatre.ie/shows-listing/"
 
     def self.get_events
@@ -21,7 +20,7 @@ module DataGrabbers
             ticket_status: buy_button ? :available : :unknown,
             link_to_buy_ticket: buy_button&.attribute("href")&.value,
             more_info: card.at_css("h4.show-item__title a")&.attribute("href")&.value,
-            venue: :bord_gais,
+            venue: :bord_gais
           }
         end
       end
@@ -33,14 +32,13 @@ module DataGrabbers
     # year for runs that cross New Year.
     private_class_method def self.parse_event_dates(text)
       start_part, end_part = text.split(/\s+[-–]\s+/, 2)
-      return [Date.parse(start_part), nil] unless end_part
+      return [ Date.parse(start_part), nil ] unless end_part
 
       end_date = Date.parse(end_part)
       start_part += " #{end_date.strftime("%B")}" unless start_part.match?(/[A-Za-z]/)
       start_part += " #{end_date.year}" unless start_part.match?(/\d{4}/)
       start_date = Date.parse(start_part)
-      start_date > end_date ? [start_date.prev_year, end_date] : [start_date, end_date]
+      start_date > end_date ? [ start_date.prev_year, end_date ] : [ start_date, end_date ]
     end
-
   end
 end

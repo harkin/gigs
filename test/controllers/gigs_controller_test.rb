@@ -6,7 +6,7 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
       title: "Test Event",
       event_date: 1.week.from_now,
       ticket_status: :available,
-      venue: :academy,
+      venue: :academy
     }.merge(attributes))
   end
 

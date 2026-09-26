@@ -1,6 +1,5 @@
 module DataGrabbers
   class Olympia
-
     EVENTS_URL = "https://www.3olympia.ie/search/events/P%d?announced=&category=0"
 
     def self.get_events
@@ -29,7 +28,7 @@ module DataGrabbers
               link_to_buy_ticket: ticket_url,
               venue: :olympia,
               more_info: event["url"]["event"],
-              price: event["originalPrice"],
+              price: event["originalPrice"]
             }
           )
         end
@@ -50,6 +49,5 @@ module DataGrabbers
         :unknown
       end
     end
-
   end
 end

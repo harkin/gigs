@@ -20,7 +20,7 @@ module DataGrabbers
             ticket_status: :unknown,
             link_to_buy_ticket: nil,
             more_info: "https://#{host}#{events_path}#{event["slug"]}",
-            venue: venue,
+            venue: venue
           }
         end.sort_by { |event| event[:event_date] }
       end
@@ -45,7 +45,7 @@ module DataGrabbers
           status: "SCHEDULED",
           startDateFrom: from,
           limit: 100,
-          offset: events.size,
+          offset: events.size
         }) { |request| request.headers["Authorization"] = instance }
 
         body = JSON.parse(response.body)

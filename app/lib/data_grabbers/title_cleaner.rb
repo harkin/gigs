@@ -7,6 +7,5 @@ module DataGrabbers
     def strip_promoter(title)
       title.sub(/\A.*?\bpres(?:ents?)?\b:?\s+/i, "")
     end
-
   end
 end

@@ -1,6 +1,5 @@
 module DataGrabbers
   class Gaiety
-
     EVENTS_URL = "https://www.gaietytheatre.ie/events/"
 
     def self.get_events
@@ -37,7 +36,7 @@ module DataGrabbers
             ticket_status: buy_button ? :available : :unknown,
             link_to_buy_ticket: buy_button&.attribute("href")&.value,
             more_info: card.at_css(".event-poster a")&.attribute("href")&.value,
-            venue: :gaiety,
+            venue: :gaiety
           }
         end
       end
@@ -48,14 +47,13 @@ module DataGrabbers
     # resolved by the caller from listing order.
     def self.month_day_range(text)
       start_part, end_part = text.split(/\s[-–]\s/, 2).map(&:strip)
-      [month_day(start_part), end_part && month_day(end_part)]
+      [ month_day(start_part), end_part && month_day(end_part) ]
     end
 
     def self.month_day(text)
       day = text[/\d{1,2}/].to_i
       month = Date::ABBR_MONTHNAMES.index(text[/[A-Za-z]{3,}/]&.capitalize)
-      [month, day]
+      [ month, day ]
     end
-
   end
 end

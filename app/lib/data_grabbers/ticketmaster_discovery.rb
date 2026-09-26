@@ -8,7 +8,7 @@ module DataGrabbers
     API_URL = "https://app.ticketmaster.com/discovery/v2/events.json"
     TIME_ZONE = "Europe/Dublin"
     # This is a music/comedy listing, so drop sports fixtures and the like.
-    GIG_SEGMENTS = ["Music", "Arts & Theatre"].freeze
+    GIG_SEGMENTS = [ "Music", "Arts & Theatre" ].freeze
 
     # The Discovery API is authoritative and versioned, so a well-formed empty
     # result is a real off-season state for these seasonal venues, not scraper
@@ -29,7 +29,7 @@ module DataGrabbers
       loop do
         response = Faraday.get(API_URL, {
           apikey: key, venueId: venue_id, countryCode: "IE",
-          size: 100, page: page, sort: "date,asc",
+          size: 100, page: page, sort: "date,asc"
         })
         raise "Ticketmaster: HTTP #{response.status} for venue #{venue_id}" unless response.status == 200
 
@@ -60,7 +60,7 @@ module DataGrabbers
         ticket_status: status == "onsale" ? :available : :unknown,
         link_to_buy_ticket: event["url"],
         more_info: event["url"],
-        venue: venue,
+        venue: venue
       }
     end
 
