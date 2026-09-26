@@ -1,0 +1,49 @@
+name: Test
+
+# Runs on every pull request, and deploy.yml calls it before deploying so
+# both run exactly the same checks.
+on:
+  pull_request:
+  workflow_call:
+
+# A new push to a PR cancels that PR's older run. Called from deploy.yml
+# there is no PR number, so each run gets its own group and never waits on
+# (or cancels) the deploy that called it.
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+# Least privilege: this job only needs to read the repo to check it out.
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      # MySQL 8.4 to match production (PlanetScale runs MySQL 8.4).
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@bec3f19a76460dbe12f60def7d1a77585f07516c # v1.322.0
+        with:
+          ruby-version: "4.0.7"
+          bundler-cache: true
+
+      # Single source of truth for checks: db prepare, Tailwind build, importmap
+      # audit, and tests all live in config/ci.rb (also runnable locally).
+      - name: Run CI checks
+        run: bin/ci
