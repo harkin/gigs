@@ -23,6 +23,8 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    # Backstop for a hung SSH connection; the refresh itself is capped below.
+    timeout-minutes: 10
     steps:
       - name: Check out the code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -37,4 +39,7 @@ jobs:
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        run: kamal app exec --reuse "bin/rails gigs:refresh"
+        # A refresh normally takes about a minute. `timeout` runs inside the
+        # container, so an overrun is killed there rather than left running
+        # after the job gives up.
+        run: kamal app exec --reuse "timeout --kill-after=30s 5m bin/rails gigs:refresh"
