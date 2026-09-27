@@ -151,6 +151,8 @@ module DataGrabbers
         uri = URI(url)
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = uri.scheme == "https"
+        http.open_timeout = Faraday.default_connection_options.request.open_timeout
+        http.read_timeout = Faraday.default_connection_options.request.timeout
 
         request = Net::HTTP::Get.new(uri)
         request["User-Agent"] = USER_AGENT
