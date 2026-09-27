@@ -12,11 +12,13 @@ on:
       - '.github/dependabot.yml'
   workflow_dispatch:
 
-# Collapse overlapping deploys to "just deploy the latest" so two runs never
-# race for kamal's deploy lock.
+# One deploy at a time. A running deploy is never cancelled: killing kamal
+# mid-deploy leaves its deploy lock on the server and every later deploy fails
+# until someone runs `kamal lock release`. Newer pushes still collapse, since
+# GitHub keeps only the latest pending run in the group.
 concurrency:
   group: deploy-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 # Least privilege: this job only needs to read the repo to check it out.
 permissions:
