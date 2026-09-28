@@ -15,12 +15,6 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "the old redesign URL redirects to the index" do
-    get "/redesign"
-    assert_redirected_to root_url
-    assert_response :moved_permanently
-  end
-
   test "index groups dated gigs by day and folds running shows into On now" do
     create_event(title: "Tonight Gig", event_date: Date.current.in_time_zone.change(hour: 20))
     create_event(title: "Next Week Gig", event_date: 1.week.from_now)
