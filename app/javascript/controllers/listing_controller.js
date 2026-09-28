@@ -2,9 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [
-    "bar", "search", "when", "newOnly", "hideSold",
+    "bar", "search", "chips", "when", "newOnly", "hideSold",
     "venueButton", "venueLabel", "venueMenu", "venueCheckbox",
-    "row", "day", "onNow", "onNowCount", "count", "empty"
+    "row", "day", "onNow", "onNowCount", "onNowNoun", "count", "empty"
   ]
   static values = { today: String }
 
@@ -32,6 +32,7 @@ export default class extends Controller {
   selectWhen(event) {
     this.when = event.currentTarget.dataset.when
     this.whenTargets.forEach(chip => chip.setAttribute("aria-pressed", chip === event.currentTarget))
+    this.newOnlyTarget.setAttribute("aria-pressed", false)
     this.filter()
   }
 
@@ -82,7 +83,8 @@ export default class extends Controller {
     const venues = new Set(this.venueCheckboxTargets.filter(box => box.checked).map(box => box.value))
     const newOnly = this.newOnlyTarget.getAttribute("aria-pressed") === "true"
     const hideSold = this.hideSoldTarget.getAttribute("aria-pressed") === "true"
-    const [from, to] = this.dateRange()
+    const [from, to] = newOnly ? ["", "9999-12-31"] : this.dateRange()
+    this.chipsTarget.classList.toggle("is-overridden", newOnly)
 
     this.updateVenueLabel(venues)
 
@@ -109,6 +111,7 @@ export default class extends Controller {
       const count = this.onNowTarget.querySelectorAll(".row:not([hidden])").length
       this.onNowTarget.hidden = count === 0
       this.onNowCountTarget.textContent = count
+      this.onNowNounTarget.textContent = count === 1 ? "show" : "shows"
     }
 
     this.countTarget.textContent = visible.toLocaleString("en-IE")
