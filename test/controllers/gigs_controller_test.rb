@@ -91,6 +91,16 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_select "section.day .time", text: "20:00"
   end
 
+  test "redesign offers a date range picker alongside the presets" do
+    create_event
+
+    get redesign_url
+
+    assert_response :success
+    assert_select ".chips .chip-dates[data-when='custom'][aria-haspopup='dialog']", 1
+    assert_select ".calendar[role='dialog'][hidden]", 1
+  end
+
   test "redesign strips markup and escapes encoded markup in scraped titles" do
     create_event(title: "<img src=x onerror=alert(1)><script>alert(2)</script>")
     create_event(title: "&lt;script&gt;alert(3)&lt;/script&gt;")

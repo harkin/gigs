@@ -48,9 +48,33 @@
           <button type="button" class="chip" aria-pressed="<%= value == "all" %>"
                   data-listing-target="when" data-when="<%= value %>" data-action="listing#selectWhen"><%= label %></button>
         <% end %>
+        <button type="button" class="chip chip-dates" aria-pressed="false" aria-haspopup="dialog" aria-expanded="false"
+                data-listing-target="when dateChip" data-when="custom" data-action="listing#toggleCalendar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span data-listing-target="dateLabel">Pick dates</span>
+        </button>
         <span class="chip-sep" aria-hidden="true"></span>
         <button type="button" class="chip" aria-pressed="false" data-listing-target="newOnly" data-action="listing#toggle">Just announced</button>
         <button type="button" class="chip" aria-pressed="false" data-listing-target="hideSold" data-action="listing#toggle">Hide sold out</button>
+      </div>
+      <div class="calendar" role="dialog" aria-label="Pick dates" hidden data-listing-target="calendar">
+        <div class="cal-head">
+          <button type="button" class="cal-nav" aria-label="Previous month" data-listing-target="prevMonth" data-action="listing#shiftMonth" data-step="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+          </button>
+          <span class="cal-month" aria-live="polite" data-listing-target="calendarMonth"></span>
+          <button type="button" class="cal-nav" aria-label="Next month" data-listing-target="nextMonth" data-action="listing#shiftMonth" data-step="1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="cal-grid" data-listing-target="calendarGrid"></div>
+        <div class="cal-foot">
+          <span data-listing-target="calendarHint"></span>
+          <span>
+            <button type="button" data-action="listing#clearDates">Clear</button>
+            <button type="button" class="cal-done" data-action="listing#closeCalendar">Done</button>
+          </span>
+        </div>
       </div>
     </div>
   </div>
