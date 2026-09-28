@@ -22,9 +22,4 @@ class GigsController < ApplicationController
     expires_in 1.hour, public: false
     render layout: "redesign"
   end
-
-  def refresh
-    Thread.new { ::RefreshGigData.refresh_events }
-    redirect_to action: :index
-  end
 end

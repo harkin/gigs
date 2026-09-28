@@ -27,11 +27,7 @@ tests we add will gate the deploy.
 3. **Model tests.** `Event`: the `venues` enum, `renderable_venue`, any
    validations/scopes. `Refresh`: `last_refresh_at` behaviour.
 
-4. **`refresh` action.** Assert it redirects to index and triggers a refresh. Note
-   the controller currently spawns a raw `Thread` — worth testing the contract and
-   probably revisiting that threading (e.g. a background job).
-
-5. **System tests (optional, later).** Browser-driven (Capybara) for the
+4. **System tests (optional, later).** Browser-driven (Capybara) for the
    Turbo/Stimulus layout switching, if it earns the maintenance cost.
 
 ## Infra notes

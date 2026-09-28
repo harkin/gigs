@@ -17,7 +17,7 @@ detail in prose.
 
 ## Deploy
 - Push to `main` → CI tests + kamal-deploys (`.github/workflows/deploy.yml`). No PR needed
-- After deploying scraper changes, hit `GET /refresh` once (refreshes in a background thread, ~30s) or data stays stale.
+- After deploying scraper changes, run the "Refresh gig data" workflow (`gh workflow run refresh.yml`) or data stays stale until the daily run.
 
 ## Databases
 - dev/prod → remote PlanetScale (MySQL 8.4) on separate branches, so dev writes don't touch production. `bin/rails server` needs **no local DB**.
