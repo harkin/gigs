@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "refresh", to: "gigs#refresh"
   get "redesign", to: "gigs#redesign"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

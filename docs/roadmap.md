@@ -227,13 +227,6 @@ and a fast route to rate-limiting / being blocked. Guardrails:
 ## 5. Standing infra / quality
 
 ### Known bugs
-- [ ] **`/refresh` is an unauthenticated GET that spawns an unbounded thread**
-      (`routes.rb`, `GigsController#refresh`). Anyone hitting the URL triggers a
-      full 23-venue scrape from the server's IP, nothing stops concurrent runs
-      interleaving their `delete_all`/`insert_all`, and being a GET it's
-      reachable by crawlers and link prefetchers. Make it a POST behind a token,
-      or drop it and rely on the daily Actions workflow. Directly at odds with
-      the rate-limiting guardrails in §4.
 - [ ] **`Event#renderable_venue` silently returns `nil` for an unmapped venue** —
       the `case` has no `else`. Adding a venue to the enum (step 2 of the guide
       above) without adding the mapping (step 3) yields a blank venue column and

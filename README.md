@@ -53,4 +53,5 @@ bin/rails gigs:refresh
 
 Pushing to `main` runs the tests and deploys with Kamal
 (`.github/workflows/deploy.yml`). A scheduled workflow
-(`.github/workflows/refresh.yml`) refreshes the gig data daily.
+(`.github/workflows/refresh.yml`) refreshes the gig data daily; run it by hand
+with `gh workflow run refresh.yml` after changing a scraper.

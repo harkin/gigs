@@ -7,9 +7,6 @@
           <span data-listing-target="count"><%= number_with_delimiter(@event_count) %></span> upcoming
           · <%= pluralize(@venues.size, "venue") %>
           · <% if @last_refreshed_at %>updated <%= time_ago_in_words(@last_refreshed_at) %> ago<% else %>never updated<% end %>
-          <% if @last_refreshed_at.blank? || @last_refreshed_at < 1.day.ago %>
-            · <a href="/refresh" class="meta-link">Refresh</a>
-          <% end %>
         </p>
       </div>
       <button type="button" class="icon-btn" data-controller="theme-toggle" data-action="theme-toggle#toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
