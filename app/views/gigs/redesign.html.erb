@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="chips" role="group" aria-label="When">
+      <div class="chips" role="group" aria-label="When" data-listing-target="chips">
         <% [["all", "Any day"], ["today", "Tonight"], ["tomorrow", "Tomorrow"], ["weekend", "This weekend"], ["week", "Next 7 days"]].each do |value, label| %>
           <button type="button" class="chip" aria-pressed="<%= value == "all" %>"
                   data-listing-target="when" data-when="<%= value %>" data-action="listing#selectWhen"><%= label %></button>
@@ -62,7 +62,7 @@
     <% if @on_now.any? %>
       <details class="on-now" data-listing-target="onNow">
         <summary>
-          <span>On now <small>· <span data-listing-target="onNowCount"><%= @on_now.size %></span> shows running over several days</small></span>
+          <span>On now <small>· <span data-listing-target="onNowCount"><%= @on_now.size %></span> <span data-listing-target="onNowNoun"><%= @on_now.size == 1 ? "show" : "shows" %></span> running over several days</small></span>
           <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
         </summary>
         <div class="rows">
