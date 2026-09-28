@@ -19,6 +19,7 @@ export default class extends Controller {
     this.barObserver.observe(this.barTarget)
     document.addEventListener("click", this.handleOutsideClick)
     document.addEventListener("keydown", this.handleKeydown)
+    this.restoreFromUrl()
     this.filter()
   }
 
@@ -208,6 +209,56 @@ export default class extends Controller {
     this.countTarget.textContent = visible.toLocaleString("en-IE")
     this.emptyTarget.hidden = visible > 0
     if (!this.calendarTarget.hidden) this.renderCalendar()
+    this.syncUrl({ query, venues, newOnly, hideSold })
+  }
+
+  // Filters live in the query string so a filtered view can be shared or
+  // reloaded. Anything unrecognised is ignored.
+  restoreFromUrl() {
+    const params = new URLSearchParams(location.search)
+    this.searchTarget.value = params.get("q") || ""
+    const venues = new Set((params.get("venues") || "").split(","))
+    this.venueCheckboxTargets.forEach(box => { box.checked = venues.has(box.value) })
+
+    const from = params.get("from")
+    const to = params.get("to") || from
+    const when = params.get("when")
+    if (this.isDate(from) && this.isDate(to)) {
+      this.range = from <= to ? { from, to } : { from: to, to: from }
+      this.setWhen("custom")
+    } else if (when !== "custom" && this.whenTargets.some(chip => chip.dataset.when === when)) {
+      this.setWhen(when)
+    }
+    this.updateDateLabel()
+    this.newOnlyTarget.setAttribute("aria-pressed", params.get("new") === "1")
+    this.hideSoldTarget.setAttribute("aria-pressed", params.get("hide_sold") === "1")
+  }
+
+  // Replaced rather than pushed, so Back leaves the page instead of stepping
+  // through every filter change.
+  syncUrl({ query, venues, newOnly, hideSold }) {
+    const params = new URLSearchParams()
+    if (query) params.set("q", this.searchTarget.value.trim())
+    if (venues.size) params.set("venues", [...venues].join(","))
+    if (this.when === "custom") {
+      params.set("from", this.range.from)
+      if (this.range.to !== this.range.from) params.set("to", this.range.to)
+    } else if (this.when !== "all") {
+      params.set("when", this.when)
+    }
+    if (newOnly) params.set("new", "1")
+    if (hideSold) params.set("hide_sold", "1")
+
+    const search = params.toString().replaceAll("%2C", ",")
+    const url = `${location.pathname}${search ? `?${search}` : ""}${location.hash}`
+    if (url !== `${location.pathname}${location.search}${location.hash}`) {
+      history.replaceState(history.state, "", url)
+    }
+  }
+
+  isDate(value) {
+    const date = new Date(`${value}T12:00:00Z`)
+    return !isNaN(date) && date.toISOString().slice(0, 10) === value
   }
 
   // ISO date strings compare correctly as plain strings, so rows are matched

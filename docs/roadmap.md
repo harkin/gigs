@@ -153,10 +153,8 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 ---
 
 ## 3. Features
-- [ ] **Filter state in the URL** — filters are client-side only, so "Whelan's
-      gigs in October" isn't a link you can send anyone. Reflect search, venues
-      and dates into the query string and restore on load; also gives back/
-      forward navigation for free.
+- [x] **Filter state in the URL** — search, venues, dates and toggles are kept
+      in the query string, so a filtered view can be shared or reloaded.
 - [x] **Date presets + range picker** — Tonight / Tomorrow / This weekend /
       Next 7 days chips, plus a calendar for any range.
 - [ ] **Add to calendar** — an `.ics` link per event. Title, datetime, venue and
