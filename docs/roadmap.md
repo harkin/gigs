@@ -16,9 +16,10 @@ Standing infra/quality items are at the bottom.
    and doesn't break on markup tweaks. Many venues share a ticketing backend
    (Ticketmaster, Ticketsolve, Eventbrite, DICE), so one adapter can cover
    several.
-2. Add the venue to the `Event` `venue` enum. Values so far run 0–6, so assign
-   the **next free integer (7+)** — don't reuse or renumber existing ones.
-3. Add a `renderable_venue` mapping in `Event`.
+2. Add the venue to the `Event` `venue` enum with the **next free integer**
+   (one above the current highest) — don't reuse or renumber existing ones.
+3. Add its display name to `Event::VENUE_NAMES`. A model test fails if any
+   enum value is missing one.
 4. Write `app/lib/data_grabbers/<venue>.rb` with `self.get_events` that builds the
    events array, calls `EventValidator.validate!(events, venue: :<venue>)`, then
    does the `delete_all`/`insert_all` transaction.
@@ -224,11 +225,6 @@ and a fast route to rate-limiting / being blocked. Guardrails:
 ## 5. Standing infra / quality
 
 ### Known bugs
-- [ ] **`Event#renderable_venue` silently returns `nil` for an unmapped venue** —
-      the `case` has no `else`. Adding a venue to the enum (step 2 of the guide
-      above) without adding the mapping (step 3) yields a blank venue column and
-      a blank entry in the venue filter, with no error. Wants an `else` that
-      raises or humanizes the enum key.
 - [ ] **Vicar Street "Larry Dean" is misdated at source** — the listing's
       `startDate` meta says 2026-10-15 while its ticket link points at
       `...dublin-06-02-2027`. The scraper correctly trusts the meta; the venue's
