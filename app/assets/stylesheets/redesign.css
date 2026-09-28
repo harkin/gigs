@@ -63,8 +63,6 @@ header.site{display:flex;align-items:flex-end;justify-content:space-between;gap:
 .meta{margin:8px 0 0;color:var(--top-muted);font-size:14px;font-variant-numeric:tabular-nums}
 .icon-btn{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--rule);background:var(--surface);cursor:pointer;color:var(--muted)}
 .icon-btn:hover{color:var(--ink);border-color:var(--rule-strong)}
-.meta-link{color:var(--top-ink);font-weight:600;text-decoration:underline}
-.meta-link:hover{text-decoration:none}
 
 .bar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--bar-top));z-index:5}
 .bar .wrap{display:flex;flex-direction:column;gap:10px;padding-block:12px;background:var(--bar-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--rule)}
