@@ -69,6 +69,5 @@ end
 gem "faraday"
 gem "trilogy"
 gem "nokogiri"
-gem "tailwindcss-rails", "~> 4.6"
 
 gem "importmap-rails", "~> 2.0"

@@ -9,10 +9,6 @@ CI.run do
   # PlanetScale, so DB steps must pin RAILS_ENV=test.
   step "Setup: test database", "env RAILS_ENV=test bin/rails db:prepare"
 
-  # The index view references the compiled Tailwind asset, so build it or the
-  # controller test 500s on the missing stylesheet.
-  step "Assets: build Tailwind", "bin/rails tailwindcss:build"
-
   step "Style: Ruby", "bin/rubocop"
 
   step "Security: gem audit", "bin/bundler-audit"

@@ -145,8 +145,7 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
 - [ ] **O'Reilly Theatre price** — only Fever/Eventbrite events return one; the
       Ticketsolve and GK paths return `nil`. See if Ticketsolve exposes pricing.
 - [x] **The Academy info link** — the venue has no per-event page, so `more_info`
-      points at the Ticketmaster listing (the only detail URL). Cards layout also
-      falls back to the ticket link for non-available events.
+      points at the Ticketmaster listing (the only detail URL).
 - [ ] **3Arena price** — not captured (secondary; arena prices are often ranges).
 - [ ] **"Limited availability" tier** — Academy and Vicar Street only emit
       available/sold-out; map a middle tier where the source supports it.
@@ -158,15 +157,13 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
       gigs in October" isn't a link you can send anyone. Reflect search, venues
       and dates into the query string and restore on load; also gives back/
       forward navigation for free.
-- [ ] **Date presets** — "Tonight", "This weekend", "Next 7 days" beside the date
-      range. Answering "what's on Friday?" shouldn't need two typed dates. Pure
-      client-side on the existing rows.
+- [x] **Date presets + range picker** — Tonight / Tomorrow / This weekend /
+      Next 7 days chips, plus a calendar for any range.
 - [ ] **Add to calendar** — an `.ics` link per event. Title, datetime, venue and
       URL are all already stored, which is everything an ICS file needs.
 - [ ] Filter by event type (music / comedy / theatre / …) — needs a category
       field on `Event`, scraper support, and a filter UI control.
-- [ ] Search should match venue names, not just titles — `filter_controller.js`
-      only tests `data-title`, so typing "whelans" finds nothing.
+- [x] Search matches venue names as well as titles.
 - [ ] **"New since your last visit"** — a personal window beats the fixed one:
       visit daily and you see today's, come back after a month and you see the
       month. Decide it client-side from `localStorage`, not a cookie — the index
@@ -177,9 +174,9 @@ Current per-venue field coverage (✓ reliable · ◑ partial · ✗ missing):
       badges on first reload. Clamp the lookback to ~30 days, and fall back to
       the fixed window when nothing is stored (first visit, second device).
 - [x] **"Just announced" badge + filter** — `first_seen_at` survives a refresh,
-      badged for 7 days with a filter-bar checkbox.
-- [x] Mobile design — responsive layouts + themes shipped.
-- [x] Show ticket prices — `price-tag` rendering shipped (per-venue gaps above).
+      badged for 7 days with a filter-bar chip.
+- [x] Mobile design — one responsive listing with light and dark themes.
+- [x] Show ticket prices (per-venue gaps above).
 
 ---
 
