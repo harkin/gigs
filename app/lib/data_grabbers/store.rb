@@ -8,7 +8,7 @@ module DataGrabbers
     def replace(venue, min_count: 1)
       start_time = Time.now.to_i
 
-      events = yield
+      events = yield.map { |event| tidy(event) }
 
       EventValidator.validate!(events, venue: venue, min_count: min_count)
 
@@ -30,11 +30,22 @@ module DataGrabbers
       events
     end
 
+    # Done once here rather than on every page view.
+    def tidy(event)
+      text = TitleCleaner.text(event[:title])
+      event = event.merge(title: TitleCleaner.tidy(text))
+      event = event.merge(ticket_status: :sold_out) if TitleCleaner.sold_out?(text)
+      event = event.merge(price: PriceCleaner.tidy(event[:price])) if event.key?(:price)
+      event
+    end
+
     def first_seen_at_by_key(venue)
       Event.where(venue: venue)
            .pluck(:title, :event_date, :more_info, :link_to_buy_ticket, :first_seen_at)
            .to_h do |title, event_date, more_info, link_to_buy_ticket, first_seen_at|
-             key = SourceKey.for(venue, { title: title, event_date: event_date,
+             # Cleaned the same way as a fresh scrape, so a title stored before
+             # tidying existed still matches.
+             key = SourceKey.for(venue, { title: TitleCleaner.clean(title), event_date: event_date,
                                           more_info: more_info, link_to_buy_ticket: link_to_buy_ticket })
              [ key, first_seen_at ]
            end
