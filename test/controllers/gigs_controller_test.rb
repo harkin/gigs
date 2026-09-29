@@ -40,16 +40,15 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".calendar[role='dialog'][hidden]", 1
   end
 
-  test "index strips markup and escapes encoded markup in scraped titles" do
+  test "index escapes markup in titles" do
     create_event(title: "<img src=x onerror=alert(1)><script>alert(2)</script>")
-    create_event(title: "&lt;script&gt;alert(3)&lt;/script&gt;")
 
     get root_url
 
     assert_response :success
-    assert_not_includes response.body, "onerror"
-    assert_not_includes response.body, "alert(2)</script>"
-    assert_not_includes response.body, "<script>alert(3)</script>"
+    assert_not_includes response.body, "<img src=x"
+    assert_not_includes response.body, "<script>alert(2)"
+    assert_includes response.body, "&lt;script&gt;alert(2)&lt;/script&gt;"
   end
 
   test "index links rows only to safe URLs" do

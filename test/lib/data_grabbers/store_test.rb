@@ -127,6 +127,35 @@ class DataGrabbers::StoreTest < ActiveSupport::TestCase
     assert_nil Event.sole.first_seen_at
   end
 
+  test "stores titles, statuses and prices tidied for display" do
+    DataGrabbers::Store.replace(:academy) do
+      [ event_attributes(title: "GURRIERS &amp; FRIENDS (SOLD OUT)", ticket_status: :unknown, price: "FROM  €14.50") ]
+    end
+
+    event = Event.sole
+    assert_equal "Gurriers & Friends", event.title
+    assert_equal "sold_out", event.ticket_status
+    assert_equal "from €14.50", event.price
+  end
+
+  test "rejects a title that is nothing but markup" do
+    assert_raises(RuntimeError) do
+      DataGrabbers::Store.replace(:academy) { [ event_attributes(title: "<img src=x onerror=alert(1)>") ] }
+    end
+  end
+
+  # Only gigs with no listing or ticket URL are matched on title.
+  test "matches a stored untidied title to its tidied rescrape" do
+    attributes = event_attributes(title: "BLUEY&#8217;S BIG PLAY", more_info: nil)
+    Event.create!(attributes.merge(first_seen_at: 3.days.ago))
+    first_seen = Event.sole.first_seen_at
+
+    DataGrabbers::Store.replace(:academy) { [ attributes ] }
+
+    assert_equal "Bluey’s Big Play", Event.sole.title
+    assert_equal first_seen.to_i, Event.sole.first_seen_at.to_i
+  end
+
   test "returns the events it stored" do
     stored = DataGrabbers::Store.replace(:academy) { [ event_attributes(title: "Returned Gig") ] }
 
