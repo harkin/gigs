@@ -9,8 +9,7 @@ module DataGrabbers
   # parsed we fall back to the month heading + a title derived from the image
   # filename so the event is never lost.
   class OreillyTheatre
-    EVENTS_URL = "https://www.oreillytheatre.com/"
-    TICKETSOLVE_HOST = "https://takeyourseats.ticketsolve.com".freeze
+    EVENTS_URL = "https://www.oreillytheatre.com/whats-on.html"
 
     # Ticketsolve gates its JSON API behind a "queue-it" waiting room that
     # rejects non-browser requests, so we present as a browser throughout.
@@ -18,12 +17,13 @@ module DataGrabbers
     DEFAULT_HEADERS = { "User-Agent" => USER_AGENT }.freeze
 
     MONTHS = %w[January February March April May June July August September October November December].freeze
+    MONTH_HEADING = /\A(#{MONTHS.join("|")})(?:\s+(\d{4}))?\z/
     FILENAME_NOISE = (MONTHS.map(&:downcase) + %w[orig full final new copy sold out pm am]).freeze
 
     def self.get_events
       Store.replace(:oreilly_theatre) do
         @ticketsolve_jar = Hash.new { |hash, host| hash[host] = {} }
-        @ticketsolve_ready = false
+        @ticketsolve_ready_hosts = Set.new
 
         events = []
 
@@ -68,24 +68,24 @@ module DataGrabbers
 
     # --- Homepage --------------------------------------------------------------
 
-    # Returns one listing per poster: { link:, filename:, month: }.
+    # Returns one listing per poster: { link:, filename:, month:, year: }.
     def self.scrape_homepage
       document = Nokogiri::HTML(fetch(EVENTS_URL).body)
       listings = []
 
-      month_headers = document.css("h2.wsite-content-title").select { |h| MONTHS.include?(h.text.strip) }
+      month_headers = document.css("h2.wsite-content-title").select { |h| month_heading(h) }
 
       month_headers.each do |header|
-        month = header.text.strip
+        month, year = month_heading(header)
         node = header.next_element
 
-        while node && !(node.name == "h2" && MONTHS.include?(node.text.strip))
+        while node && !(node.name == "h2" && month_heading(node))
           node.css("a").each do |anchor|
             image = anchor.at_css("img")
             link = anchor.attribute("href")&.value
             next unless image && link.present?
 
-            listings << { link: link, filename: image.attribute("src")&.value.to_s, month: month }
+            listings << { link: link, filename: image.attribute("src")&.value.to_s, month: month, year: year }
           end
           node = node.next_element
         end
@@ -94,14 +94,21 @@ module DataGrabbers
       listings
     end
 
+    # Headings read "October 2026" (the year is sometimes omitted) and can carry
+    # &nbsp; or zero-width spaces, which String#strip doesn't remove.
+    def self.month_heading(node)
+      match = node.text.gsub(/[[:space:]\u200B]+/, " ").strip.match(MONTH_HEADING)
+      [ match[1], match[2]&.to_i ] if match
+    end
+
     # --- Dispatch --------------------------------------------------------------
 
     def self.resolve(listing)
       case URI.parse(listing[:link]).host.to_s
-      when /ticketsolve\.com/             then resolve_ticketsolve(listing[:link])
-      when /feverup\.com/                 then resolve_fever(listing[:link])
-      when /eventbrite\./                 then resolve_schema_event(listing[:link])
-      when /gkentertainment/              then resolve_gk(listing[:link])
+      when /ticketsolve\.com|takeyourseats\.ie/ then resolve_ticketsolve(listing[:link])
+      when /feverup\.com/                       then resolve_fever(listing[:link])
+      when /eventbrite\./                       then resolve_schema_event(listing[:link])
+      when /gkentertainment/                    then resolve_gk(listing[:link])
       end
     end
 
@@ -111,10 +118,13 @@ module DataGrabbers
       show_id = url[%r{/shows/(\d+)}, 1]
       return unless show_id
 
-      ensure_ticketsolve_session!(url)
-      name = humanize_if_shouty(ticketsolve_api("shows/#{show_id}").dig("data", "attributes", "name").to_s.strip)
+      uri = URI(url)
+      host = "#{uri.scheme}://#{uri.host}"
 
-      performances = ticketsolve_api("events?filter%5Bshow%5D=#{show_id}&page%5Blimit%5D=50")["data"] || []
+      ensure_ticketsolve_session!(url)
+      name = humanize_if_shouty(ticketsolve_api(host, "shows/#{show_id}").dig("data", "attributes", "name").to_s.strip)
+
+      performances = ticketsolve_api(host, "events?filter%5Bshow%5D=#{show_id}&page%5Blimit%5D=50")["data"] || []
 
       performances.filter_map do |performance|
         attributes = performance["attributes"]
@@ -132,16 +142,18 @@ module DataGrabbers
 
     # Visiting any Ticketsolve page bounces through the queue-it waiting room and
     # back; completing that redirect round-trip leaves a validated session the
-    # JSON API accepts. It's session-wide, so bootstrap once per run.
+    # JSON API accepts. The session cookie is per host, so bootstrap once per
+    # host per run.
     def self.ensure_ticketsolve_session!(seed_url)
-      return if @ticketsolve_ready
+      host = URI(seed_url).host
+      return if @ticketsolve_ready_hosts.include?(host)
 
       ticketsolve_http_get(seed_url)
-      @ticketsolve_ready = true
+      @ticketsolve_ready_hosts << host
     end
 
-    def self.ticketsolve_api(path)
-      JSON.parse(ticketsolve_http_get("#{TICKETSOLVE_HOST}/api/ticketbooth/v1/#{path}").body)
+    def self.ticketsolve_api(host, path)
+      JSON.parse(ticketsolve_http_get("#{host}/api/ticketbooth/v1/#{path}").body)
     end
 
     # Net::HTTP (rather than Faraday) so we can read Set-Cookie as a clean array
@@ -299,7 +311,7 @@ module DataGrabbers
     def self.fallback_event(listing)
       {
         title: title_from_filename(listing[:filename]),
-        event_date: first_of_month(listing[:month]),
+        event_date: first_of_month(listing[:month], listing[:year]),
         ticket_status: listing[:filename].downcase.include?("sold-out") ? :sold_out : :unknown,
         price: nil
       }
@@ -313,10 +325,12 @@ module DataGrabbers
       (tokens.join(" ").titleize.presence || base.tr("-_", " ").titleize)
     end
 
-    def self.first_of_month(month)
+    def self.first_of_month(month, year = nil)
       month_number = MONTHS.index(month) + 1
-      year = Date.today.year
-      year += 1 if month_number < Date.today.month
+      unless year
+        year = Date.today.year
+        year += 1 if month_number < Date.today.month
+      end
       Time.new(year, month_number, 1)
     end
 
