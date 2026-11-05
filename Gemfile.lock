@@ -287,8 +287,6 @@ GEM
     thruster (0.1.27-arm64-darwin)
     thruster (0.1.27-x86_64-linux)
     timeout (0.6.1)
-    trilogy (2.13.3)
-      bigdecimal
     tsort (0.2.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
@@ -331,7 +329,6 @@ DEPENDENCIES
   sqlite3
   stimulus-rails
   thruster
-  trilogy
   turbo-rails
   tzinfo-data
   web-console

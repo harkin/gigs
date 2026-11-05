@@ -1,16 +1,8 @@
 name: SQLite cutover
 
-# One-off data tasks for the move to SQLite; remove once it's done.
+# One-off first scrape into the new, empty SQLite database; remove once it's done.
 on:
   workflow_dispatch:
-    inputs:
-      task:
-        description: Task to run in the production container
-        required: true
-        type: choice
-        options:
-          - gigs:import_previous_database
-          - gigs:forget_first_seen
 
 permissions:
   contents: read
@@ -29,9 +21,8 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-host: ${{ secrets.SSH_HOST }}
 
-      - name: Run the task in the running container
+      - name: Run the first refresh in the running container
         env:
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          TASK: ${{ inputs.task }}
-        run: kamal app exec --reuse "timeout --kill-after=30s 5m bin/rails $TASK"
+        run: kamal app exec --reuse "timeout --kill-after=30s 5m bin/rails gigs:initial_refresh"
