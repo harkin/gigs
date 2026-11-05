@@ -1,0 +1,37 @@
+name: SQLite cutover
+
+# One-off data tasks for the move to SQLite; remove once it's done.
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Task to run in the production container
+        required: true
+        type: choice
+        options:
+          - gigs:import_previous_database
+          - gigs:forget_first_seen
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up kamal
+        uses: ./.github/actions/kamal-setup
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-host: ${{ secrets.SSH_HOST }}
+
+      - name: Run the task in the running container
+        env:
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          TASK: ${{ inputs.task }}
+        run: kamal app exec --reuse "timeout --kill-after=30s 5m bin/rails $TASK"

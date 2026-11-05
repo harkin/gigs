@@ -67,6 +67,8 @@ group :development do
 end
 
 gem "faraday"
+gem "sqlite3"
+# Only for the one-off import from the previous database; remove with it.
 gem "trilogy"
 gem "nokogiri"
 

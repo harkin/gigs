@@ -1,28 +1,17 @@
 default: &default
-  adapter: trilogy
-  encoding: utf8mb4
+  adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
-  host: localhost
+  timeout: 5000
 
 development:
   <<: *default
-  username: <%= Rails.application.credentials.planetscale&.fetch(:username) %>
-  password: <%= Rails.application.credentials.planetscale&.fetch(:password) %>
-  database: <%= Rails.application.credentials.planetscale&.fetch(:database) %>
-  host: <%= Rails.application.credentials.planetscale&.fetch(:host) %>
-  ssl_mode: verify_identity
+  database: storage/development.sqlite3
 
-# Local MySQL; `bin/rails test` wipes and reloads it.
 test:
   <<: *default
-  database: gigs_test
+  database: storage/test.sqlite3
 
+# On the volume mounted in config/deploy.yml, so it survives deploys.
 production:
   <<: *default
-  username: <%= Rails.application.credentials.planetscale&.fetch(:username) %>
-  password: <%= Rails.application.credentials.planetscale&.fetch(:password) %>
-  database: <%= Rails.application.credentials.planetscale&.fetch(:database) %>
-  host: <%= Rails.application.credentials.planetscale&.fetch(:host) %>
-  ssl_mode: verify_identity
+  database: storage/production.sqlite3
