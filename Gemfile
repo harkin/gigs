@@ -67,7 +67,7 @@ group :development do
 end
 
 gem "faraday"
-gem "trilogy"
+gem "sqlite3"
 gem "nokogiri"
 
 gem "importmap-rails", "~> 2.0"

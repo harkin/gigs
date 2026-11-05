@@ -6,7 +6,7 @@ venue's website once a day and serves the combined listing as a single page.
 ## Stack
 
 - Ruby (version in `.ruby-version`) and Rails 8
-- MySQL 8.4, via Trilogy
+- SQLite
 - Hotwire (Turbo + Stimulus) with importmap, Tailwind CSS
 - Deployed as a Docker image with Kamal
 
@@ -17,20 +17,13 @@ bin/setup   # install gems, prepare the test database, start the server
 bin/dev     # start the server (also rebuilds Tailwind on change)
 ```
 
-Development connects to a remote MySQL database whose credentials live in
-`config/credentials/development.yml.enc`, so no local database is needed to run
-the app. You'll need `config/credentials/development.key` to decrypt it.
+Development uses a local SQLite file, `storage/development.sqlite3`. It starts
+empty; fill it by scraping the venues with `bin/rails gigs:refresh`.
 
 ## Tests
 
-Tests use a local MySQL 8.4 on `localhost:3306` (database `gigs_test`, user
-`root`, no password). For example:
-
-```sh
-podman run -d --name gigs-mysql -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes mysql:8.4
-```
-
-Then run the same checks CI does (lint, security scans and tests):
+Tests use their own SQLite file and need no setup. To run the same checks CI
+does (lint, security scans and tests):
 
 ```sh
 bin/ci

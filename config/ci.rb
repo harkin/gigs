@@ -5,8 +5,7 @@
 CI.run do
   step "Setup: dependencies", "bundle check || bundle install"
 
-  # Tests use the local MySQL test database; dev/prod point at remote
-  # PlanetScale, so DB steps must pin RAILS_ENV=test.
+  # DB steps must pin RAILS_ENV=test so they don't touch the development database.
   step "Setup: test database", "env RAILS_ENV=test bin/rails db:prepare"
 
   step "Style: Ruby", "bin/rubocop"

@@ -31,6 +31,10 @@ env:
 ssh:
   user: ubuntu
 
+# Holds the SQLite database, so it survives deploys.
+volumes:
+  - gigs_storage:/rails/storage
+
 # Serve the previous release's fingerprinted assets alongside the new ones, so
 # pages loaded just before a deploy don't 404 on their CSS and JS.
 asset_path: /rails/public/assets

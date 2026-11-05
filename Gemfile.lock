@@ -272,6 +272,8 @@ GEM
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
+    sqlite3 (2.10.2-arm64-darwin)
+    sqlite3 (2.10.2-x86_64-linux-gnu)
     sshkit (1.25.0)
       base64
       logger
@@ -285,8 +287,6 @@ GEM
     thruster (0.1.27-arm64-darwin)
     thruster (0.1.27-x86_64-linux)
     timeout (0.6.1)
-    trilogy (2.13.3)
-      bigdecimal
     tsort (0.2.0)
     turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
@@ -326,9 +326,9 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 8.1.4)
   rubocop-rails-omakase
+  sqlite3
   stimulus-rails
   thruster
-  trilogy
   turbo-rails
   tzinfo-data
   web-console

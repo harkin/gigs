@@ -39,4 +39,28 @@ class EventTest < ActiveSupport::TestCase
       assert_equal rendered, Event.new(ticket_status: status).renderable_ticket_status
     end
   end
+
+  test "upcoming keeps a gig stored at midnight today, as date-only grabbers store them" do
+    travel_to Time.utc(2026, 11, 5, 12)
+    assert_includes Event.upcoming, upcoming_event(event_date: Date.new(2026, 11, 5))
+  end
+
+  test "upcoming drops a gig from yesterday" do
+    travel_to Time.utc(2026, 11, 5, 12)
+    assert_not_includes Event.upcoming, upcoming_event(event_date: Time.utc(2026, 11, 4, 23, 59))
+  end
+
+  test "upcoming keeps a run until its last day passes" do
+    travel_to Time.utc(2026, 11, 5, 12)
+    assert_includes Event.upcoming, upcoming_event(event_date: Date.new(2026, 10, 1), end_date: Date.new(2026, 11, 5))
+  end
+
+  test "upcoming drops a finished run" do
+    travel_to Time.utc(2026, 11, 5, 12)
+    assert_not_includes Event.upcoming, upcoming_event(event_date: Date.new(2026, 9, 1), end_date: Date.new(2026, 11, 4))
+  end
+
+  def upcoming_event(attributes)
+    Event.create!({ title: "Gig", venue: :academy, ticket_status: :available }.merge(attributes))
+  end
 end

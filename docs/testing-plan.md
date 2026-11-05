@@ -32,9 +32,6 @@ tests we add will gate the deploy.
 
 ## Infra notes
 
-- Tests need MySQL on `localhost:3306` (db `gigs_test`, user `root`, empty
-  password). Use **MySQL 8.4** to match production (PlanetScale runs MySQL 8.4).
-  Locally: the `gigs-mysql` podman container. In CI: a `mysql:8.4` service
-  container (already wired in `.github/workflows/deploy.yml`).
+- Tests use a local SQLite file, so they need no database service.
 - The test environment needs **no** secrets / `RAILS_MASTER_KEY`.
 - If `db:prepare` ever does heavy work in CI, review `db/seeds.rb`.

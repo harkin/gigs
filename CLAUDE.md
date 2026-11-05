@@ -20,9 +20,10 @@ detail in prose.
 - After deploying scraper changes, run the "Refresh gig data" workflow (`gh workflow run refresh.yml`) or data stays stale until the daily run.
 
 ## Databases
-- dev/prod → remote PlanetScale (MySQL 8.4) on separate branches, so dev writes don't touch production. `bin/rails server` needs **no local DB**.
-- test → local MySQL 8.4 on `localhost:3306` (db `gigs_test`, user `root`, no password). CI uses a `mysql:8.4` service.
-- Per-environment credentials (`config/credentials/<env>.key`, no `master.key`). `development.key` is present so dev reaches PlanetScale; `production.key` isn't here (it's the deploy's `RAILS_MASTER_KEY`).
+- SQLite in every environment, under `storage/`. Production's file is on the `gigs_storage` Kamal volume (`config/deploy.yml`); without that volume a deploy would wipe it.
+- `bin/rails server` needs no database service. A fresh dev database is empty until `bin/rails gigs:refresh` runs.
+- Per-environment credentials (`config/credentials/<env>.key`, no `master.key`). `production.key` isn't here (it's the deploy's `RAILS_MASTER_KEY`).
+- The data can be rebuilt by scraping, except `first_seen_at`, which only drives the 7-day "new" badge.
 
 ## Scraping (`app/lib/data_grabbers/`)
 - One class per venue with `get_events`; `RefreshGigData` runs them in sequence and is intentionally **fail-loud** (one venue raising aborts the whole refresh). Don't add per-venue rescue without being asked.

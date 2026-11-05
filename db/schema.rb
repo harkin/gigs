@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_09_21_000352) do
-  create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "end_date"
     t.datetime "event_date", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_21_000352) do
     t.index ["venue"], name: "index_events_on_venue"
   end
 
-  create_table "refreshes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "refreshes", force: :cascade do |t|
     t.datetime "last_refresh_at", null: false
   end
 end
