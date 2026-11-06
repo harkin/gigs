@@ -11,6 +11,15 @@ Rails.application.configure do
 
   config.active_storage.service = :local
 
+  # kamal-proxy terminates TLS and redirects HTTP to HTTPS; Rails adds HSTS and
+  # secure cookies.
+  config.assume_ssl = true
+  config.force_ssl = true
+
+  config.hosts = [ "gigs.kothacles.com" ]
+  # kamal-proxy's health check doesn't send the public hostname.
+  config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
   config.log_tags = [ :request_id ]
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
@@ -18,7 +27,7 @@ Rails.application.configure do
 
   config.active_support.report_deprecations = false
 
-  config.action_mailer.default_url_options = { host: "example.com" }
+  config.action_mailer.default_url_options = { host: "gigs.kothacles.com", protocol: "https" }
 
   config.i18n.fallbacks = true
 

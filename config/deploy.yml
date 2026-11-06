@@ -7,7 +7,10 @@ servers:
     - jigglypuff
 
 proxy:
-  ssl: false
+  host: gigs.kothacles.com
+  # Let's Encrypt certificate, issued and renewed by kamal-proxy. The DNS record
+  # must stay unproxied ("DNS only") for that to work.
+  ssl: true
   # kamal-proxy connects to your container over port 80, which is where Thruster
   # listens; it proxies on to Puma at 3000. Pointing this back at 3000 would skip
   # Thruster and lose compression.
