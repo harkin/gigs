@@ -1,7 +1,7 @@
 class GigsController < ApplicationController
   def index
-    # Loaded up front so the counts come off the loaded rows. The database is
-    # remote, so a second query costs a whole round-trip.
+    # Loaded up front so size and the groupings below reuse these rows rather
+    # than each issuing its own query.
     events = Event.upcoming.order(:event_date).load
     @event_count = events.size
     @on_now, dated = events.partition { |event| event.multi_day? && event.event_date.to_date <= Date.current }

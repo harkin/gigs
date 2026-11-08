@@ -64,8 +64,6 @@ class Event < ApplicationRecord
   # Production scrapes once a day, so this is the seven most recent refreshes.
   NEWLY_ANNOUNCED_WINDOW = 7.days
 
-  scope :newly_announced, -> { where(first_seen_at: NEWLY_ANNOUNCED_WINDOW.ago..) }
-
   # Multi-day runs store the run's start in event_date and its last day in
   # end_date; single events leave end_date nil. An event counts as upcoming
   # until its last day passes, so an in-progress run stays visible.
