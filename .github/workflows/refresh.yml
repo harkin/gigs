@@ -34,6 +34,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-host: ${{ secrets.SSH_HOST }}
+          ssh-host-key: ${{ secrets.SSH_HOST_KEY }}
 
       - name: Refresh gig data in the running container
         env:

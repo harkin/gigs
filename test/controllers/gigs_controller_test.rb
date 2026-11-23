@@ -15,6 +15,18 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "sends a Content-Security-Policy whose nonce covers the inline scripts" do
+    get root_url
+
+    csp = response.headers["Content-Security-Policy"]
+    nonce = csp[/script-src[^;]*'nonce-([^']+)'/, 1]
+    assert nonce.present?
+    assert_includes csp, "frame-ancestors 'none'"
+    assert_not_includes csp, "unsafe-inline"
+    assert_select "script[type=importmap][nonce='#{nonce}']", 1
+    assert_select "head script:not([src]):not([nonce='#{nonce}'])", 0
+  end
+
   test "index groups dated gigs by day and folds running shows into On now" do
     create_event(title: "Tonight Gig", event_date: Date.current.in_time_zone.change(hour: 20))
     create_event(title: "Next Week Gig", event_date: 1.week.from_now)
