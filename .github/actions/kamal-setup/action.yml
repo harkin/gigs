@@ -8,6 +8,9 @@ inputs:
   ssh-host:
     description: Address of the server
     required: true
+  ssh-host-key:
+    description: Server SSH host public key(s) (e.g. from /etc/ssh/ssh_host_ed25519_key.pub)
+    required: true
 
 runs:
   using: composite
@@ -34,11 +37,22 @@ runs:
       shell: bash
       env:
         SSH_HOST: ${{ inputs.ssh-host }}
+        SSH_HOST_KEY: ${{ inputs.ssh-host-key }}
       run: |
+        if [ -z "$SSH_HOST_KEY" ]; then
+          echo "::error::SSH_HOST_KEY secret is not set"
+          exit 1
+        fi
         mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        while IFS= read -r key; do
+          [ -n "$key" ] && printf '%s,%s %s\n' "jigglypuff" "$SSH_HOST" "$key"
+        done <<< "$SSH_HOST_KEY" >> ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
         cat >> ~/.ssh/config <<EOF
         Host jigglypuff
           HostName $SSH_HOST
           User ubuntu
-          StrictHostKeyChecking accept-new
+          StrictHostKeyChecking yes
         EOF
+        chmod 600 ~/.ssh/config
