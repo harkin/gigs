@@ -15,12 +15,13 @@ class GigsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "sends a Content-Security-Policy whose nonce covers the inline scripts" do
+  test "sends a Content-Security-Policy whose nonce covers inline scripts and styles" do
     get root_url
 
     csp = response.headers["Content-Security-Policy"]
     nonce = csp[/script-src[^;]*'nonce-([^']+)'/, 1]
     assert nonce.present?
+    assert_match(/style-src[^;]*'nonce-#{Regexp.escape(nonce)}'/, csp)
     assert_includes csp, "frame-ancestors 'none'"
     assert_not_includes csp, "unsafe-inline"
     assert_select "script[type=importmap][nonce='#{nonce}']", 1
